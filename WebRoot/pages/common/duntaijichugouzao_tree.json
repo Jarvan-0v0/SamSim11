@@ -1,0 +1,17 @@
+[{"id":"R1","text":"桥墩基础类型","value":"01","IsTree":"","img":"../scripts/images/Icon16/molecule.png","parentnodes":"0","showcheck":true,"isexpand":true,"complete":true,"hasChildren":true,
+"ChildNodes":[
+      
+    {"id":"M1","text":"扩大基础","value":"扩大基础","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M2","text":"沉井基础","value":"沉井基础","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0, "hasChildren":false,"ChildNodes":[]},
+    {"id":"M3","text":"桩基础","value":"桩基础","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M4","text":"沉箱基础","value":"沉箱基础","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M5","text":"管柱基础","value":"管柱基础","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M6","text":"天然基础","value":"天然基础","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M7","text":"地下连续墙","value":"地下连续墙","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M8","text":"端承桩","value":"端承桩","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M9","text":"摩擦桩","value":"摩擦桩","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M10","text":"预制桩","value":"预制桩","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M11","text":"灌注桩","value":"灌注桩","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]}
+ ]
+
+}]

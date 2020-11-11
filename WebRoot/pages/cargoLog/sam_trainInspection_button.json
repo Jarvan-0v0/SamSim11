@@ -1,0 +1,14 @@
+[
+
+{"ButtonId":"cb_01","ParentId":"0","FullName":"刷新","Icon":"arrow_refresh.png","Category":"1","JsEvent":"Replace()","ActionEvent":"","Split":1,"Remark":"刷新当前(Ctrl+Q)"},
+{"ButtonId":"cb_02","ParentId":"0","FullName":"删除","Icon":"DeleteRed.png","Category":"1","JsEvent":"btn_delete()","ActionEvent":"","Split":0,"Remark":"删除(Ctrl+D)"},
+{"ButtonId":"cb_03","ParentId":"0","FullName":"编辑","Icon":"edit.gif","Category":"1","JsEvent":"btn_edit()","ActionEvent":"","Split":0,"Remark":"编辑(Ctrl+W)"},
+{"ButtonId":"cb_04","ParentId":"0","FullName":"暂存","Icon":"spellcheck.png","Category":"1","JsEvent":"btn_save()","ActionEvent":"","Split":0,"Remark":"暂存"},
+{"ButtonId":"cb_05","ParentId":"0","FullName":"提交","Icon":"sort_ascending.png","Category":"1","JsEvent":"btn_submit()","ActionEvent":"","Split":0,"Remark":"提交"},
+{"ButtonId":"cb_06","ParentId":"0","FullName":"取消操作","Icon":"cancel.png","Category":"1","JsEvent":"btn_cancel()","ActionEvent":"","Split":0,"Remark":"取消(Ctrl+Z)"},
+{"ButtonId":"cb_07","ParentId":"0","FullName":"导出","Icon":"printer.png","Category":"1","JsEvent":"btn_print()","ActionEvent":"","Split":1,"Remark":"导出"},
+{"ButtonId":"cb_08","ParentId":"0","FullName":"列检开始","Icon":"cell_style.png","Category":"1","JsEvent":"btn_cargoInspectionBegin()","ActionEvent":"","Split":0,"Remark":"跳转"},
+{"ButtonId":"cb_09","ParentId":"0","FullName":"列检扣车","Icon":"premium_support.png","Category":"1","JsEvent":"btn_cargoInspectionDetention()","ActionEvent":"","Split":0,"Remark":"跳转"},
+{"ButtonId":"cb_010","ParentId":"0","FullName":"列检确认","Icon":"accept.png","Category":"1","JsEvent":"btn_cargoInspectionConfirm()","ActionEvent":"","Split":0,"Remark":"跳转"}
+
+]

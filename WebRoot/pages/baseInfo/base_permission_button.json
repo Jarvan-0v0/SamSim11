@@ -1,0 +1,12 @@
+[
+
+{"ButtonId":"BU1","ParentId":"0","FullName":"刷新","Icon":"arrow_refresh.png","Category":"1","JsEvent":"Replace()","ActionEvent":"","Split":1,"Remark":"刷新当前(Ctrl+Q)"},
+
+{"ButtonId":"BU2","ParentId":"0","FullName":"新增","Icon":"add.png","Category":"1","JsEvent":"btn_add()","ActionEvent":"","Split":0,"Remark":"新增(Ctrl+Z)"},
+{"ButtonId":"BU3","ParentId":"0","FullName":"编辑","Icon":"edit.gif","Category":"1","JsEvent":"btn_edit()","ActionEvent":"","Split":0,"Remark":"编辑(Ctrl+W)"},
+{"ButtonId":"BU4","ParentId":"0","FullName":"删除","Icon":"DeleteRed.png","Category":"1","JsEvent":"btn_delete()","ActionEvent":"","Split":1,"Remark":"删除(Ctrl+S)"},
+
+{"ButtonId":"BU5","ParentId":"0","FullName":"离开","Icon":"back.png","Category":"1","JsEvent":"btn_back()","ActionEvent":"","Split":0,"Remark":"关闭当前窗口(Esc)"}
+
+
+]

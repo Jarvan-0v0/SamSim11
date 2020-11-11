@@ -1,0 +1,15 @@
+[
+
+{"label":"主键","name":"id","hidden":true},
+
+{"label":"姓名","name":"name","hidden":false},
+{"label":"密码","name":"password","hidden":false},
+{"label":"固定电话","name":"phone","hidden":false},
+{"label":"手机","name":"mobile","hidden":false},
+{"label":"Email地址","name":"email","hidden":false},
+{"label":"微信号","name":"weixin","hidden":false},
+{"label":"QQ号","name":"qq","hidden":false},
+{"label":"描述","name":"description","hidden":false}
+
+]
+

@@ -1,0 +1,9 @@
+[
+
+{"ButtonId":"BU1","ParentId":"0","FullName":"刷新","Icon":"arrow_refresh.png","Category":"1","JsEvent":"Replace()","ActionEvent":"","Split":1,"Remark":"刷新当前"},
+
+{"ButtonId":"BU2","ParentId":"0","FullName":"转入","Icon":"cheliu.png","Category":"1","JsEvent":"btn_Cheliu()","ActionEvent":"","Split":0,"Remark":"转入车流内容"},
+{"ButtonId":"BU3","ParentId":"0","FullName":"班计划","Icon":"banjihua.png","Category":"1","JsEvent":"btn_Banjihua()","ActionEvent":"","Split":1,"Remark":"请求班计划"}
+
+
+]

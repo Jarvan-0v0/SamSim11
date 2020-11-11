@@ -1,0 +1,13 @@
+[{"id":"R1","text":"地基土类型","value":"01","IsTree":"","img":"../scripts/images/Icon16/molecule.png","parentnodes":"0","showcheck":true,"isexpand":true,"complete":true,"hasChildren":true,
+"ChildNodes":[
+      
+    {"id":"M1","text":"新黄土","value":"tbridgebasicinfo","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M2","text":"细砂","value":"tgirder","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0, "hasChildren":false,"ChildNodes":[]},
+    {"id":"M3","text":"粗砂","value":"tqiaomian","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M4","text":"砂粘土","value":"tzhizuo","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M5","text":"中砂","value":"tqiaodun","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M6","text":"卵石土","value":"tqiaotai","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M7","text":"粘土","value":"tqiaodu","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]}
+ ]
+
+}]

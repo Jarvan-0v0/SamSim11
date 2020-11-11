@@ -1,0 +1,104 @@
+﻿<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	     
+	<script src="../scripts/jquery/jquery.min.js"></script>
+    <script src="../scripts/jquery/jquery.browser.js"></script>
+        
+    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    <script src="../scripts/js/validator.js"></script>
+    
+    <script src="../scripts/My97DatePicker/WdatePicker.js"></script>
+    
+    <link href="../scripts/uploadfile/css/uploadfile.css" rel="stylesheet" type="text/css" />
+    <script src="../scripts/uploadfile/uploadfile.js"></script>
+    	
+    <script type="text/javascript">
+        $(document).ready(function () { Loadlayout();});
+    </script>
+</head>
+<body><div>
+  <script type="text/javascript">
+    $(function () { 
+       BindSelectItem(); 
+       var folderId = GetQuery('FolderId');//文件所在文件夹
+       var fileType = GetQuery('FileType');//文档类别
+       $("#filetype").val(fileType);
+       $("#relativepath").val(folderId);
+    })
+    //下拉框
+	function BindSelectItem() {
+	  BindDropItem("/pages/common/dropList.json","#ispublic", "shifou", "");
+	  BindDropItem("/pages/common/dropList.json","#filetype", "doctype", "");
+	}
+    //保存事件
+    function AcceptClick() {
+      if (!CheckDataValid('#upload_form')) {
+            return false;
+      }
+      startUploading("/bridgeCMS/doc_center_upload.do");
+    }
+</script>
+  
+<form id="upload_form" enctype="multipart/form-data">
+<div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+<div class="bd" style="border-bottom: none; margin: 1px;">
+    <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+    <div class="tab_list_top" style="position: absolute">
+         <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">文档基本信息</div>
+    </div></div>
+</div>
+<div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+    <div id="basic" class="tabPanel""><table class="form">
+    <input type="hidden" id="relativepath" name="relativepath" />
+    <tr>
+       <th class="formTitle">文档编号：</th>
+       <td class="formValue"><input id="id" name="id" type="text" class="txt required" datacol="yes" err="文档编号" checkexpession="NotNull" /></td>
+       <th class="formTitle">文档类别：</th>
+       <td class="formValue"><select id="filetype" name="filetype" class="txtselect" readOnly="true"></select></td>
+    </tr>
+    <tr>
+        <th class="formTitle">文档上传者：</th>
+        <td class="formValue"><input id="uploader" name="uploader" type="text" class="txt" /></td>
+        <th class="formTitle">文档是否公开：</th>
+        <td class="formValue"><select id="ispublic" name="ispublic" class="txtselect" readOnly="true"></select></td>
+    </tr>
+    <tr>
+        <th class="formTitle">文档编制者：</th>
+        <td class="formValue"><input id="author" name="author" type="text" class="txt" /></td>
+        <th class="formTitle">文档编制时间：</th>
+        <td class="formValue"><input id="publishdate" name="publishdate"  type="text" class="txt Wdate" onfocus="WdatePicker({maxDate:'%y-%M-%d'})"></td>
+    </tr>
+    <tr>
+       <th class="formTitle">文档标题：</th>
+       <td class="formValue" colspan="3"><input id="name" name="name" type="text" class="txt" /> </td>
+    </tr>
+    <tr>
+         <th class="formTitle">文档简介： </th>
+         <td class="formValue" colspan="3">
+            <textarea id="descript" name="descript"  class="txtArea" rows="6"></textarea>
+         </td>
+     </tr>
+   </table></div>
+</div><!-- ScrollBar -->
+
+<div>
+    <div><label for="uploadFile">选取文件</label></div>
+    <div><input type="file" name="uploadFile" id="uploadFile" onchange="fileSelected();" /></div>
+</div>
+<div id="error2">系统错误！</div>
+<div id="abort">网络连接异常！</div>
+<div id="warnsize">上传文件太大</div>
+<div id="progress_info">
+    <div id="progress"></div>
+    <div id="progress_percent">&nbsp;</div>
+    <div class="clear_both"></div>
+    <div id="upload_response"></div>
+</div>
+
+</form>
+</div></body>
+</html>

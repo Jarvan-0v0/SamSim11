@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                       http://www.springframework.org/schema/beans/spring-beans.xsd   
+                           http://www.springframework.org/schema/util 
+                           http://www.springframework.org/schema/util/spring-util.xsd"
+>
+	<!--设置自定义realm;安全管理器 --> 
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="MyRealm" /><!-- 基于数据库登录校验的实现MonitorRealm -->
+	</bean>
+	<!-- 用户自定义Realm -->  
+   <bean id="MyRealm" class="blkjweb.shiro.MonitorRealm"></bean>
+
+    <!-- 安全认证过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />  <!-- 安全管理器 -->
+	    <!-- 身份认证失败，则跳转到登录页面的配置 -->
+		<property name="loginUrl" value="/" />   <!-- 默认的登陆访问url -->
+		<property name="successUrl" value="/main.html" />  <!-- 登陆成功后跳转的url -->
+		<property name="unauthorizedUrl" value="/pages/common/404" />  <!-- 没有权限跳转的url -->
+	    <!-- 访问地址的过滤规则,从上至下的优先级,如果有匹配的规则,就会返回,不会再进行匹配 -->
+		<property name="filterChainDefinitions">
+			<value> <!-- anon表示此地址不需要任何权限即可访问   authc-->
+			    /validateCode.do  = anon 
+				/changeLocale.do = anon
+				/login.do = anon
+				/login = anon
+				/sendPWByEmail.do = anon
+				/sendPWByEmail = anon
+				/register.do = anon
+				/register = anon
+				
+				/pages/scripts/js/** = anon
+	           	/**	= authc
+				 
+			</value>
+		</property>
+	</bean>
+	
+     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->  
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	
+</beans>
+
+

@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" /> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		 
+		<script src="../scripts/jquery/jquery.min.js"></script>
+	    <script src="../scripts/jquery/jquery.browser.js"></script>
+        
+		<link href="../scripts/css/framework.css" rel="stylesheet" />
+    	<script src="../scripts/js/framework.js"></script>
+    	
+    	<script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
+    	<script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    	<script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    	<link href="../scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />
+    	<link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" media="screen" />
+
+        <link href="../scripts/tree/tree.css" rel="stylesheet" />
+    	<script src="../scripts/tree/tree.js"></script>
+    	<script src="../scripts/jquery/splitter.js"></script>
+        
+        <script type="text/javascript">
+	        $(document).ready(function () { Loadlayout();});
+	    </script>
+</head>
+<body>
+<div>
+   <script type="text/javascript">
+    $(document).ready(function () {
+        GetTree();
+        GetGrid();
+    });
+    
+    //加载左边树
+    var rootId = "", subMenuId = "", SubMenuName = "";
+    function GetTree() {
+        var itemtree = {
+            onnodeclick: function (item) {
+                if (item.Type == "Root") {
+                    subMenuId = "";
+                    rootId = item.RootId;
+                } 
+                else if (item.Type == "SubMenu") {
+                    rootId = item.parentnodes; //一级目录的Id
+                    subMenuId = item.id;      //二级目录的ID
+                    SubMenuName = item.text;  //二级目录的名称
+                }
+               $("#titleinfo").text(item.text ); //$("#titleinfo").html(" - " + item.text + "(" + item.value + ")");
+               // btn_Search();
+               $("#gridTable").jqGrid('setGridParam',{
+		           	 url: RootPath()+ "/sys_log_init.do", //缺省时，同GetGrid()的URL
+			         datatype:'json', 	             
+			         postData:{RootId:rootId, SubMenuId:subMenuId}, 
+			         page:1
+	       		 }).trigger('reloadGrid');
+	       		 
+            },//onnodeclick
+            url: RootPath()+ "/pages/system/log_center_tree.json"
+        };
+        $("#ItemsTree").treeview(itemtree);
+    }
+    
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: RootPath()+ "/sys_log_initPage.do",
+        	mtype : "POST",
+            datatype: "json",
+            height: $(window).height() - 185,
+            autowidth: true,
+            colModel:[
+                {label:'流水号', name:'id',index:'id', hidden: true },
+                {label:'日志类别', name:'type',index:'type',width:100, formatter:function(cellValue) {
+    						if (cellValue == 0) { return "访问日志";}
+    						else if (cellValue == 1) { return "运行时日志"; }
+    						else return '';
+    			 } },
+                {label:'操作用户(生成日志的类)', name:'name',index:'name',width:100,formatter:function(cellValue) {
+    				if (cellValue  == "9010") { return "<span style='color:blue'>超级管理员</span>";}
+    				else if (cellValue == "9090") { return "<span style='color:red'>领导</span>"; }
+    				else if (cellValue == "1010")  { return "<span style='color:red'>工队管理员</span>"; }
+    				else if (cellValue == "1090") { return "<span style='color:yellow'>工队领导</span>";}
+    				else return cellValue;
+    			 } },
+                {label:'IP地址', name:'ip',index:'ip', width:100},
+                {label:'访问时间(日志生成时间)', name:'time',index:'time', width:100},
+                {label:'操作状态', name:'status',index:'status', width:100,formatter:function(cellValue) {
+    						if (cellValue == "成功") { return "<span style='color:blue'>成功</span>";}
+    						else if (cellValue == "异常") { return "<span style='color:red'>异常</span>"; }
+    						else if (cellValue == "失败")  { return "<span style='color:red'>失败</span>"; }
+    						else if (cellValue == "调试") { return "<span style='color:yellow'>调试</span>";}
+    						else return cellValue;
+    			 } },
+                {label:'操作类别(日志级别)', name:'level',index:'level', width:150,sortable:false},               
+                {label:'操作描述(日志信息)', name: 'message',index:'message', width:1000, sortable:false}           
+            ],
+     	    viewrecords: true,
+            rowNum: "25",
+            rowList: [10,15,25,50], 
+            rownumbers: true,
+            sortname: 'id',
+            sortorder: 'desc',
+            shrinkToFit: false,
+            gridview: true,
+            jsonReader : {
+		         id: "id",
+		         root:"rows", 
+		       	 page: "page",
+		         total: "total",
+		         records: "records", 
+                 repeatitems : false 
+		     },
+		     page:1,
+		     pager: "#gridPager",
+		     pagerpos: "center",
+		     pgbuttons:true,
+		     recordpos:	"left",
+		     prmNames:{
+			    page:"page",  
+			    rows:"rows",  
+			    totalrows:"totalrows",
+			    sort: "sidx",
+				order: "sord"
+		     }, 
+        });
+        //自应高度
+        $(window).resize(function () {
+            $("#gridTable").setGridHeight($(window).height() - 185);
+        });
+    }
+    
+    
+    //刷新表格
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入  
+    }
+     //清空数据
+    function btn_broom() {
+    	var url = "/pages/system/log_center_remove.html";
+        openDialog(url, "Form", "清理系统日志", 300, 80, function (iframe) {
+            top.frames[iframe].AcceptClick();
+        });
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        if (QueryConChecked(keywords)) {
+	        $("#gridTable").jqGrid('setGridParam',{
+	            url: RootPath()+  "/sys_log_search.do", //缺省时，同GetGrid()的URL
+		        datatype:'json', 	             
+		        postData:{KeyValue:keywords}, 
+		        page:1 
+	        }).trigger('reloadGrid');
+       }
+    }
+
+</script>
+   
+   <!-- 布局 开始-->
+   <div id="layout" class="layout">
+	     <!--左边开始-->
+	     <div class="layoutPanel layout-west"> 
+	        <div class="btnbartitle"> <div>导航目录 </div></div>
+	        <div class="ScrollBar" id="ItemsTree"></div>
+	     </div><!--左边结束-->
+	     
+	     <!--中间开始-->
+	     <div class="layoutPanel layout-center">
+	        <div class="btnbartitle"><div>系统日志 - <span id="titleinfo">所有日志</span></div></div><!-- 标题行 -->
+	         <!--工具栏 行开始-->
+	        <div class="tools_bar" style="border-top: none; margin-bottom: 0px;">
+		        <div class="PartialButton"><!--工具条开始-->
+				<script type="text/javascript">
+				    $(document).ready(function () {
+				        PartialButton("/pages/system/log_center_button.json");  
+				    });
+				 </script>
+		         </div><!--工具条结束-->
+              </div><!--工具栏行 结束-->    
+	         <!-- 列表开始 -->
+             <div id="grid_List">
+                 <!-- 查询开始-->
+                 <div class="bottomline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+                    <table border="0" class="form-find" style="height: 45px;">
+                     <tr>
+                        <th>选取关键字：   </th>
+                        <td><select id="keywords" class="txtselect" style="width: 100px">
+	                        <option value="0">访问日志</option>
+	                        <option value="1">运行时日志</option>
+	                        <option value="2">非法访问</option>
+	                    </select> </td>
+                        <td> <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" /> </td>
+                     </tr>
+                    </table>
+                  </div><!-- 查询结束 -->
+                   <!-- jqgrid表格及分页显示 -->
+                   <table id="gridTable"></table>
+                    <div id="gridPager"></div>
+               </div> <!-- 列表结束 -->
+	     </div><!--中间结束-->
+   </div> <!-- 布局结束 -->
+</div>
+</body>
+</html>

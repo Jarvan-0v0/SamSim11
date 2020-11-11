@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	
+	<script src="../scripts/jquery/jquery.min.js"></script>
+	<script src="../scripts/jquery/jquery.browser.js"></script>
+    
+    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    
+    <script src="../scripts/flexpaper/js/flexpaper_flash.js"></script>
+    <!-- 
+	    <link href="./scripts/flexpaper/css/flexpaper.css" rel="stylesheet" />
+	    <script src="./scripts/flexpaper/js/flexpaper.js"></script>
+	    <script src="./scripts/flexpaper/js/flexpaper_handlers.js"></script>
+	    <script src="./scripts/flexpaper/js/flexpaper_handlers_debug.js"></script>
+     -->
+    <script>
+        $(function () {
+            $("#viewerPlaceHolder").height($(window).height() - 20);
+            $("#viewerPlaceHolder").width($(window).width() - 20);
+        })
+    </script>
+</head>
+<body style="margin: 10px;">
+    <a id="viewerPlaceHolder" style="width: 1000px; height: 700px; display: block; z-index: 100;"></a>
+    <script type="text/javascript">
+        var swfPath = "../scripts/flexpaper/FlexPaperViewer.swf";
+        
+        if (GetQuery('filename')) {//保存与PDF文件对应的swf文件的路径和文件
+            swfPath =RootPath()+ "/document/flexpaper/" + GetQuery('filename').replace('.pdf', '.swf');
+        }
+        if (swfPath != "") {
+            var fp = new FlexPaperViewer(
+            '../scripts/flexpaper/FlexPaperViewer', /* 对应FlexPaperViewer.swf文件*/
+            'viewerPlaceHolder',   /*对应于a 标签的id*/
+            {
+                config: {
+                    SwfFile: escape(swfPath),  /*SwfFile: 指示导入的.swf的路径*/
+                    Scale: 0.6,
+                    ZoomTransition: 'easeOut',
+                    ZoomTime: 0.5,
+                    ZoomInterval: 0.2,
+                    FitPageOnLoad: true,
+                    FitWidthOnLoad: false,
+                    PrintEnabled: true,
+                    FullScreenAsMaxWindow: false,
+                    ProgressiveLoading: false,
+                    MinZoomSize: 0.2,
+                    MaxZoomSize: 5,
+                    SearchMatchAll: false,
+                    InitViewMode: 'Portrait',
+                    ViewModeToolsVisible: true,
+                    ZoomToolsVisible: true,
+                    NavToolsVisible: true,
+                    CursorToolsVisible: true,
+                    SearchToolsVisible: true,
+                    localeChain: 'zh_CN' //'en_US'
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+<!-- 
+http://blog.csdn.net/xinxin19881112/article/details/48681637
+  view-source:http://121.40.148.178:8080/ExampleModule/PDFReader/PDFViewer
+-->

@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  
+  <script src="../scripts/jquery/jquery.min.js"></script>
+     
+  <link rel="stylesheet" href="../scripts/zTree/css/dropmenu.css" type="text/css">
+  <link rel="stylesheet" href="../scripts/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="../scripts/zTree/js/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="../scripts/zTree/js/jquery.ztree.excheck.js"></script>
+
+  <link href="../scripts/css/framework.css" rel="stylesheet" />
+  <script src="../scripts/js/framework.js"></script>
+  <script src="../scripts/js/validator.js"></script>
+  <script src="../scripts/My97DatePicker/WdatePicker.js"></script>
+
+ <link href="../scripts/jquery-editable-select/jquery-editable-select.css" rel="stylesheet" />
+ <script src="../scripts/jquery-editable-select/jquery-editable-select.min.js"></script>
+      <script src="../scripts/jquery/jquery.cookie.js"></script>   
+   <script type="text/javascript">
+     $(document).ready(function () {
+         Loadlayout();
+               
+     });
+   </script>
+   
+</head>
+<body><div>
+  <script type="text/javascript">
+  
+  var cc, qbid, clzs, dfrq, dfsj;
+  $(function () {
+	  
+  	cc = GetQuery("cc");	//当前转股道车次
+    document.getElementById('cc').value = cc;
+    qbid = GetQuery("qbid");	//确报ID
+  	document.getElementById('qbid').value = qbid;
+  	document.getElementById('keyValue').value = qbid;
+  	clzs = GetQuery("clzs");	//车辆总数
+  	document.getElementById('clzs').value = clzs;
+  	gdh = GetQuery("gdh");	//股道号
+    
+    BindSelectItem(); 	//下拉框
+    RadioSelectItem();	//点击选项
+  });
+  
+	//radio lable事件
+  	function RadioSelectItem() {
+		var $wdbz = $("#wdbz");	//晚点选项
+		$wdbz.click(function(e){
+			if ($wdbz.data('checked')){
+	        	$wdbz.prop('checked', false);
+	            $wdbz.data('checked', false);
+	        } 
+			else {
+	            $wdbz.prop('checked', true);
+	            $wdbz.data('checked', true);
+	        }
+		});
+}
+  
+  //下拉框
+  function BindSelectItem() {
+	  BindDropItem("/pages/common/dropList.json","#gdh", "fcgd", gdh);	//股道号
+	  BindDropItem("/pages/common/dropList.json","#jrfx", "jrfx", "");
+	  BindDropItem("/pages/common/dropList.json","#bzzm", "bzzm", "");	//编组站名
+	  BindDropItem("/pages/common/dropList.json","#dzm", "dzm", "");	//到站名
+	  //BindDropItem("/pages/common/dropList.json","#jyzm", "jyzm", "");	//经由站名
+	  BindDropItem("/pages/common/dropList.json","#gdfx", "gdfx", "");	//股道方向
+	  BindDropItem("/pages/common/dropList.json","#zbr", "zbr", "");	//制表人
+	  BindDropItem("/pages/common/dropList.json","#jcr", "jcr", "");	//检查人
+	}
+  
+    //保存事件
+    function AcceptClick() {
+    	if (!CheckDataValid('#form1')) {
+            return false;
+        }
+   		Loading(true, "正在提交数据...");
+           window.setTimeout(function () {
+           var postData = GetWebControls("#form1");  
+           postData.gdh = "";
+           getAjaxJson("/editSaveSamSystem.do", postData, function (data) {
+                   tipDialog(data.Message, 3, data.Code);
+           		if(data.Code > 0)
+                	top.frames[tabiframeId()].windowload();
+                		//closeDialog();
+               });
+           postData.tableName = "cch_dbzw";
+           getAjaxJson("/editSaveSamSystem.do", postData, function (data) {
+               tipDialog(data.Message, 3, data.Code);
+       		if(data.Code > 0)
+            	top.frames[tabiframeId()].windowload();
+            		closeDialog();
+           });
+         }, 200);
+    }
+
+</script>
+	<form id="form1">
+    <!-- 车次信息 -->
+    <div class="" style="margin: 1px; margin-top: 20px; margin-bottom: 0px; border:1px;">
+        <table class="form" style="border: 1px; border-radius:6px; height: 40px;">   
+          <tr>
+			 <th class="formTitleShort1">出发股道：</th>
+			 <td class="formValue"><select id="gdh" class="txtselect"></select></td>
+			 <th class="formTitleShort1">车次：</th>
+			 <td class="formValue"><input id="cc" class="txt" value="" readOnly="readonly" /></td>
+			 <th class="formTitleShort1">车数：</th>
+			 <td class="formValue"><input id="clzs" class="txt" value="" readOnly="readonly" /></td>
+		 </tr>
+		 <tr>
+		   	 <th class="formTitleShort1">编组车站：</th>
+			 <td class="formValue"><select id="bzzm" class="txtselect"></select></td> 
+			 <th class="formTitleShort1">列车到站：</th>
+			 <td class="formValue"><select id="dzm" class="txtselect"></select></td>
+			 <th class="formTitleShort1">股道方向：</th>
+			 <td class="formValue"><select id="gdfx" class="txtselect"></select></td>
+		 </tr>
+		  <tr>
+			 <th class="formTitleShort1">编完日期：</th>
+			 <td class="formValue"><input id="jlrq" class="txt Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></td>
+			 <th class="formTitleShort1">编完时间：</th>
+ 			 <td class="formValue"><input id="jlsj" class="txt Wdate" onfocus="WdatePicker({dateFmt:'HH:mm:ss'})"></td>
+			 <th class="formTitleShort1">制表人：</th>
+			 <td class="formValue"><select id="zbr" class="txtselect"></select></td>
+		 </tr>
+		 <tr>
+			  <th class="formTitleShort1">正点日期：</th>
+			 <td class="formValue"><input id="zdrq" class="txt Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></td>
+			 <th class="formTitleShort1">正点时间：</th>
+ 			 <td class="formValue"><input id="zdsj" class="txt Wdate" onfocus="WdatePicker({dateFmt:'HH:mm:ss'})"></td>
+			 <th class="formTitleShort1">检查人：</th>
+			 <td class="formValue"><select id="jcr" class="txtselect"></select></td>
+		 </tr>
+		 <tr>
+			 <th class="formTitleShort1">晚点原因：</th>
+			 <td class="formValue"><input id="wdyy" class="txt" value="" /></td>
+			 <th><label for="wdbz" style="margin-left: 10px;">晚点&nbsp;</label></th>
+			 <td><input type="radio" id="wdbz" name="wdbz" value="false" /></td>
+			 
+			 <th style="display:none; position: absolute;">表名：</th>
+			 <td style="display:none; position: absolute;"><input id="tableName" value="cch_dbml" ></td>
+			 <th style="display:none; position: absolute;">确报ID：</th>
+			 <td style="display:none; position: absolute;"><input id="qbid" ></td>
+			 <th style="display:none; position: absolute;">状态：</th>
+			 <td style="display:none; position: absolute;"><input id="zhuangtai" value="CF" ></td>
+			 
+			 <td style="display:none; position: absolute;"><input id="changeWhere" value="qbid" ></td>
+			 <td style="display:none; position: absolute;"><input id="keyValue" ></td>
+		 </tr>
+	</table>
+	</div>
+	
+   		
+    <!-- -->
+    <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+		 <ul id="dropTree" class="ztree" style="margin-top:0; width:140px; height: 120px;"></ul>
+	</div> 
+
+</form>
+</div></body>
+</html>

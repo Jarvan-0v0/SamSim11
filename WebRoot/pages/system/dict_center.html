@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		 
+		<script src="../scripts/jquery/jquery.min.js"></script>
+        <script src="../scripts/jquery/jquery.browser.js"></script>
+        
+		<link href="../scripts/css/framework.css" rel="stylesheet" />
+    	<script src="../scripts/js/framework.js"></script>
+    	
+    	<script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
+    	<script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    	<script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    	<link href="../scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />
+    	<link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" media="screen" />
+
+        <link href="../scripts/tree/tree.css" rel="stylesheet" />
+    	<script src="../scripts/tree/tree.js"></script>
+    	<script src="../scripts/jquery/splitter.js"></script>
+        
+        <script type="text/javascript">
+	        $(document).ready(function () { Loadlayout();});
+	    </script>
+</head>
+<body>
+<div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetTree();
+        GetGrid();
+    });
+    //加载左边树
+    var selectedItemId = "", selectedItemName = "", selectedItemCode = "";
+    function GetTree() {
+        var itemtree = {
+            onnodeclick: function (item) {
+               //selectedItemId = item.id; //ID
+               selectedItemName = item.text; //名称
+               selectedItemCode = item.value; //编码 库表名称
+               $("#titleinfo").text(item.text ); //$("#titleinfo").html(" - " + item.text + "(" + item.value + ")");
+               $("#gridTable").jqGrid('setGridParam',{
+		           	 url: RootPath()+ "/sys_dict_init.do", //缺省时，同GetGrid()的URL
+			         datatype:'json', 	             
+			         postData:{tableName:selectedItemCode}, 
+	       		 }).trigger('reloadGrid');
+	       		 
+            },//onnodeclick
+            url: RootPath()+ "/pages/system/dict_center_tree.json"
+        };
+        $("#ItemsTree").treeview(itemtree);
+    }
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: RootPath()+ "/sys_dict_init.do",
+            datatype: "json",
+           //treeGrid: true,函数GetJqGridRowValue不起作用。原因不明
+            //treeGridModel: "nested",
+            //ExpandColumn: "name",
+            height: $(window).height() - 135,//105
+            autowidth: true,
+            colModel:[
+                { label: "项目编码", name: 'id', index: 'id', width: 200 },
+                { label: "项目名称（最多30个字符）", name: 'name', index: 'name', width:300 }           
+            ],
+     	    pager: "false",
+            rowNum: 1000,
+            rownumbers: true,
+            shrinkToFit: false,
+        });
+        //autocomplete 
+        //自应高度
+        $(window).resize(function () {
+            $("#gridTable").setGridHeight($(window).height() - 135);
+        });
+    }
+    
+    //刷新表格
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入  
+    }
+    
+    //新增
+    function btn_add() {
+        if (!!selectedItemCode) { // + "&id=" + id + "&name=" + escape(name)
+            var url = "/pages/system/dict_center_add.html?selectedItemCode=" + selectedItemCode + "&selectedItemName=" + escape(selectedItemName);
+            openDialog(url, "Form", "新增数据字典项", 350, 120, function (iframe) {
+                top.frames[iframe].AcceptClick()
+            });
+        } else {
+            tipDialog('请选择分类目录。',2, 'warning');
+        }
+    } 
+    
+    //编辑
+    function btn_edit() {
+        var id = GetJqGridRowValue("#gridTable", "id");
+        var name = GetJqGridRowValue("#gridTable", "name");
+        if (IsChecked(id)) {
+            var url = "/pages/system/dict_center_edit.html?selectedItemCode=" + selectedItemCode + 
+                      "&selectedItemName=" + escape(selectedItemName) + 
+                      "&id=" + escape(id) + "&name=" + escape(name);
+            openDialog(url, "Form", "编辑数据字典", 350, 120, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+     
+     //删除记录
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        if (IsDelData(KeyValue)) {
+            var delparm = {tableName:selectedItemCode, KeyValue: KeyValue};
+            delConfig("/sys_dict_del.do",delparm, KeyValue.split(",").length);
+        }
+     }
+     
+     //清空数据
+    function btn_broom() {
+      if (!!selectedItemCode) {
+         var delparm = {tableName: selectedItemCode};
+         delConfirm("/sys_dict_broom.do",delparm, "您确定要删除数据字典："+selectedItemName+" 中所有信息吗？");
+      } else {
+            tipDialog('请选择分类目录。',2, 'warning');
+      }
+    }
+</script>
+   
+<!-- 布局 开始-->
+<div id="layout" class="layout">
+	     <!--左边开始-->
+	     <div class="layoutPanel layout-west"> 
+	        <div class="btnbartitle"> <div>分类目录 </div></div>
+	        <div class="ScrollBar" id="ItemsTree"></div>
+	     </div><!--左边结束-->
+	     <!--中间开始-->
+	     <div class="layoutPanel layout-center">
+	        <div class="btnbartitle"><div>数据字典 - <span id="titleinfo">未选择分类</span></div></div><!-- 标题行 -->
+	         <!--工具栏 行开始-->
+	        <div class="tools_bar" style="border-top: none; margin-bottom: 0px;">
+		        <div class="PartialButton">
+				<script type="text/javascript">
+				    $(document).ready(function () {PartialButton("/pages/system/dict_center_button.json"); });
+				 </script>
+		         </div><!--工具条结束-->
+              </div><!--工具栏行 结束-->  
+              <!-- 列表开始 -->
+             <div id="grid_List"  class="topline">
+                 <table id="gridTable"></table>
+              </div> <!--  列表结束 -->
+	     </div><!--中间结束-->
+</div> <!-- 布局结束 -->
+
+</div>
+</body></html>

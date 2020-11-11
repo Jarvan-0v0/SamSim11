@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		
+	<script src="../scripts/jquery/jquery.min.js"></script>
+    <script src="../scripts/jquery/jquery.browser.js"></script>
+	<link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    <script src="../scripts/js/validator.js"></script>
+    	  <script src="../scripts/jquery/jquery.cookie.js"></script>   
+    <script type="text/javascript">
+        $(document).ready(function () { Loadlayout();});
+    </script>
+</head>
+
+<body><div>
+<script type="text/javascript">
+   $(function () {
+      BindSelectItem();
+      InitControl();
+    });
+    //下拉框
+	function BindSelectItem() {
+	  BindDropItem("/pages/common/dropList.json","#sex", "gender", "");
+	  BindDropItem("/pages/common/dropList.json","#unittype", "unit_type", "");
+	  //初值
+	  var index = $('#unittype option:selected').val();
+	  changChild(index);
+	 
+	  //注册单位类别下拉框事件  
+      $("#unittype").change(function(){  
+       	changChild($(this).val());  
+       });  
+	}
+	
+	function changChild(unittype){  
+    	getAjaxJson("/drop_select_unitid.do", {"unittype":unittype}, function (data) {
+             $("#unitid").html("");  //清空所在单位下拉框  
+             var jsonText = JSON.stringify(data);//将JSON对象转化为JSON字符
+             var json = JSON.parse(jsonText);//由JSON字符串转换为JSON对象
+  	         var optionstring = "";  
+             for (var i = 0; i < json.length; i++) { 
+               	optionstring += "<option value=\"" + json[i].id + "\" >" + json[i].name + "</option>";
+              }
+             $("#unitid").html(optionstring);  
+       });
+    }  
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery("KeyValue")) {//接收地址栏参数，即获取传的参数值 
+            //获取基本信息
+            getAjaxJson("/base_user_edit_init.do", { KeyValue: GetQuery("KeyValue") }, function (data) {
+                SetWebControls(data);
+                $("#oldid").val(data.id);
+                $("#password").val(data.password);
+                //$("#sex").val(data.sex);     
+                /*if(data.sex == null)
+                  $("#sex").val("0");                
+                */
+                /*功能等同SetWebControls(data)
+            	var jsonText = JSON.stringify(data);
+  	        	var object = JSON.parse(jsonText);
+            	$("#id").val(object.id);*/ 
+            });
+            
+           /* $("#tb_basic tr").each(function () {
+	           	$(this).find('td').find('select').each(function ()  {
+		           var pk_id = $(this).attr('id');
+		           if (pk_id == "sex") {//获取当前选中项的text: .find("option:selected").text()
+		                $("#" + pk_id).parent().html($("#sex").find("option:selected").text());
+		            }
+		            else { $("#" + pk_id).parent().html($(this).val()); }
+	             })
+        	});*/
+        	//获取密码
+        	/*getAjaxJson("/base_user_pw_init.do", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                $("#password").val(data.password);
+            });*/
+        } 
+        else {
+        	alert('出错了！');
+        }
+    }
+    
+    //保存事件
+    function AcceptClick() {
+    //验证表单中的输入信息是否合法
+      if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var Password = $("#newPassword");
+        var NewPassword = $("#newPassword2");
+        if (Password.val() != NewPassword.val()) {
+            tipCss("#newPassword", "您两次输入的密码不一致");
+            return false;
+        }
+        Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+            var postData = GetWebControls("#form1");//自动获取页面控件值 
+            getAjaxJson("/base_user_editsave.do", postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }, 200);
+    }
+     
+</script>
+<form id="form1" style="margin: 1px">
+    <input id="oldid" type="text" style="display:none;" />
+    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+     <!--  <div style="height: 30px; line-height: 30px;">
+       <table class="form">
+           <tr>
+              <th class="formTitle">工号（登录账号）： </th>
+              <td class="formValue"> 
+                 <input id="oldid" type="text"  maxlength="10"  class="txt"  readOnly="true" />
+        	   </td>
+           </tr>
+       </table>
+     </div> -->
+     <div class="bd" style="border-bottom: none; margin-top: 1px; margin-bottom: 1px;">
+            <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+                <div class="tab_list_top" style="position: absolute">
+                    <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">可编辑基本信息</div>
+                    <div id="Tabpassword" class="tab_list bd " onclick="Tabchange('pw')">修改密码</div>
+                </div>
+            </div>
+     </div>
+    
+    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+        <!--基本信息-->
+        <div id="basic" class="tabPanel"">
+        <table id="tb_basic" class="form">
+            <tr>
+              <th class="formTitle">工号（登录账号）：</th>
+                <td class="formValue">
+                    <input id="id" type="text" class="txt required" datacol="yes" err="工号" checkexpession="NotNull" />
+                </td>
+              <th class="formTitle">姓名：</th>
+                <td class="formValue">
+                   <input id="name" type="text" class="txt required" datacol="yes" err="姓名" checkexpession="NotNull" />
+                </td>
+              </tr>
+              <tr>
+                 <th class="formTitle">性别：</th>
+                   <td class="formValue">
+                		<select id="sex" class="txtselect" readOnly="true"></select>
+            		</td>
+                 <th class="formTitle">电子邮箱：</th>
+                    <td class="formValue">
+                        <input id="email" type="text" class="txt" datacol="yes" err="邮箱"  checkexpession="EmailOrNull"/>
+                    </td>
+              </tr>
+             <tr>
+                <th class="formTitle">联系手机：</th>
+                  <td class="formValue">
+                      <input id="mobile" type="text" class="txt required" datacol="yes" err="手机" checkexpession="Mobile" />
+                  </td>
+                <th class="formTitle">联系电话：</th>
+                  <td class="formValue">
+                      <input id="phone" type="text" class="txt" datacol="yes" err="电话" checkexpession="PhoneOrNull" />
+                  </td>
+             </tr>
+             <tr>
+                  <th class="formTitle">微信号：</th>
+                  <td class="formValue"> <input id="weixin" type="text" class="txt" />  </td>
+                  <th class="formTitle">QQ号码：</th>
+                  <td class="formValue"> <input id="qq" type="text" class="txt" /> </td>
+              </tr>
+              <tr>
+                  <th class="formTitle">所在部门：</th>
+                  <td class="formValue"> <input id="departid" type="text" class="txt" />  </td>
+                  <th class="formTitle">职务：</th>
+                  <td class="formValue"> <input id="dutyid" type="text" class="txt" /> </td>
+              </tr>
+              <tr>
+                  <th class="formTitle">单位类别：</th>
+                  <td class="formValue" >
+                      <select id="unittype" class="txtselect" readOnly="true"></select>
+                  </td>
+                  <th class="formTitle">所在单位：</th>
+                  <td class="formValue">
+                       <select id="unitid" class="txtselect" readOnly="true"></select>
+                  </td>
+              </tr>
+              <tr>
+                  <th class="formTitle">备注： </th>
+                  <td class="formValue" colspan="3">
+                     <textarea id="descript" class="txtArea" rows="4"></textarea>
+                  </td>
+              </tr>
+    </table>
+    </div><!--基本信息结束-->
+  
+    <!--修改密码开始-->
+    <div id="pw" class="tabPanel" style="display: none;">
+    <table class="form">
+       <tr>
+            <th class="formTitle">原密码：  </th>
+            <td class="formValue">
+               <input id="password" type="text"  maxlength="10"  class="txt"  readOnly="true" />
+            </td>
+        </tr>
+        <tr>
+            <th class="formTitle">新密码： </th>
+            <td class="formValue">
+                <input id="newPassword" type="password" class="txt" datacol="yes"  />
+            </td>
+        </tr>
+        <tr>
+            <th class="formTitle">确认密码： </th>
+            <td class="formValue">
+                <input id="newPassword2" type="password" class="txt" datacol="yes"  />
+            </td>
+        </tr>
+    </table>
+    </div> <!--修改密码结束-->
+  
+</div>
+</form>
+</div></body>
+</html>

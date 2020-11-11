@@ -1,0 +1,16 @@
+[{"id":"1","text":"系统日志","Type":"Root","RootId":"1","parentnodes":"0", "img":"../scripts/images/Icon16/molecule.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":true,
+  "ChildNodes":[
+    {"id":"pNode01","text":"运行时日志","Type":"Root","RootId":"pNode01","parentnodes":"1","img":"../scripts/images/Icon16/hostname.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":true,
+       "ChildNodes":[
+        {"id":"LIKE '%调试%'","text":"调试信息","Type":"SubMenu","RootId":"pNode01","parentnodes":"pNode01","img":"../scripts/images/Icon16/chart_organisation.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":false,"ChildNodes":[]},
+		{"id":"LIKE '%异常%'","text":"异常信息","Type":"SubMenu","RootId":"pNode01","parentnodes":"pNode01","img":"../scripts/images/Icon16/chart_organisation.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":false,"ChildNodes":[]}
+   ]},
+       
+  {"id":"pNode02","text":"访问日志","Type":"Root","RootId":"pNode02","parentnodes":"1","img":"../scripts/images/Icon16/hostname.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":true,
+       "ChildNodes":[
+         {"id":"LIKE '%角色不详%'","text":"非法用户","Type":"SubMenu","RootId":"pNode02","parentnodes":"pNode02", "img":"../scripts/images/Icon16/chart_organisation.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":false,"ChildNodes":[]},
+         {"id":"LIKE '%领导%'","text":"领导","Type":"SubMenu","RootId":"pNode02","parentnodes":"pNode02","img":"../scripts/images/Icon16/chart_organisation.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":false,"ChildNodes":[]},
+         {"id":"LIKE '%管理员%'","text":"管理员","Type":"SubMenu","RootId":"pNode02","parentnodes":"pNode02", "img":"../scripts/images/Icon16/chart_organisation.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":false,"ChildNodes":[]}
+  ]}
+  
+]}]

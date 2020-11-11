@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="../scripts/jquery/jquery.min.js"></script>
+	    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    	<script src="../scripts/js/framework.js"></script>
+    	<script src="../scripts/jquery/jquery.browser.js"></script>
+  
+    	<script src="../scripts/js/validator.js"></script>
+    	<script src="../scripts/lhgdialog/lhgdialog.min.js"></script>
+</head>
+<body>
+<div>
+        
+<script type="text/javascript">
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = {
+            KeepTime: $("#KeepTime").val()
+        }
+        getAjaxJson("/sys_log_broom.do", postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 25px; margin-left: 40px; margin-right: 40px;">
+    <div style="padding-bottom: 5px;">
+        日志保留时间：<select id="KeepTime"  class="keyword" style="width: 125px;">
+            <option value="0">删除访问日志</option>
+            <option value="1">删除运行时日志</option>
+            <option value="2">不保留，全部删除</option>
+            <option value="3">保留近一个月日志</option>
+        </select>
+    </div>
+</form>
+
+</div>
+</body>
+</html>

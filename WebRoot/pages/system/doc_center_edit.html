@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		 
+	<script src="../scripts/jquery/jquery.min.js"></script>
+    <script src="../scripts/jquery/jquery.browser.js"></script>
+        
+	<link href="../scripts/css/framework.css" rel="stylesheet" />
+   	<script src="../scripts/js/framework.js"></script>
+   	<script src="../scripts/js/validator.js"></script>
+    
+    <script src="../scripts/My97DatePicker/WdatePicker.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () { Loadlayout();});
+    </script>
+</head>
+
+<body><div>
+<script type="text/javascript">
+    var id = GetQuery('ID');
+    $(function () { 
+    	BindSelectItem();
+    	InitControl();
+    })
+    //下拉框
+    function InitControl() {
+        getAjaxJson("/doc_center_editinit.do", {KeyValue:id}, function (data){
+            //var jsonText = JSON.stringify(data);//将JSON对象转化为JSON字符
+            //var object = JSON.parse(jsonText);//由JSON字符串转换为JSON对象
+            SetWebControls(data);
+  	        $("#oldID").val(data.id);
+  	        $("#oldFilename").val(data.filename);
+  	        $("#oldRelativepath").val(GetQuery('relativepath'));  
+  	        /*
+               $("#roleid").html("");  
+               var jsonText = JSON.stringify(data);
+  	           var json = JSON.parse(jsonText);
+               var optionstring = "";  
+               for (var i = 0; i < json.length; i++) { 
+                	optionstring += "<option value=\"" + json[i].id + "\" >" + json[i].name + "</option>";
+                }
+                $("#roleid").html(optionstring);
+           */  
+       });
+    }
+    //下拉框
+	function BindSelectItem() {
+	  BindDropItem("/pages/common/dropList.json","#ispublic", "shifou", "");
+	  BindDropItem("/pages/common/dropList.json","#filetype", "doctype", "");
+	}
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+            //relativepath = $("#filetype").get(0).selectedIndex;//索引0,1,...
+            //relativepath = $('#filetype option:selected').text();//选中的文本,科技图书，
+			var relativepath = $('#filetype option:selected').val();//选中的值10,20,
+            if(relativepath == "10")
+                relativepath ='standard';
+            else if(relativepath == "20")
+                relativepath ='literature';
+            else if(relativepath == "30")
+                relativepath ='book';
+            else if(relativepath == "40")
+                relativepath ='other';   
+            else if ( (relativepath == "80") || (relativepath == "90") ) 
+                relativepath ='template'; 
+            $("#relativepath").val(relativepath);  
+            
+            var postData = GetWebControls("#form1");//自动获取页面控件值 
+            getAjaxJson("/doc_center_editsave.do", postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }, 200);
+    }
+</script>
+<form id="form1" style="margin: 1px" >
+    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+<div class="bd" style="border-bottom: none; margin: 1px;">
+    <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+    <div class="tab_list_top" style="position: absolute">
+         <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">文档基本信息</div>
+    </div></div>
+</div>
+<div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+  <div id="basic" class="tabPanel""><table class="form">
+    <input type="hidden" id="oldID" />
+    <input type="hidden" id="oldFilename" />
+    <input type="hidden" id="oldRelativepath" />
+    <input type="hidden" id="relativepath" />
+    <tr>
+       <th class="formTitle">文档编号：</th>
+       <td class="formValue"><input id="id" name="id" type="text" class="txt required" datacol="yes" err="文档编号" checkexpession="NotNull" /></td>
+       <th class="formTitle">文档类别：</th>
+       <td class="formValue"><select id="filetype" name="filetype" class="txtselect" readOnly="true"></select></td>
+    </tr>
+    <tr>
+        <th class="formTitle">文档上传者：</th>
+        <td class="formValue"><input id="uploader" name="uploader" type="text" class="txt" /></td>
+        <th class="formTitle">文档是否公开：</th>
+        <td class="formValue"><select id="ispublic" name="ispublic" class="txtselect" readOnly="true"></select></td>
+    </tr>
+    <tr>
+        <th class="formTitle">文档编制者：</th>
+        <td class="formValue"><input id="author" name="author" type="text" class="txt" /></td>
+        <th class="formTitle">文档编制时间：</th>
+        <td class="formValue"><input id="publishdate" name="publishdate"  type="text" class="txt Wdate" onfocus="WdatePicker({maxDate:'%y-%M-%d'})"></td>
+    </tr>
+    <tr>
+       <th class="formTitle">文档标题：</th>
+       <td class="formValue" ><input id="name" name="name" type="text" class="txt" /> </td>
+       <th class="formTitle">文件名(附件)：</th>
+       <td class="formValue"><input id="filename" name="filename"  type="text" class="txt" ></td>
+    </tr>
+    <tr>
+         <th class="formTitle">文档简介： </th>
+         <td class="formValue" colspan="3">
+            <textarea id="descript" name="descript"  class="txtArea" rows="6"></textarea>
+         </td>
+     </tr>
+   </table></div>
+</div><!-- ScrollBar -->
+
+</form>
+</div></body>
+</html>

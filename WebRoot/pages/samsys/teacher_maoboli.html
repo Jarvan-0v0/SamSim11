@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	
+	<script src="../scripts/jquery/jquery.min.js"></script>
+	<script src="../scripts/jquery/jquery.browser.js"></script>
+    
+    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    <script src="../scripts/js/validator.js"></script>
+      
+    <script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    <script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <link href="../scripts/jqGrid/css/ui.jqgrid-maoboli.css" rel="stylesheet" />
+    <link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
+
+	<script src="../scripts/jquery/jquery.cookie.js"></script>   
+    <script type="text/javascript">
+	     $(document).ready(function () { Loadlayout();});
+	</script>
+	
+	<!-- jqgrid自动换行-->
+	<style>
+		.ui-jqgrid tr.jqgrow td { white-space: normal !important; height:auto; }
+	</style>
+	<!-- 可改变按钮的字体颜色
+	  <style type="text/css">
+	  a{display:block;height:30px;width:50px;line-height:30px;text-align:center;color:#f60}
+	</style> -->
+	
+</head>
+<body><div>
+<script type="text/javascript">
+	var objData = {};
+	var cch_dbml = "cch_dbml_1";
+	var cch_dbzw = "cch_dbzw_1";
+    $(document).ready(function () {
+    	getTestName();
+    	getTrainData("cch_dbml_1");
+    	GetGrid(); //加载表格      
+        BindSelectItem(); 	//下拉框
+    });
+
+  //下拉框
+    function BindSelectItem() {
+  	  BindDropItem("/pages/common/dropList.json","#maoboli", "maoboli", "");	//毛玻璃
+  	}
+    
+  //获取实验名称
+  	function getTestName() {
+	  	var postData = {tableName:"syt_exprimenttime",queryWhere:"status", keyValue:"1", rows:50, page:1}
+	  	getAjaxJson("/searchSamSystem.do", postData, function (data) {
+	  		var str = "";//="<option value=''></option>";		//select框第一个选项为空，这样不选择的时候就是空（null）
+	  		for(var i=0; i<data.records; i++){			//将数据循环插入select框中
+	  			var obj = data.rows[i];
+	        	str+="<option value=" + obj['exprimenttime_id'] + ">" + obj['expriment'] + "</option>";
+	        }
+	        $("#textname").html(str);　
+           	
+        });
+	}
+  
+   //加载毛玻璃表格
+    function GetGrid() {
+	   $("#gridTable").jqGrid({
+            url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"xc_sql_tab", queryWhere:"sql_name", keyValue:"maoboli_1"},
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 97,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "确报ID", name: 'qbid', index: 'qbid', width: 1, hidden: true},
+                {label: "股道号", name: 'gdh', index: 'gdh', width: 50, cellattr: addCellAttr},
+                {label: "站名称", name: 'zmc', index: 'zmc', width: 80},
+                {label: "车数", name: 'clzs', index: 'clzs', width: 50},
+                {label: "车辆信息", name: 'clsj', index: 'clsj', width: 1200, formatter: editLink}
+              
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "50",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'gdh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+	
+		     gridComplete:function(){
+	             var ids = $("#gridTable").getDataIDs();
+	             for(var i=0;i<ids.length;i++){
+	                     $('#'+ids[i]).find("td").css("font-size", "15px");
+	                 }
+	         },
+		     onSelectRow : function(id) {    },
+             ondblClickRow: function(){	btn_detail(); },
+ 		     
+	     });
+      }  
+     
+   
+  //获取dbml信息
+    function getTrainData(tableName) {
+    	getAjaxJson("/initSamSystem.do", {tableName:tableName, rows:100, page:1}, function (data){
+        	objData = data;
+	    });
+	}
+	//改变股道表格颜色
+    function addCellAttr(rowId, val, rawObject, cm, rdata) {
+   		var style = "style='font-size:16px; text-align:center;";
+   		var arry = val;
+        
+        for(var i=0;i<objData.records;i++){
+        	if((rawObject.qbid == objData.rows[i].qbid) && ((arry[0] == "A") || (arry[0] == "B") || (arry[0] == "D")) ){	//根据列检货检状态修改股道颜色
+                if((">" == objData.rows[i].huo) && (">" == objData.rows[i].lie)){
+                	style += "color:red;'";
+                }
+                else if(">" == objData.rows[i].huo){
+                	style += "color:yellow;'";
+                }
+                else if(">" == objData.rows[i].lie){
+                	style += "color:brown;'";
+                }
+                else if((objData.rows[i].zhuangtai == "DB") || (objData.rows[i].zhuangtai == "FB")){
+                	style += "color:green;'";
+                }
+            }
+        }
+        return style;
+    }
+   	
+   	//改变车辆信息颜色
+   	function editLink(cellValue, options, rowdata, action) {
+   		var arr = cellValue.split(",");
+   		var showList = "";
+   		for(var i=0; i<arr.length; i++){
+   			var arryxx = arr[i].split("/");
+   			if(arryxx[0] == "C")
+   				showList += '<a style="font-size:15px; color:white; background-color:green">' + arr[i] + ' ' + '</a>';
+   			else if(arryxx[0] == "P")
+   	   			showList += '<a style="font-size:15px; color:white; background-color:pink">' + arr[i] + ' ' + '</a>';
+   	   		else if(arryxx[0] == "X")
+   	   			showList += '<a style="font-size:15px; color:white; background-color:brown">' + arr[i] + ' ' + '</a>';
+   			else
+   				showList += '<a style="font-size:15px;">' + arr[i] + ' ' + '</a>';
+   		}
+   		return showList;
+   	}
+   
+     //刷新表格
+    function windowload() {
+       $("#gridTable").trigger("reloadGrid"); //重新载入  
+    }
+      
+ //股道详细信息
+   function btn_detail(){
+        var gdh = GetJqGridRowValue("#gridTable", "gdh");
+        if (IsChecked(gdh)) {
+           var url ="/pages/samsys/teacher_maoboli_detail.html?gdh=" + escape(gdh) + "&tableTitle=" + escape(cch_dbml) + "&tableName=" + escape(cch_dbzw);
+     		 FullWidthDialog(url, "Maoboli_Details_Form", "股道详细信息--[股道号："+ gdh + "]");
+       }
+    }
+ //设置实验场景
+   function btn_Set(){
+	    
+	 
+    }
+ 
+ 	//改变实验名称
+ 	function change_text() {
+ 		var textname = $("#textname").val();
+ 		if (IsChecked(textname)) {
+ 			document.getElementById('maoboli').value = textname; 	
+ 			change_MBL();
+ 		}
+	}
+ 
+ 	//改变毛玻璃
+ 	function change_MBL() {
+ 		var maoboli = $("#maoboli").val();
+ 		var keyValue = "maoboli_" + maoboli;
+ 		cch_dbml = "cch_dbml_" + maoboli;
+ 		cch_dbzw = "cch_dbzw_" + maoboli;
+        if (IsChecked(maoboli)) {
+        	getTrainData(cch_dbml);
+        	$("#gridTable").jqGrid('setGridParam',{
+	  			url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
+	  			postData:{tableName:"xc_sql_tab", queryWhere:"sql_name", keyValue:keyValue},
+	         	datatype:'json',               
+	         	page:1 ,
+        	}).trigger('reloadGrid');
+		}
+ 	}
+ 
+</script>
+<!--布局开始-->
+<div class="leftline rightline" style="margin-left: 1px; margin-right: 1px;">
+	<div class="bottomline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+		<table class="form-find" style="boder: 0px; height: 40px;">
+	    	<tr>
+	        	<th class="formTitleLong" style="font-size: 16px;">实训名称：</th>
+	        	<td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="textname" class="txtselect" onchange="change_text()"></select></td>
+	            <th class="formTitleLong" style="font-size: 16px;">毛玻璃：</th>
+	            <td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="maoboli" class="txtselect" onchange="change_MBL()"></select></td>
+	
+	            <td><input id="btnSet" type="button" class="btnSearch" value="设置" onclick="btn_Set()" /> </td>
+	        </tr>
+	     </table> 
+	</div>
+	 	
+	<table id="gridTable"></table>
+</div>
+
+</div> <!-- 布局结束 -->
+</div>
+
+</body>
+</html>

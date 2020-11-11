@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+				 
+		<script src="../scripts/jquery/jquery.min.js"></script>
+        <script src="../scripts/jquery/jquery.browser.js"></script>
+        
+        <link href="../scripts/css/framework.css" rel="stylesheet" />
+    	<script src="../scripts/js/framework.js"></script>
+    	<script src="../scripts/js/validator.js"></script>
+    	 
+        <link href="../scripts/css/table.css" rel="stylesheet" />
+    	  <script src="../scripts/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript">
+	        $(document).ready(function () { Loadlayout();});
+	    </script>
+</head>
+<body><div>
+<script>
+    $(function () {
+    	
+    	start_JianzhiBridge();
+    	start_Jianzhi3Bridge();
+    	start_LianxuBridge();
+    	start_Lianxu3Bridge();
+    });
+       function start_JianzhiBridge()
+       {
+    	   var d=new Date();
+    	   $("#Jianzhiyear").val(d.getFullYear());
+    	   $("#JianzhiBlock_Search").click(function()
+    			   {
+    		 
+    		   $("input[id*='Jianzhi_']").val("");
+    		   $("input[id*='JianzhiG_']").val("");
+    		   Get_JianzhiBridge();
+    			   });
+    	    }
+       function start_Jianzhi3Bridge()
+       {
+    	   var d=new Date();
+    	   
+    	   $("#Jianzhi3year").val(d.getFullYear());
+    	 
+    	   $("#Jianzhi3_Block_Search").click(function()
+    			   {
+    		   $(".txtShort").val(" ");      
+    		   Get_Jianzhi3Bridge();
+    			   });
+    	    }
+       function start_LianxuBridge()
+       {var d=new Date();
+    	   $("#Lianxuyear").val(d.getFullYear());
+    	   $("#Lianxu_Block_Search").click(function()
+    			   {
+    		   $(".txt").val(" ");
+    		   Get_LianxuBridge();
+    			   });
+    	    }
+       function start_Lianxu3Bridge()
+       {
+    	   var d=new Date();
+    	   $("#Lianxu3year").val(d.getFullYear());
+    	   $("#Lianxu3_Block_Search").click(function()
+    			   {
+    		   $(".txt").val(" ");
+    		   Get_lianxu3Bridge();
+    			   });
+    	    }
+       
+       
+        
+   
+    
+    function Get_JianzhiBridge() {
+    	var postData = jQuery.parseJSON('{' + "" + '}');
+        postData["Year"] = $("#Jianzhiyear").val();
+   
+       getAjaxJson("/JianzhiBridge_init.do", postData, function (data){
+    	      
+            SetWebControls(data);
+  	   });
+  	   
+  	   $("#lr-JianzhiBridge_back").click(function () {
+       	  btn_back();
+      });
+  	 }
+  	 function Get_Jianzhi3Bridge() {
+  		var postData = jQuery.parseJSON('{' + "" + '}');
+        postData["Year"] = $("#Jianzhi3year").val();
+        getAjaxJson("/Jianzhi3Bridge_init.do", postData, function (data){
+            SetWebControls(data);
+  	     });
+  	 }
+  	 
+  	 function Get_LianxuBridge() {
+  		var postData = jQuery.parseJSON('{' + "" + '}');
+        postData["Year"] = $("#lianxuyear").val();
+       getAjaxJson("/LianxuBridge_init.do", postData, function (data){
+            SetWebControls(data);
+  	   });
+  	 }
+  	 
+  	 function Get_Lianxu3Bridge() {
+  		 
+  		var postData = jQuery.parseJSON('{' + "" + '}');
+        postData["Year"] = $("#lianxu3year").val();
+       getAjaxJson("/Lianxu3Bridge_init.do", postData, function (data){
+            SetWebControls(data);
+  	   });
+  	 }
+</script>
+<!-- 布局开始  
+<div id="TabLianxuBridge" class="tab_list bd" onclick="Tabchange('LianxuBridge')">连续梁</div>
+<div id="TabLianxu3Bridge" class="tab_list bd" onclick="Tabchange('Lianxu3Bridge')">连续梁近三年</div>
+-->
+   
+<div class="bd" style="border: none;">
+<div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+    <div class="tab_list_top" style="position: absolute ">
+         <div id="TabJianzhiBridge" class="tab_list bd actived" onclick="Tabchange('JianzhiBridge')">简支梁和框构</div>
+         <div id="TabJianzhi3Bridge" class="tab_list bd" onclick="Tabchange('Jianzhi3Bridge')">简支梁和框构近三年</div>
+         <div id="TabLianxuBridge" class="tab_list bd" onclick="Tabchange('LianxuBridge')">连续梁</div>
+		<div id="TabLianxu3Bridge" class="tab_list bd" onclick="Tabchange('Lianxu3Bridge')">连续梁近三年</div>
+    </div>
+</div>
+
+<div class="ScrollBar" style="margin: 1px; margin-bottom: 0px;">
+
+<!-- 简支梁 -->
+<form id="form1">
+<div id="JianzhiBridge" class="tabPanel" >
+
+<div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">  
+      <table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Jianzhiyear" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="JianzhiBlock_Search" type="button" class="btnSearch" value="统计" /> </td>
+		      
+		      <td><input  type="button" class="btnSearch" value="导  出" onclick="btn_PrintsW()" /> </td>
+		      
+		      <td><a id="lr-JianzhiBridge_back" class="tools_btn" title="离开"><span><b style='background: url(../scripts/images/Icon16/back.png) no-repeat 50% 4px;'>离开</b></span></a></td>
+		      
+		  </tr>
+       </table>
+</div>
+</div>
+
+<div id="basic" class="rightline" style="display: block; width:99%;">
+<table class="form"><tbody>
+     <tr>
+		  <td class="tableCol_1">梁体跨度L/m</td>
+		  <td class="tableCol_1">梁体类型</td>
+		  <td class="tableCol_1">数量/孔</td>
+		  <td class="tableCol_1">小计 </td>
+		  <td class="tableCol_1">AA</td>
+		  <td  class="tableCol_1">A1</td>
+		  <td class="tableCol_1">B</td>
+		  <td  class="tableCol_1">C</td>
+		  <td class="tableCol_1">D</td>
+	</tr>
+	<tr >
+		  <td class="tableCol_1">8</td>
+		  <td class="tableCol_1">普通高度钢筋混凝土梁 </td>
+		  <td class="tableCol_1" ><input id="Jianzhi_8_kongshu" type="text" class="txt Jianzhitxt " readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_8_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_8_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_8_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_8_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_8_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_8_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+		 
+	 <tr>
+		  <td rowspan=2 class="tableCol_1">10</td>
+		  <td class="tableCol_1">低高度钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_10-1_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=2 class="tableCol_1"><input id="Jianzhi_10-1_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_10-1_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_10-1_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_10-1_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_10-1_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_10-1_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+	 <tr>
+		  <td class="tableCol_1">钢混结合梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_10-2_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 <td class="tableCol_1" ><input id="Jianzhi_10-2_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_10-2_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_10-2_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_10-2_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_10-2_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+	 
+	 <tr>
+		  <td rowspan=3 class="tableCol_1">12</td>
+		  <td class="tableCol_1">普通高度钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_12-1_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=3 class="tableCol_1"><input id="Jianzhi_12-1_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-1_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-1_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-1_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_12-1_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_12-1_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+	 <tr>
+		  <td class="tableCol_1">低高度钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_12-2_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-2_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-2_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-2_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_12-2_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_12-2_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  </tr>
+	  <tr>
+		  <td class="tableCol_1">低高度钢筋混凝土板梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_12-3_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-3_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-3_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_12-3_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_12-3_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_12-3_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  </tr>
+		 
+	  <tr>
+		  <td rowspan=2 class="tableCol_1">16</td>
+		  <td class="tableCol_1">普通高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_16-1_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=2 class="tableCol_1"><input id="Jianzhi_16-1_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_16-1_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_16-1_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_16-1_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_16-1_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_16-1_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  </tr>
+	  <tr>
+		  <td class="tableCol_1">低高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_16-2_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_16-2_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_16-2_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_16-2_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_16-2_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_16-2_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+		 
+	 <tr>
+		  <td rowspan=4 class="tableCol_1">20</td>
+		  <td class="tableCol_1">普通高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_20-1_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=4 class="tableCol_1"><input id="Jianzhi_20-1_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 <td class="tableCol_1" ><input id="Jianzhi_20-1_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-1_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-1_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-1_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-1_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+	 <tr>
+		  <td class="tableCol_1">中高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_20-2_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-2_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-2_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-2_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-2_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-2_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+	 <tr>
+		  <td class="tableCol_1">低高度预应力钢筋混凝土T梁  </td>
+		  <td class="tableCol_1"><input id="Jianzhi_20-3_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-3_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-3_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-3_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-3_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-3_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+	 <tr>
+		  <td class="tableCol_1">超低高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_20-4_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-4_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-4_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_20-4_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-4_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_20-4_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+	 </tr>
+		 
+		 <tr>
+		  <td rowspan=2 class="tableCol_1">24 </td>
+		  <td class="tableCol_1">普通高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_24-1_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=2 class="tableCol_1"><input id="Jianzhi_24-1_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_24-1_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_24-1_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_24-1_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_24-1_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_24-1_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr >
+		  <td class="tableCol_1">超低高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_24-2_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 <td class="tableCol_1" ><input id="Jianzhi_24-2_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_24-2_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_24-2_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_24-2_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_24-2_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 
+		 
+		 <tr>
+		  <td rowspan=2 class="tableCol_1">32 </td>
+		  <td class="tableCol_1">普通高度预应力钢筋混凝土T梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_32-1_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=2 class="tableCol_1"><input id="Jianzhi_32-1_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_32-1_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_32-1_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_32-1_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_32-1_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_32-1_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">超低高度预应力钢筋混凝土T梁  </td>
+		  <td class="tableCol_1"><input id="Jianzhi_32-2_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_32-2_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_32-2_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_32-2_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_32-2_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_32-2_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 
+		 
+		 <tr>
+		  <td class="tableCol_1">48</td>
+		  <td rowspan=2 class="tableCol_1">钢桁梁 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_48_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=2 class="tableCol_1"><input id="Jianzhi_48-1_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 <td class="tableCol_1" ><input id="Jianzhi_48_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_48_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_48_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_48_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_48_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">64 </td>
+		  <td class="tableCol_1"><input id="Jianzhi_64_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		   <td class="tableCol_1" ><input id="Jianzhi_64_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_64_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_64_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_64_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_64_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 
+		 <tr>
+		  <td class="tableCol_1">L<4 </td>
+		  <td rowspan=7 class="tableCol_1">框构  </td>
+		  <td class="tableCol_1"><input id="JianzhiG_4_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td rowspan=7 class="tableCol_1"><input id="JianzhiG_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		   <td class="tableCol_1" ><input id="JianzhiG_4_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_4_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_4_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_4_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_4_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">4≤L<8 </td>
+		  <td class="tableCol_1"><input id="JianzhiG_8_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		   <td class="tableCol_1" ><input id="JianzhiG_8_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_8_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_8_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_8_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_8_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">8≤L<10</td>
+		  <td class="tableCol_1"><input id="JianzhiG_10_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+	     <td class="tableCol_1" ><input id="JianzhiG_10_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_10_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_10_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_10_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_10_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">10≤L＜12</td>
+		  <td class="tableCol_1"><input id="JianzhiG_12_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_12_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_12_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_12_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_12_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_12_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">12≤L＜16</td>
+		  <td class="tableCol_1"><input id="JianzhiG_16_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 <td class="tableCol_1" ><input id="JianzhiG_16_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_16_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_16_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_16_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_16_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">16≤L＜20</td>
+		  <td class="tableCol_1"><input id="JianzhiG_20_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_20_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_20_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_20_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_20_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_20_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">L≥20 </td>
+		  <td class="tableCol_1"><input id="JianzhiG_00_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_00_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_00_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="JianzhiG_00_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_00_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="JianzhiG_00_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td class="tableCol_1">其他  </td>
+		  <td class="tableCol_1">  </td>
+		  <td class="tableCol_1"><input id="Jianzhi_other_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1"><input id="Jianzhi_other_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_other_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_other_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_other_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_other_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_other_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+		 <tr>
+		  <td colspan=2 class="tableCol_1">合计  </td>
+		  <td class="tableCol_1"><input id="Jianzhi_total_kongshu" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1"><input id="Jianzhi_total_xiaoji" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_total_AA" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_total_A1" type="text" class="txt Jianzhitxt" readOnly/></td>
+		  <td class="tableCol_1" ><input id="Jianzhi_total_B" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_total_C" type="text" class="txt Jianzhitxt" readOnly/></td>
+	  	  <td class="tableCol_1" ><input id="Jianzhi_total_D" type="text" class="txt Jianzhitxt" readOnly/></td>
+		 </tr>
+</tbody></table> 
+</div></div>
+
+<!-- 简支梁三年 -->
+<form id="form3">
+<div id="Jianzhi3Bridge" class="tabPanel" style="display: none;">
+
+<div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">  
+      <table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Jianzhi3year" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="Jianzhi3_Block_Search" type="button" class="btnSearch" value="统计" /> </td>
+		      <td><a id="Jianzhi3Bridge_back" class="tools_btn" title="离开"><span><b style='background: url(../scripts/images/Icon16/back.png) no-repeat 50% 4px;'>离开</b></span></a></td>
+		      
+		  </tr>
+       </table>
+
+</div>
+</div>
+
+<div id="basic" class="rightline" style="display: block; width:99%;">
+<table class="form"><tbody>
+     <tr>
+	  <td width=125 class="tableCol_1"></td>
+	  <td width=96  class="tableCol_1"></td>
+	  <td colspan=5 class="tableCol_1"><input id="JfirstYear" type="text" class="txt " readOnly/> </td>
+	  <td colspan=5 class="tableCol_1"><input id="JsecondYear" type="text" class="txt Jianzhi3txt" readOnly/> </td>
+	  <td colspan=5 class="tableCol_1"><input id="JthirdYear" type="text" class="txt" readOnly/> </td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">  </td>
+	  <td class="tableCol_1">梁体跨度/m</td>
+	  <td class="tableCol_1">AA </td>
+	  <td class="tableCol_1">A1 </td>
+	  <td class="tableCol_1">B </td>
+	  <td class="tableCol_1">C</td>
+	  <td class="tableCol_1">D </td>
+	  <td class="tableCol_1">AA </td>
+	  <td class="tableCol_1">A1</td>
+	  <td class="tableCol_1">B </td>
+	  <td class="tableCol_1">C</td>
+	  <td class="tableCol_1">D </td>
+	  <td class="tableCol_1">AA </td>
+	  <td class="tableCol_1">A1 </td>
+	  <td class="tableCol_1">B </td>
+	  <td class="tableCol_1">C </td>
+	  <td class="tableCol_1">D </td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">桥梁数量/座 </td>
+	  <td class="tableCol_1">  </td>
+	  <td class="tableCol_1"><input id="Jnum_1_sum_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_sum_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_sum_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_sum_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_sum_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_sum_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_sum_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_sum_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_sum_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_sum_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_sum_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_sum_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_sum_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_sum_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_sum_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">占全线桥梁比例 </td>
+	  <td class="tableCol_1">  </td>
+	  <td class="tableCol_1"><input id="Jnum_1_bili_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_bili_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_bili_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_bili_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_bili_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_bili_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_bili_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_bili_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_bili_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_bili_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_bili_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_bili_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_bili_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_bili_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_bili_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td rowspan=11 class="tableCol_1">桥梁孔跨数/孔 </td>
+	  <td class="tableCol_1">8 </td>
+	  <td class="tableCol_1"><input id="Jnum_1_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_8_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_8_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_8_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">10 </td>
+	   <td class="tableCol_1"><input id="Jnum_1_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_10_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_10_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_10_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">12 </td>
+	   <td class="tableCol_1"><input id="Jnum_1_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_12_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_12_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_12_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">16 </td>
+	   <td class="tableCol_1"><input id="Jnum_1_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_16_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_16_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_16_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">20 </td>
+	   <td class="tableCol_1"><input id="Jnum_1_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_20_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_20_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_20_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	  <tr>
+	  <td class="tableCol_1">24</td>
+	   <td class="tableCol_1"><input id="Jnum_1_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_24_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_24_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_24_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">32</td>
+	   <td class="tableCol_1"><input id="Jnum_1_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_32_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_32_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_32_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	<tr>
+	  <td class="tableCol_1">64</td>
+	  <td class="tableCol_1"><input id="Jnum_1_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_64_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">框构</td>
+	   <td class="tableCol_1"><input id="Jnum_1_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">其他</td>
+	  <td class="tableCol_1"><input id="Jnum_1_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_other_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">合计</td>
+	 <td class="tableCol_1"><input id="Jnum_1_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_1_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_2_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jnum_3_heji_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 
+	 
+	 <tr>
+	  <td rowspan=11 class="tableCol_1">占同类桥梁比例  </td>
+	 <td class="tableCol_1">8 </td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_8_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_8_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_8_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">10 </td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_10_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_10_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_10_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">12 </td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_12_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_12_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_12_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">16 </td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_16_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_16_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_16_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">20 </td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_20_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_20_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_20_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	  <tr>
+	  <td class="tableCol_1">24</td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_24_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_24_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_24_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">32</td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_32_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_32_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_32_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	<tr>
+	  <td class="tableCol_1">64</td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_64_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">框构</td>
+	   <td class="tableCol_1"><input id="Jtonglei_1_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">其他</td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_other_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">合计</td>
+	 <td class="tableCol_1"><input id="Jtonglei_1_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_1_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_2_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jtonglei_3_heji_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 
+	 
+	 <tr>
+	  <td  rowspan=11  class="tableCol_1">占全线桥梁比例  </td>
+	  <td class="tableCol_1">8 </td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_8_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_8_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_8_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_8_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_8_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_8_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_8_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">10 </td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_10_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_10_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_10_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_10_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_10_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_10_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_10_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">12 </td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_12_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_12_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_12_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_12_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_12_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_12_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_12_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">16 </td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_16_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_16_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_16_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_16_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_16_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_16_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_16_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">20 </td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_20_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_20_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_20_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_20_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_20_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_20_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_20_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	  <tr>
+	  <td class="tableCol_1">24</td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_24_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_24_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_24_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_24_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_24_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_24_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_24_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">32</td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_32_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_32_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_32_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_32_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_32_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_32_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_32_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	<tr>
+	  <td class="tableCol_1">64</td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_64_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">框构</td>
+	   <td class="tableCol_1"><input id="Jquanxian_1_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_kuanggou_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_kuanggou_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_kuanggou_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_kuanggou_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_kuanggou_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">其他</td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_other_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">合计</td>
+	 <td class="tableCol_1"><input id="Jquanxian_1_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_1_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_2_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Jquanxian_3_heji_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+     
+</tbody></table> 
+</div></div>
+
+<!-- 连续梁 -->
+<form id="form2">
+<div id="LianxuBridge" class="tabPanel" style="display: none;">
+
+<div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">
+ <table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Lianxuyear" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="Lianxu_Block_search" type="button" class="btnSearch" value="统计" /> </td>
+		      <td><a id="lr-LianxuBridge_back" class="tools_btn" title="离开"><span><b style='background: url(../scripts/images/Icon16/back.png) no-repeat 50% 4px;'>离开</b></span></a></td>
+		      
+		  </tr>
+       </table>
+	
+</div>
+</div>
+
+<div id="basic" class="rightline" style="display: block; width:99%;">
+<table class="form"><tbody>
+	 <tr>
+	  <td class="tableCol_1">梁体跨度L/m</td>
+	  <td class="tableCol_1">梁体类型  </td>
+	  <td class="tableCol_1">数量/孔 </td>
+	  <td class="tableCol_1">小计 </td>
+	  <td class="tableCol_1">AA</td>
+	  <td class="tableCol_1">A1</td>
+	  <td class="tableCol_1">B </td>
+	  <td class="tableCol_1">C</td>
+	  <td class="tableCol_1">D</td>
+	 </tr>
+	 
+	 <tr>
+	  <td class="tableCol_1">40  </td>
+	  <td rowspan=4 class="tableCol_1">预应力钢筋混凝土箱梁 </td>
+	  <td class="tableCol_1" ><input id="Lianxu_40_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1" ><input id="Lianxu_40_xiaoji" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_40_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_40_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_40_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_40_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_40_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 
+	 <tr>
+	  <td class="tableCol_1">50 </td>
+	  <td class="tableCol_1" ><input id="Lianxu_50_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td rowspan=2 class="tableCol_1"><input id="Lianxu_50_xiaoji" type="text" class="txt" readOnly/> </td>
+	   <td class="tableCol_1" ><input id="Lianxu_50_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_50_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_50_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_50_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_50_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">72  </td>
+	  <td class="tableCol_1" ><input id="Lianxu_72_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1" ><input id="Lianxu_72_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_72_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_72_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_72_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_72_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">80 </td>
+	  <td class="tableCol_1" ><input id="Lianxu_80_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td rowspan=3 class="tableCol_1"><input id="Lianxu_80_xiaoji" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1" ><input id="Lianxu_80_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_80_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_80_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_80_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_80_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">48</td>
+	  <td rowspan=4 class="tableCol_1">连续钢桁梁  </td>
+	  <td class="tableCol_1"><input id="Lianxu_48_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1" ><input id="Lianxu_48_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_48_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_48_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_48_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_48_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">64 </td>
+	  <td class="tableCol_1"><input id="Lianxu_64_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1" ><input id="Lianxu_64_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_64_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_64_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_64_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_64_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">120 </td>
+	  <td class="tableCol_1"><input id="Lianxu_120_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td rowspan=2 class="tableCol_1"><input id="Lianxu_120_xiaoji" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1" ><input id="Lianxu_120_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_120_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_120_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_120_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_120_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">180 </td>
+	  <td class="tableCol_1"><input id="Lianxu_180_kongshu" type="text" class="txt" readOnly/> </td>
+ 	 <td class="tableCol_1" ><input id="Lianxu_180_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_180_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_180_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_180_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_180_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">其他  </td>
+	  <td class="tableCol_1"></td>
+	  <td class="tableCol_1"><input id="Lianxu_other_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1"><input id="Lianxu_other_xiaoji" type="text" class="txt" readOnly/> </td>
+      <td class="tableCol_1" ><input id="Lianxu_other_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_other_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_other_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_other_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_other_D" type="text" class="txt" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td colspan=2 class="tableCol_1">合计 </td>
+	  <td class="tableCol_1"><input id="Lianxu_total_kongshu" type="text" class="txt" readOnly/> </td>
+	  <td class="tableCol_1"><input id="Lianxu_total_xiaoji" type="text" class="txt" readOnly/> </td>
+      <td class="tableCol_1" ><input id="Lianxu_total_AA" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_total_A1" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_total_B" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_total_C" type="text" class="txt" readOnly/></td>
+	  <td class="tableCol_1" ><input id="Lianxu_total_D" type="text" class="txt" readOnly/></td>
+	 </tr>    
+     
+</tbody></table> 
+</div></div>    
+</form>
+
+<!-- 连续梁三年 -->
+<form id="form4">
+<div id="Lianxu3Bridge" class="tabPanel" style="display: none;">
+
+<div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">
+<table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Lianxu3year" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="Lianxu3_Block_search" type="button" class="btnSearch" value="统计" /> </td>
+		      <td><a id="Lianxu3Bridge_back" class="tools_btn" title="离开"><span><b style='background: url(../scripts/images/Icon16/back.png) no-repeat 50% 4px;'>离开</b></span></a></td>
+		      
+		  </tr>
+       </table>
+</div>
+</div>
+
+<div id="basic" class="rightline" style="display: block; width:99%;">
+<table class="form"><tbody>
+  <tr>
+	  <td width=125 class="tableCol_1">  </td>
+	  <td width=96  class="tableCol_1"> </td>
+	  <td colspan=5 class="tableCol_1"><input id="LfirstYear" type="text" class="txt" readOnly/></td>
+	  <td colspan=5 class="tableCol_1"><input id="LsecondYear" type="text" class="txt" readOnly/></td>
+	  <td colspan=5 class="tableCol_1"><input id="LthirdYear" type="text" class="txt" readOnly/></td>
+   </tr>
+	 <tr>
+	  <td class="tableCol_1">  </td>
+	  <td class="tableCol_1">梁体跨度/m</td>
+	  <td class="tableCol_1">AA </td>
+	  <td class="tableCol_1">A1 </td>
+	  <td class="tableCol_1">B </td>
+	  <td class="tableCol_1">C</td>
+	  <td class="tableCol_1">D </td>
+	  <td class="tableCol_1">AA </td>
+	  <td class="tableCol_1">A1</td>
+	  <td class="tableCol_1">B </td>
+	  <td class="tableCol_1">C</td>
+	  <td class="tableCol_1">D </td>
+	  <td class="tableCol_1">AA </td>
+	  <td class="tableCol_1">A1 </td>
+	  <td class="tableCol_1">B </td>
+	  <td class="tableCol_1">C </td>
+	  <td class="tableCol_1">D </td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">桥梁数量/座 </td>
+	  <td class="tableCol_1">  </td>
+	  <td class="tableCol_1"><input id="Lnum_1_sum_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_sum_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_sum_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_sum_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_sum_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_sum_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_sum_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_sum_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_sum_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_sum_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_sum_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_sum_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_sum_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_sum_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_sum_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">占全线桥梁比例 </td>
+	  <td class="tableCol_1">  </td>
+	  <td class="tableCol_1"><input id="Lnum_1_bili_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_bili_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_bili_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_bili_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_bili_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_bili_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_bili_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_bili_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_bili_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_bili_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_bili_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_bili_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_bili_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_bili_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_bili_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 
+	 <tr>
+	  <td rowspan=10 class="tableCol_1">桥梁孔跨数/孔 </td>
+	  <td class="tableCol_1">40 </td>
+	  <td class="tableCol_1"><input id="Lnum_1_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_40_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_40_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_40_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">48 </td>
+	  <td class="tableCol_1"><input id="Lnum_1_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_48_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_48_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_48_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">50 </td>
+	  <td class="tableCol_1"><input id="Lnum_1_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_50_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_50_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_50_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">64 </td>
+	  <td class="tableCol_1"><input id="Lnum_1_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_64_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">72 </td>
+	  <td class="tableCol_1"><input id="Lnum_1_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_72_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_72_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_72_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	  <tr>
+	  <td class="tableCol_1">80</td>
+	  <td class="tableCol_1"><input id="Lnum_1_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_80_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_80_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_80_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">120</td>
+	  <td class="tableCol_1"><input id="Lnum_1_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_120_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_120_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_120_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">180</td>
+	   <td class="tableCol_1"><input id="Lnum_1_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_180_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_180_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_180_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">其他</td>
+	   <td class="tableCol_1"><input id="Lnum_1_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_other_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">合计</td>
+	  <td class="tableCol_1"><input id="Lnum_1_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_1_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_2_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lnum_3_heji_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 
+	 <tr>
+	  <td rowspan=10 class="tableCol_1">占同类桥梁比例  </td>
+	  <td class="tableCol_1">40 </td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_40_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_40_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_40_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">48 </td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_48_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_48_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_48_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">50 </td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_50_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_50_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_50_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">64 </td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_64_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">72 </td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_72_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_72_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_72_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	  <tr>
+	  <td class="tableCol_1">80</td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_80_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_80_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_80_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">120</td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_120_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_120_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_120_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	<tr>
+	  <td class="tableCol_1">180</td>
+	   <td class="tableCol_1"><input id="Ltonglei_1_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_180_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_180_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_180_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">其他</td>
+	   <td class="tableCol_1"><input id="Ltonglei_1_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_other_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">合计</td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_1_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_2_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Ltonglei_3_heji_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 
+	 <tr>
+	  <td  rowspan=10  class="tableCol_1">占全线桥梁比例  </td>
+	  <td class="tableCol_1">40 </td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_40_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_40_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_40_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_40_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_40_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_40_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_40_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">48 </td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_48_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_48_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_48_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_48_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_48_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_48_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_48_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">50 </td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_50_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_50_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_50_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_50_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_50_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_50_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_50_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">64 </td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_64_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_64_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_64_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_64_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_64_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_64_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">72 </td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_72_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_72_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_72_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_72_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_72_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_72_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_72_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	  <tr>
+	  <td class="tableCol_1">80</td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_80_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_80_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_80_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_80_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_80_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_80_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_80_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">120</td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_120_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_120_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_120_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_120_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_120_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_120_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_120_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	<tr>
+	  <td class="tableCol_1">180</td>
+	   <td class="tableCol_1"><input id="Lquanxian_1_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_180_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_180_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_180_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_180_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_180_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_180_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_180_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">其他</td>
+	   <td class="tableCol_1"><input id="Lquanxian_1_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_other_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_other_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_other_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_other_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_other_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_other_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+	 <tr>
+	  <td class="tableCol_1">合计</td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_1_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_2_heji_D" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_heji_AA" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_heji_A1" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_heji_B" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_heji_C" type="text" class="txtShort" readOnly/></td>
+	  <td class="tableCol_1"><input id="Lquanxian_3_heji_D" type="text" class="txtShort" readOnly/></td>
+	 </tr>
+     
+</tbody></table> 
+</div></div>    
+</form>
+
+</div><!-- class="ScrollBar" -->
+</div><!--class="bd" -->
+</div></body>
+</html>

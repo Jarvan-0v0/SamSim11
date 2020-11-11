@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		    http://www.springframework.org/schema/beans/spring-beans.xsd 
+		    http://www.springframework.org/schema/context
+  		    http://www.springframework.org/schema/context/spring-context.xsd
+  	        http://www.springframework.org/schema/mvc
+			http://www.springframework.org/schema/mvc/spring-mvc.xsd" >
+	
+    <!-- 支持JSON 注释 -->
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" />
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+	    <property name="favorPathExtension" value="false" />
+	</bean>
+
+	<mvc:default-servlet-handler/>
+	
+	<!-- 链接式i18n国际化、网址拦截器--> 
+	<mvc:interceptors>  
+    	<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+	</mvc:interceptors>
+	 
+	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
+	<context:component-scan base-package="blkjweb.controller" />
+		
+	<!-- spring管理登录拦截器 . 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->  
+    <mvc:interceptors>    
+        <mvc:interceptor>   
+            <mvc:mapping path="/**" />  <!-- 所有的请求都进行拦截  -->
+            <!-- 需要拦截的url <mvc:mapping path="/pages/**" />  -->
+            <mvc:exclude-mapping path="/index.html"/>   <!-- 不需要拦截的地址 -->    
+            <bean class="blkjweb.listener.Interceptor"></bean> <!--   拦截器实现类 -->  
+        </mvc:interceptor> 
+    </mvc:interceptors>
+    
+	<!-- 配置SpringMVC的视图解析器   定义跳转的文件的前后缀 ，视图模式配置 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<!-- 配置页面的路径前缀  如 /WEB-INF/jsp/   /pages/-->
+		<property name="prefix" value="/pages/" />
+		<!-- 配置URl后缀 -->
+		<property name="suffix" value=".html"/>
+	</bean>
+	
+</beans>

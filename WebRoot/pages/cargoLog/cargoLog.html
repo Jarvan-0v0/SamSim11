@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>无标题文档</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<link href="../scripts/css/framework.css" rel="stylesheet" />
+<script src="../scripts/js/framework.js"></script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+<script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+<link href="../scripts/jqGrid/css/ui.jqgrid-maoboli.css" rel="stylesheet" />
+<link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet" />
+<style type="text/css"> 
+	.hoverRow{
+		background-color:#77AFCA;
+	}
+	.clickRow{
+		background-color:yellow;
+	}
+</style>
+<script type="text/javascript">	
+	var resource1 = new Array();
+	var resource2 = new Array();
+	
+	function cb_ini(){									//初始化
+		/*
+		（此说明为初版）
+		货检系统需实现若干功能，如下：
+			在第一个表格中，一旦点击其中一辆车，立即在第二个表格中显示该车的对应的信息；
+			在第一个表格中，一旦选中一辆车，该车（即该行数据高亮显示）处于选中状态，此时按下“货检开始”按钮，
+		在第三个表格中的“货检日志”处于选中状态，同时将该车相应信息显示在第三表格中的可填充信息中，填充完毕后
+		需将开始时间从系统中获取，并填充当前时间。（货检中无与“关门”相关的操作）。基本来说操作人员仅需填写结
+		束时间。当填写好结束时间后点击货检确认。此时当前选中列车货检完成；
+			在列检过程中可能存在需要扣车的情况。当需要时，在第二个表格中选择相应的车厢。此时该车厢高亮显示。
+		点击货检扣车。此时第三个表格显示“扣修登记”。在“扣修登记”表格里自动填充相应的车厢信息，其余信息需操作
+		人员自行填写记录。填写完毕后点击保存时将相应车辆的相应信息的扣修车登记的各项数据及关联数据记录在（缓
+		存）数据库内。填写完毕或填写中途也可取消扣车，此时填写的信息作废，不进入（缓存）数据库。点击提交时将
+		填写的各项数据提交到（服务器）另一数据库中；
+			列检系统基本相同。仅多了关门的相关功能；
+		*/
+		
+		$("#gridTable3").css("display","none");
+	
+		GetGrid1();
+		
+		$(".cb_bottom").click(function(){
+			$("#dataTable3").html('<table id="gridTable3" class="cbTab"></table>');
+			$("#gridTable3").jqGrid('clearGridData');
+			if(this.innerText == "货检日志"){
+				$(".cb_bottom").eq(1).css("background-color","#fff");
+				$(".cb_bottom").eq(0).css("background-color","#8CCEEE");
+				GetGrid3();
+			}else{
+				$(".cb_bottom").eq(0).css("background-color","#fff");
+				$(".cb_bottom").eq(1).css("background-color","#8CCEEE");
+				GetGrid4();
+			}
+		})
+	}
+	
+	$(document).ready(function(){
+		cb_ini();
+		
+		
+	})
+	
+	function GetGrid1(){
+		$("#gridTable1").jqGrid({
+            url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cch_dbml"}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height()*0.25,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                      {label: "确报ID", name: 'qbid', index: 'qbid', width: 1, hidden: true},
+                      {label: "车次", name: 'cc', index: 'cc', width: 80},
+                      {label: "流水号", name: 'lsh', index: 'lsh', width: 100},
+                      {label: "匹配率", name: 'ppl', index: 'ppl', width: 50},
+                      {label: "计划编号", name: 'jhbh', index: 'jhbh', width: 100},
+                      {label: "车数", name: 'clzs', index: 'clzs', width: 50},
+                      {label: "发站名", name: 'fzm', index: 'fzm', width: 80},
+                      {label: "自重", name: 'ziz', index: 'ziz', width: 80},
+                      {label: "换长", name: 'hc', index: 'hc', width: 80},
+                      {label: "到发日期", name: 'dfrq', index: 'dfrq', width: 130},
+                      {label: "到发时间", name: 'dfsj', index: 'dfsj', width: 130},
+                      {label: "到达股道", name: 'dfgd', index: 'dfgd', width: 80},
+                      {label: "到站名", name: 'dzm', index: 'dzm', width: 80},
+                      {label: "自首尾", name: 'swbz', index: 'swbz', width: 50},
+                      {label: "直通", name: 'zt', index: 'zt', width: 50},
+                      {label: "篷布数", name: 'pbs', index: 'pbs', width: 50},
+                      {label: "制表人", name: 'zbr', index: 'zbr', width: 80},
+                      {label: "检查人", name: 'jcr', index: 'jcr', width: 80}
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "50",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'cc',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+            jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+		     gridComplete:function(){
+	             var ids = $("#gridTable1").getDataIDs();
+	             for(var i=0;i<ids.length;i++){
+	                 $('#'+ids[i]).find("td").css({"font-size": "16px","text-align":"center"});
+	             }
+	         },
+		     onSelectRow:function(){showData();}
+	     });
+	  }
+	var countClick = 0;
+	function showData(){
+		var qbid = GetJqGridRowValue("#gridTable1", "qbid");
+		if(countClick == 0){
+			GetGrid2(qbid);										//这个第一次运行
+			countClick = 2;
+		}else{
+			$("#gridTable2").jqGrid('clearGridData');//清空表格
+			$("#gridTable2").jqGrid('setGridParam',{			//这个后续运行1
+	            url: RootPath() + "/searchSamSystem.do",
+		         datatype:'json',               
+		         postData:{tableName:"cch_dbzw",queryWhere:"qbid", keyValue:qbid}, 
+		         page:1 
+		    }).trigger('reloadGrid');
+		}
+     }
+	function GetGrid2(keyValue) {
+    	$("#gridTable2").jqGrid({
+            url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cch_dbzw", queryWhere:"qbid", keyValue:keyValue}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height()*0.25,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "顺位号", name: 'swh', index: 'swh', width: 50},
+                {label: "车号", name: 'ch', index: 'ch', width: 80},
+                {label: "车种", name: 'cz', index: 'cz', width: 80},
+                {label: "自重", name: 'ziz', index: 'ziz', width: 50},
+                {label: "换长", name: 'hc', index: 'hc', width: 50},
+                {label: "油种", name: 'yz', index: 'yz', width: 50},
+                {label: "成组", name: 'chengzu', index: 'chengzu', width: 50},
+                {label: "载重", name: 'zaiz', index: 'zaiz', width: 50},
+                {label: "到站", name: 'dzm', index: 'dzm', width: 80},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 80},
+                {label: "到局", name: 'zdj', index: 'zdj', width: 80},
+                {label: "品名", name: 'pm', index: 'pm', width: 120},
+                {label: "发站", name: 'fzm', index: 'fzm', width: 80},
+                {label: "篷布", name: 'pb', index: 'pb', width: 50},
+                {label: "记事栏", name: 'jsl', index: 'jsr', width: 400},
+                {label: "收货人", name: 'shr', index: 'shr', width: 400}
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "50",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'swh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+            jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+	
+		     gridComplete:function(){
+	             var ids = $("#gridTable2").getDataIDs();
+	             for(var i=0;i<ids.length;i++){
+	                     $('#'+ids[i]).find("td").css({"font-size": "16px","text-align":"center"});
+	                 }
+	         },
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){	btn_detail(); },
+	     });
+      }
+    function GetGrid3() {
+    	$("#gridTable3").css("display","");
+    	$("#gridTable3").jqGrid({
+            url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cargo_inspection_log"}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height()*0.22,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "序号", name: 'xh', index: 'xh', width: 30},//editable: true,edittype:'text',sorttype:'integer'},
+                {label: "车次", name: 'cc', index: 'cc', width: 50},//editable: true,edittype:'text'},
+                {label: "车号", name: 'ch', index: 'ch', width: 50},//editable: true,edittype:'text'},
+                {label: "车种", name: 'cz', index: 'cz', width: 50},//editable: true,edittype:'text'},
+                {label: "到站名", name: 'dzm', index: 'dzm', width: 50},//editable: true,edittype:'text'},
+                {label: "发站名", name: 'fzm', index: 'fzm', width: 50},//editable: true,edittype:'text'},
+                {label: "品名", name: 'pm', index: 'pm', width: 50},//editable: true,edittype:'text'},
+                {label: "载重", name: 'zz', index: 'zz', width: 50},//editable: true,edittype:'text'},
+                {label: "换长", name: 'hc', index: 'hc', width: 50},//editable: true,edittype:'text'},
+                {label: "记事栏", name: 'jsl', index: 'jsl', width: 50},//editable: true,edittype:'text'},
+                {label: "扣车标志", name: 'kcbz', index: 'kcbz', width: 50},//editable: true,edittype:'text'},
+                {label: "扣车原因", name: 'kcyy', index: 'kcyy', width: 180},//editable: true,edittype:'text'},
+                {label: "修竣时间", name: 'xjsj', index: 'xjsj', width: 80},//editable: true,edittype:'text'},
+                {label: "操作人", name: 'czr', index: 'czr', width: 50},//editable: true,edittype:'text'},
+                {label: "操作时间", name: 'czsj', index: 'czsj', width: 80},//editable: true,edittype:'text'}
+     		],
+     		scroll:true,	//显示所有数据
+     		sortname: 'xh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'desc',//排序顺序，升序或者降序（asc or desc）
+     		gridComplete:function(){
+	             var ids = $("#gridTable3").getDataIDs();
+	             for(var i=0;i<ids.length;i++){
+	                     $('#'+ids[i]).find("td").css({"font-size": "16px","text-align":"center"});
+	             }
+	         },
+	         loadComplete: function (){
+		     	dataSave1();
+		     	source_save();
+		     }
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){	btn_detail(); },
+	         
+	     });
+      }
+    function GetGrid4() {
+    	$("#gridTable3").css("display","");
+    	$("#gridTable3").jqGrid({
+            url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cargo_inspection_book"}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height()*0.22,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "序号", name: 'xh', index: 'xh', width: 30},//editable: true,edittype:'text',sorttype:'integer'},
+                {label: "车次", name: 'cc', index: 'cc', width: 50},//editable: true,edittype:'text'},
+                {label: "到站名", name: 'dzm', index: 'dzm', width: 50},//editable: true,edittype:'text'},
+                {label: "发站名", name: 'fzm', index: 'fzm', width: 50},//editable: true,edittype:'text'},
+                {label: "品名", name: 'pm', index: 'pm', width: 50},//editable: true,edittype:'text'},
+                {label: "载重", name: 'zz', index: 'zz', width: 50},//editable: true,edittype:'text'},
+                {label: "换长", name: 'hc', index: 'hc', width: 50},//editable: true,edittype:'text'},
+                {label: "记事栏", name: 'jsl', index: 'jsl', width: 50},//editable: true,edittype:'text'},
+                {label: "开始时间", name: 'kssj', index: 'kssj', width: 80},//editable: true,edittype:'text'},
+                {label: "结束时间", name: 'jssj', index: 'jssj', width: 80},//editable: true,edittype:'text'},
+                {label: "扣车标志", name: 'kcbz', index: 'kcbz', width: 50},//editable: true,edittype:'text'},
+                {label: "操作人", name: 'czr', index: 'czr', width: 50},//editable: true,edittype:'text'},
+                {label: "操作时间", name: 'czsj', index: 'czsj', width: 80},//editable: true,edittype:'text'}
+     		],
+     		scroll:true,	//显示所有数据
+     		sortname: 'xh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'desc',//排序顺序，升序或者降序（asc or desc）
+     		gridComplete:function(){
+	            var ids = $("#gridTable3").getDataIDs();
+	            for(var i=0;i<ids.length;i++){
+	                    $('#'+ids[i]).find("td").css({"font-size": "16px","text-align":"center"});
+	            }
+	        },
+	        loadComplete: function (){
+	        	dataSave2();
+	        	source_save();
+	        }
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){	btn_detail(); },
+	         
+	     });
+    	/*
+    	if(sort == 0){
+    		//这里获取当前操作时间并格式化填入开始时间中
+    		var da = new Date(); 
+    		var mon = da.getMonth()+1;
+    		var d = da.getDate();
+    		var h = da.getHours();
+    		var min = da.getMinutes();
+    		if (mon < 10) {mon = "0" + mon;}
+    		if (d < 10) {d = "0" + d;}
+    		if (h < 10) {h = "0" + h;}
+    		if (min < 10) {min = "0" + min;}
+    		var cargoInspection_date = da.getFullYear() + mon + d + h + min;
+            var dataRow = {
+                "xh" : "",
+                "cc" : GetJqGridRowValue("#gridTable1", "cc"),
+                "dzm" : GetJqGridRowValue("#gridTable2", "dz"),
+                "fzm" : GetJqGridRowValue("#gridTable2", "fz"),
+                "pm" : GetJqGridRowValue("#gridTable2", "pm"),
+                "zz" : GetJqGridRowValue("#gridTable2", "zz"),
+                "hc" : GetJqGridRowValue("#gridTable2", "hc"),
+                "jsl" : GetJqGridRowValue("#gridTable2", "jsl"),
+                "kssj" : cargoInspection_date,
+                "jssj" : "",
+                "kcbz" : "",
+                "czr" : "",
+                "czsj" : "",
+            };
+            $("#gridTable3").jqGrid("addRowData", -1, dataRow, "first");
+            
+            var ids = $("#gridTable3").getDataIDs();
+            for(var i=0;i<ids.length;i++){
+                    $('#'+ids[i]).find("td").css({"font-size": "16px","text-align":"center"});
+            }
+            cacheId = ids[ids.length-1];
+            $("#"+ids[ids.length-1]).attr("contenteditable",true);
+    	}
+    	var ids = $("#gridTable3").getDataIDs();
+        for(var i=0;i<ids.length;i++){
+                $('#'+ids[i]).find("td").css({"font-size": "16px","text-align":"center"});
+        }
+        */
+      }  
+  	
+	/***********************************************起*******************************************************/
+	var cacheId;
+	function btn_edit(){
+		$("#gridTable3 tr").attr("contenteditable",true);
+		$("#gridTable3 tr").eq(0).attr("contenteditable",false);
+		if(colorRGBtoHex($(".cb_bottom").eq(0).css("background-color")) == "#8cceee"){
+			dataSave1();
+		}else{
+			dataSave2();
+		}
+	}
+	function btn_save(){
+		$("tr").attr("contenteditable",false);
+		//当处在扣修登记时
+		var color = $(".cb_bottom").eq(1).css("background-color");
+		var colorJudge = colorRGBtoHex(color);
+		if(colorJudge == "#8cceee"){
+			dataSave2();
+		}else{
+			dataSave1();
+		}
+		source_save();
+	}
+	function source_show(){
+		var sourceData1 = new Array();
+		var sourceData2 = new Array();
+		if(resource1.length != 0){
+			alert("本大爷是数据1\n行数是："+resource1.length+"\n列数是："+resource1[0].length);
+			for(var i = 0;i<resource1.length;i++){
+				for(var j = 0;j<resource1[0].length;j++){
+					sourceData1 += resource1[i][j] + "_";
+				}
+				sourceData1 += "*\n";
+			}
+			alert(sourceData1);
+		}
+		if(resource2.length != 0){
+			alert("本大爷是数据2\n行数是："+resource2.length+"\n列数是："+resource2[0].length);
+			for(var i = 0;i<resource2.length;i++){
+				for(var j = 0;j<resource2[0].length;j++){
+					sourceData2 += resource2[i][j] + "_";
+				}
+				sourceData2 += "*\n";
+			}
+			alert(sourceData2);
+		}
+		
+	}
+	function source_save(){
+		if(colorRGBtoHex($(".cb_bottom").eq(0).css("background-color")) == "#8cceee"){
+			resource1.length = 0;
+			for(var i = 0;i<rowCount;i++){
+	            resource1[i] = new Array();
+				for(var j = 0;j<colCount;j++){
+	                resource1[i][j] = dataArrayTable1[i][j];
+				}
+			}
+		}else{
+			resource2.length = 0;
+			for(var i = 0;i<rowCount;i++){
+	            resource2[i] = new Array();
+				for(var j = 0;j<colCount;j++){
+	                resource2[i][j] = dataArrayTable2[i][j];
+				}
+			}
+		}
+	}
+	function btn_submit(){
+		var sourceData1 = new Array();
+		var sourceData2 = new Array();
+		if(resource1.length != 0){
+			for(var i = 0;i<resource1.length;i++){
+				for(var j = 0;j<resource1[0].length;j++){
+					sourceData1 += resource1[i][j] + "_";
+				}
+				sourceData1 += "*";
+			}
+			document.form001.data1.value = sourceData1;
+		}
+		if(resource2.length != 0){
+			for(var i = 0;i<resource2.length;i++){
+				for(var j = 0;j<resource2[0].length;j++){
+					sourceData2 += resource2[i][j] + "_";
+				}
+				sourceData2 += "*";
+			}
+			document.form001.data2.value = sourceData2;
+		}
+		document.getElementById("cargoLog_form").submit();
+	}
+	function btn_delete(){
+		if(GetJqGridRowValue("#gridTable3", "cc") != null){
+			if(colorRGBtoHex($(".cb_bottom").eq(0).css("background-color")) == "#8cceee"){
+				dataSave1();
+				var deleteCount;
+				for(var i=0;i<rowCount;i++){
+					if(dataArrayTable1[i][1] == GetJqGridRowValue("#gridTable3", "cc")){
+						deleteCount = i;
+					}
+				}
+				cut(dataArrayTable1,deleteCount);
+				cut(resource1,deleteCount);
+			}else{
+				dataSave2();
+				var deleteCount;
+				for(var i=0;i<rowCount;i++){
+					if(dataArrayTable2[i][1] == GetJqGridRowValue("#gridTable3", "cc")){
+						deleteCount = i;
+					}
+				}
+				cut(dataArrayTable2,deleteCount);
+				cut(resource2,deleteCount);
+			}
+			reloadTable();
+		}else{
+			alert("请先选定再删除！");
+		}
+	}
+	function btn_cancel(){
+		reloadTable();
+	}
+	function btn_print(){	
+		alert("r u ok?");
+		source_show();
+	}
+	
+	function btn_cargoInspectionBegin(){
+		if(GetJqGridRowValue("#gridTable1", "cc") == null){
+			alert("请在货检操作前先选择列车！");
+		}else{
+			//GetJqGridRowValue("#gridTable1", "qbid");
+			$("#dataTable3").html('<table id="gridTable3" class="cbTab"></table>');
+			GetGrid3();
+			$(".cb_bottom").eq(1).css("background-color","#fff");
+			$(".cb_bottom").eq(0).css("background-color","#8CCEEE");
+			var dataRow = {
+    	        "xh" : "",
+    	        "cc" : GetJqGridRowValue("#gridTable1", "cc"),
+    	        "ch" : "",
+    	        "cz" : "",
+    	        "dzm" : GetJqGridRowValue("#gridTable1", "dzm"),
+    	        "fzm" : GetJqGridRowValue("#gridTable1", "fzm"),
+    	        "pm" : "",
+    	        "zz" : "",
+    	        "hc" : GetJqGridRowValue("#gridTable1", "hc"),
+    	        "jsl" : "",
+    	        "kcbz" : "",
+    	        "kcyy" : "",
+    	        "xjsj" : "",
+    	        "czr" : "",
+    	        "czsj" : "",
+    	    };
+    	    $("#gridTable3").jqGrid("addRowData", -1, dataRow, "first");
+    	    $("tr").css({"font-size": "16px","text-align":"center"});
+            $("#gridTable3 tr").attr("contenteditable",true);
+    		$("#gridTable3 tr").eq(0).attr("contenteditable",false);
+		}
+	}
+	function btn_cargoInspectionDetention(){
+		if(document.getElementById("gridTable2").children.length == 0){
+			alert("请在货检扣车前先选择列车！");
+		}else if(GetJqGridRowValue("#gridTable2", "jsl") == null){
+			alert("请在货检扣车前先选择车厢！");
+		}else{
+			$("#dataTable3").html('<table id="gridTable3" class="cbTab"></table>');
+			GetGrid4();
+			$(".cb_bottom").eq(1).css("background-color","#8CCEEE");
+			$(".cb_bottom").eq(0).css("background-color","#fff");
+			//这里获取当前操作时间并格式化填入开始时间中
+    		var da = new Date(); 
+    		var mon = da.getMonth()+1;
+    		var d = da.getDate();
+    		var h = da.getHours();
+    		var min = da.getMinutes();
+    		if (mon < 10) {mon = "0" + mon;}
+    		if (d < 10) {d = "0" + d;}
+    		if (h < 10) {h = "0" + h;}
+    		if (min < 10) {min = "0" + min;}
+    		var cargoInspection_date = da.getFullYear() + mon + d + h + min;
+            var dataRow = {
+                "xh" : "",
+                "cc" : GetJqGridRowValue("#gridTable1", "cc"),
+                "dzm" : GetJqGridRowValue("#gridTable2", "dz"),
+                "fzm" : GetJqGridRowValue("#gridTable2", "fz"),
+                "pm" : GetJqGridRowValue("#gridTable2", "pm"),
+                "zz" : GetJqGridRowValue("#gridTable2", "zz"),
+                "hc" : GetJqGridRowValue("#gridTable2", "hc"),
+                "jsl" : GetJqGridRowValue("#gridTable2", "jsl"),
+                "kssj" : cargoInspection_date,
+                "jssj" : "",
+                "kcbz" : "",
+                "czr" : "",
+                "czsj" : "",
+            };
+            $("#gridTable3").jqGrid("addRowData", -1, dataRow, "first");
+            $("tr").css({"font-size": "16px","text-align":"center"});
+            $("#gridTable3 tr").attr("contenteditable",true);
+    		$("#gridTable3 tr").eq(0).attr("contenteditable",false);
+		}
+	}
+	function btn_cargoInspectionConfirm(){
+		$("tr").attr("contenteditable",false);
+		//当处在扣修登记时
+		var color = $(".cb_bottom").eq(1).css("background-color");
+		var colorJudge = colorRGBtoHex(color);
+		if(colorJudge == "#8cceee"){
+			//这里获取当前操作时间并格式化
+			var da = new Date(); 
+			var mon = da.getMonth()+1;
+			var d = da.getDate();
+			var h = da.getHours();
+			var min = da.getMinutes();
+			if (mon < 10) {mon = "0" + mon;}
+			if (d < 10) {d = "0" + d;}
+			if (h < 10) {h = "0" + h;}
+			if (min < 10) {min = "0" + min;}
+			var cargoInspection_date = da.getFullYear() + mon + d + h + min;
+			//这里获取选中的数据的位置
+			var $objTd = $("#gridTable3 tr").eq(1).find("td");
+			//这里赋值
+			$objTd.eq(9).html(cargoInspection_date);
+			dataSave2();
+		}else{
+			dataSave1();
+		}
+		source_save();
+	}
+	/***********************************************止*******************************************************/
+	//删除name数组的第i行代码
+	function cut(name ,i){
+        var al,acl,j,k;
+        al=name.length-1;
+        for(j=i;j<al;j++)
+            {acl=name[i].length;
+            for(k=0;k<acl;k++){
+                name[j][k]=name[j+1][k];
+            }
+        }
+        name.length--
+    }
+	//颜色RGB转换#代码
+	function colorRGBtoHex(color) {
+	    var rgb = color.split(',');
+	    var r = parseInt(rgb[0].split('(')[1]);
+	    var g = parseInt(rgb[1]);
+	    var b = parseInt(rgb[2].split(')')[0]);
+	    var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+	    return hex;
+	 }
+	var dataArrayTable1 = new Array();				//这里用来存储货检日志数据
+	var dataArrayTable2 = new Array();				//这里用来存储扣修登记数据
+	var rowCount = 0;								//这里用来记录操作时的表格数据行数
+	var colCount = 0;								//这里用来记录操作时的表格数据列数
+	function reloadTable(){
+		$("#gridTable3").jqGrid("clearGridData");
+		if(colorRGBtoHex($(".cb_bottom").eq(0).css("background-color")) == "#8cceee"){
+			for(var i=0;i<rowCount;i++){
+				var mydata = [{xh : resource1[i][0],cc : resource1[i][1],ch : resource1[i][2],cz : resource1[i][3],dzm : resource1[i][4],fzm : resource1[i][5],pm : resource1[i][6],zz : resource1[i][7],hc : resource1[i][8],jsl : resource1[i][9],kcbz : resource1[i][10],kcyy : resource1[i][11],xjsj : resource1[i][12],czr : resource1[i][13],czsj : resource1[i][14]}];
+				$("#gridTable3").jqGrid("addRowData", -1, mydata);
+			}
+		}else{
+			for(var i=0;i<rowCount;i++){
+				var mydata = [{xh : dataArrayTable2[i][0],cc : dataArrayTable2[i][1],dzm : dataArrayTable2[i][2],fzm : dataArrayTable2[i][3],pm : dataArrayTable2[i][4],zz : dataArrayTable2[i][5],hc : dataArrayTable2[i][6],jsl : dataArrayTable2[i][7],kssj : dataArrayTable2[i][8],jssj : dataArrayTable2[i][9],kcbz : dataArrayTable2[i][10],czr : dataArrayTable2[i][11],czsj : dataArrayTable2[i][12]}];
+				$("#gridTable3").jqGrid("addRowData", -1, mydata);
+			}
+		}
+		var ids = $("#gridTable3").getDataIDs();
+    	for(var i=0;i<ids.length;i++){
+            $('#'+ids[i]).find("td").css({"font-size": "16px","text-align":"center"});
+    	}
+	}
+	//var mydata = [{xh : resource1[i][0],cc : resource1[i][1],ch : resource1[i][2],cz : resource1[i][3],dzm : resource1[i][4],fzm : resource1[i][5],pm : resource1[i][6],zz : resource1[i][7],hc : resource1[i][8],jsl : resource1[i][9],kcbz : resource1[i][10],kcyy : resource1[i][11],xjsj : resource1[i][12],czr : resource1[i][13],czsj : resource1[i][14]}];
+	//var mydata = [{xh : dataArrayTable2[i][0],cc : dataArrayTable2[i][1],dzm : dataArrayTable2[i][2],fzm : dataArrayTable2[i][3],pm : dataArrayTable2[i][4],zz : dataArrayTable2[i][5],hc : dataArrayTable2[i][6],jsl : dataArrayTable2[i][7],kssj : dataArrayTable2[i][8],jssj : dataArrayTable2[i][9],kcbz : dataArrayTable2[i][10],czr : dataArrayTable2[i][11],czsj : dataArrayTable2[i][12]}];
+	function dataSave1(){
+		dataArrayTable1.length = 0;
+		var dataColCount = 0;				
+		var dataRowCount = 0;
+		$('#gridTable3 tr:gt(0)').each(function(i){                   // 遍历 tr
+			dataArrayTable1[dataRowCount] = new Array();
+			$(this).children('td').each(function(j){  // 遍历 tr 的各个 td
+		    	dataArrayTable1[dataRowCount][dataColCount] = $(this).text();
+				dataColCount += 1;
+		    });
+			dataRowCount += 1;
+			rowCount = dataRowCount;    //这里获取gridTable3数据的行数
+			colCount = dataColCount;    //这里获取gridTable3每行的数据个数
+			dataColCount = 0;
+		});
+		/*
+		for(var i=0;i<rowCount;i++){
+			for(var j=0;j<colCount;j++){
+				alert(dataArrayTable1[i][j]);
+			}
+		}
+		*/
+	}
+	function dataSave2(){
+		dataArrayTable2.length = 0;
+		var dataColCount = 0;							
+		var dataRowCount = 0;
+		$('#gridTable3 tr:gt(0)').each(function(i){                   // 遍历 tr
+			dataArrayTable2[dataRowCount] = new Array();
+			$(this).children('td').each(function(j){  // 遍历 tr 的各个 td
+		    	dataArrayTable2[dataRowCount][dataColCount] = $(this).text();
+				dataColCount += 1;
+		    });
+			dataRowCount += 1;
+			rowCount = dataRowCount;    //这里获取gridTable3数据的行数
+			colCount = dataColCount;    //这里获取gridTable3每行的数据个数
+			dataColCount = 0
+		});
+	}
+</script>
+</head>
+
+<body>
+<div class="tools_bar" style="margin-top: 1px; margin-bottom: 0px;">
+   	<div class="PartialButton" style="position:absolute;width:100%;">
+		<script type="text/javascript">
+		    $(document).ready(function () {
+		        PartialButton("/pages/cargoLog/sam_cargoLog_button.json");  
+		    });
+		</script>
+	</div>
+</div>
+<div class="cBook_content">
+	<div id="cb_tab1" class="CD">
+		<table id="gridTable1" class="cbTab"></table>
+	</div>
+	<div id="cb_tab2" class="CD">
+		<table id="gridTable2" class="cbTab"></table>
+	</div>
+	<div id="cb_tab3" class="CD">
+		<div id="dataTable3"><table id="gridTable3" class="cbTab"></table></div>
+       	<!--不显示分页栏
+       	<div id="gridPager"></div> -->
+       	<div style="border:#000 solid 0;position:absolute;bottom:0;height:28px;width:100%;background-color:#F6F6F6">
+       		<span class="cb_bottom">
+       			货检日志
+       		</span>
+       		<span class="cb_bottom">
+       			扣修登记
+       		</span>
+       	</div>
+	</div>
+</div>
+<form id="cargoLog_form" name="form001" action="dodata_cargoBook.jsp" method="post" style="display:none;">
+	<input name="data1">
+	<input name="data2">
+</form>
+</body>
+</html>

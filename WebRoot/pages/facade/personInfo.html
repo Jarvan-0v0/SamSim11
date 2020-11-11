@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <link href="../scripts/css/framework.css" rel="stylesheet" />
+        <script src="../scripts/jquery/jquery-2.2.4.min.js"></script>
+        <script src="../scripts/jquery/jquery.cookie.js"></script>
+        <script src="../scripts/js/framework.js"></script>
+</head>
+<body><div>
+   <script>
+    //var usename = sessionStorage.getItem("USERNAME");
+    var username = $.cookie("USERNAME");
+    $(function () { 
+         BindSelectItem(); 
+         InitControl(); 
+    })
+    //初始化个人信息
+    function InitControl() {
+       getAjaxJson("/personInfo.do", {id: username}, function (data){
+            SetWebControls(data);
+            /*功能等同SetWebControls(data)
+            var jsonText = JSON.stringify(data);
+  	        var object = JSON.parse(jsonText);
+            $("#id").val(object.id);*/           
+        });
+        $("#tb_basic tr").each(function () {
+            $(this).find('td').find('select').each(function ()  {
+                var pk_id = $(this).attr('id');
+                if (pk_id == "role") {
+                    $("#" + pk_id).parent().html($("#role").find("option:selected").text());
+                }
+                else {
+                    $("#" + pk_id).parent().html($(this).val());
+                }
+            })
+        });
+     }
+     //下拉框 
+	 function BindSelectItem() {
+		 //BindDropItem("/pages/common/dropList.json","#role", "user_role", "");
+         getAjaxJson("/drop_select_role.do", "", function (data) {
+                $("#role").html("");  
+                var jsonText = JSON.stringify(data);
+  	            var json = JSON.parse(jsonText);
+                var optionstring = "";  
+                for (var i = 0; i < json.length; i++) { 
+                 	optionstring += "<option value=\"" + json[i].id + "\" >" + json[i].name + "</option>";
+                 }
+                 $("#role").html(optionstring);  
+            });
+	 }
+    /*基本信息end=====================================*/
+</script>
+<div class="ScrollBar" style="margin: 1px">
+    <!--基本信息-->
+    <div id="basic" class="tabPanel">
+        <table id="tb_basic" class="form">
+            <tr>
+                <th class="formTitle">用户工号：</th>
+                <td class="formValue"> <input id="id" type="text" class="txt" readOnly="true"/></td>
+            </tr>
+            <tr>
+	            <th class="formTitle">姓名：</th>
+	            <td class="formValue"><input id="name" type="text" class="txt" readOnly="true"/> </td>
+            </tr>    
+            <tr>
+                <th class="formTitle">联系手机：</th>
+                <td class="formValue"><input id="mobile" type="text" class="txt" readOnly="true"/></td>
+            </tr>
+            <tr>
+                <th class="formTitle">联系电话：</th>
+                <td class="formValue"><input id="phone" type="text" class="txt" readOnly="true"/></td>
+            </tr>
+            <tr>
+                <th class="formTitle">QQ：</th>
+                <td class="formValue"><input id="qq" type="text" class="txt" readOnly="true"/></td>
+			</tr>            
+            </tr>
+            <tr>
+                <th class="formTitle">微信号：</th>
+                <td class="formValue"><input id="weixin" type="text" class="txt" readOnly="true"/> </td>
+            </tr>
+            <tr>
+	            <th class="formTitle">电子邮箱：</th>
+                <td class="formValue"><input id="email" type="text" class="txt" readOnly="true"/></td>
+            </tr>
+	        <tr>
+	           <th class="formTitle">角色：</th>
+                <td class="formValue"><select id="role" class="txtselect" readOnly="true"></select></td>
+            </tr>
+            <tr>
+	            <th class="formTitle">密码：</th>
+                <td class="formValue"><input id="password" type="text" class="txt" readOnly="true"/></td>
+            </tr>
+            <tr>
+                 <th class="formTitle">说明： </th>
+                 <td class="formValue">
+                    <textarea id="description" class="txtArea" rows="3" readOnly="true"></textarea>
+                 </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+</div></body>
+</html>

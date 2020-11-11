@@ -1,0 +1,65 @@
+@charset "UTF-8";
+/* CSS Document */
+.CD{
+	cursor:default;
+}
+.cb_tabCenter{
+	margin:auto;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+}
+.cBook_content{
+	margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+	top:50px;
+	bottom:20px;
+	width:99%;
+	background-color:#8CCEEE;
+}
+#cb_tab1{
+	position:absolute;
+	width:100%;
+	height:33%;
+	border:#000 solid 1px;
+}
+#cb_tab2{
+	margin: auto;
+    position: absolute;
+	top:0;
+	bottom:0;
+	width:100%;
+	height:33%;
+	border:#000 solid 1px;
+}
+#cb_tab3{
+	position:absolute;
+	bottom:0;
+	width:100%;
+	height:33%;
+	border:#000 solid 1px;
+}
+.cbTab{
+	position:absolute;
+}
+.cb_bottom{
+	float:left;
+	display:block;
+	font-size:19px;
+	width:100px;
+	height:100%;
+	border-right:#000 solid 1px;
+	text-align:center;
+}
+div.ui-jqgrid-hdiv.ui-state-default.ui-corner-top{
+	background-color:#0080FF;
+}
+div.ui-jqgrid-bdiv div{
+	background-color:#8CCEEE;
+}
+div.ui-jqgrid-bdiv{
+	background-color:#8CCEEE;
+}

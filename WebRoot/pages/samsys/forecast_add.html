@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  
+  <script src="../scripts/jquery/jquery.min.js"></script>
+     
+  <link rel="stylesheet" href="../scripts/zTree/css/dropmenu.css" type="text/css">
+  <link rel="stylesheet" href="../scripts/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="../scripts/zTree/js/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="../scripts/zTree/js/jquery.ztree.excheck.js"></script>
+
+  <link href="../scripts/css/framework.css" rel="stylesheet" />
+  <script src="../scripts/js/framework.js"></script>
+  <script src="../scripts/js/validator.js"></script>
+  <script src="../scripts/My97DatePicker/WdatePicker.js"></script>
+
+ <link href="../scripts/jquery-editable-select/jquery-editable-select.css" rel="stylesheet" />
+ <script src="../scripts/jquery-editable-select/jquery-editable-select.min.js"></script>
+      <script src="../scripts/jquery/jquery.cookie.js"></script>   
+   <script type="text/javascript">
+     $(document).ready(function () {
+         Loadlayout();
+        
+        
+     });
+   </script>
+   
+</head>
+<body><div>
+  <script type="text/javascript">
+  
+    //保存事件
+    function AcceptClick() {
+    	if (!CheckDataValid('#form1')) {
+            return false;
+        }
+    	Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+            var postData = GetWebControls("#form1");
+            
+        getAjaxJson("/addSamSystem.do", postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+               if(data.Code > 0)
+               		top.frames[tabiframeId()].windowload();
+             		//closeDialog();
+            });
+        }, 200);
+    }
+
+</script>
+<form id="form1">
+    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+    <div class="bd" style="border-bottom: none; margin: 1px;">
+        <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+            <div class="tab_list_top" style="position: absolute">
+                <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">基本信息</div>
+                <!-- 
+                <input id="btnSave" type="button" class="btnSearch" value="其他信息" 
+                       onclick="window.open('../common/tiandiMap.html')"/> 
+                -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+        <!--基本信息 + RootPath()+ -->
+        <div id="basic" class="tabPanel">
+        <table class="form">
+          <tr>
+          	 <th style="display:none; position: absolute;">表名：</th>
+			 <td style="display:none; position: absolute;"><input id="tableName" value="cch_dbzw" ></td>		  		
+			 <th class="formTitle">确报ID：</th>
+			 <td class="formValue"><input id="qbid" type="text" class="txt required" datacol="yes" err="确报ID" checkexpession="Num"></td>
+			 <th class="formTitle">车次：</th>
+			 <td class="formValue"><input id="cc" type="text" class="txt required" datacol="yes" err="确报ID" checkexpession="Num"></td>
+			 <th class="formTitle">车号：</th>
+			 <td class="formValue"><input id="ch" type="text" class="txt required" datacol="yes" err="确报ID" checkexpession="Num"></td>
+			 <th class="formTitle">顺位号：</th>
+             <td class="formValue"> <input id="ppzt" type="text" class="txt"></td>  
+		 </tr>
+		 <tr> 
+		 	 <th class="formTitle">车种：</th>
+             <td class="formValue"><input id="cz" type="text" class="txt"/> </td>
+			 <th class="formTitle">自重：</th>
+             <td class="formValue"><input id="ziz" type="text" class="txt"/> </td>
+             <th class="formTitle">换长：</th>
+             <td class="formValue"> <input id="hc" type="text" class="txt"></td>
+             <th class="formTitle">油种：</th>
+             <td class="formValue"> <input id="yz" type="text" class="txt"></td>
+		 </tr>
+		 <tr> 
+			 <th class="formTitle">篷布：</th>
+             <td class="formValue"><input id="pbs" type="text" class="txt"> </td>
+             <th class="formTitle">车数：</th>
+             <td class="formValue"> <input id="clzs" type="text" class="txt"></td>
+			 <th class="formTitle">空车：</th>
+             <td class="formValue"><input id="kongche" type="text" class="txt"> </td>
+             <th class="formTitle">重车：</th>
+             <td class="formValue"> <input id="zhongche" type="text" class="txt"></td>    
+		 </tr>
+		 <tr>
+		 	 <th class="formTitle">非运用：</th>
+             <td class="formValue"><input id="fyyzaz" type="text" class="txt"> </td>
+			 <th class="formTitle">车次：</th>
+             <td class="formValue"> <input id="cc" type="text" class="txt"></td>
+             <th class="formTitle">流水号：</th>
+             <td class="formValue"><input id="" type="text" class="txt"> </td>
+             <th class="formTitle">发站：</th>
+             <td class="formValue"> <input id="fzm" type="text" class="txt"></td>
+		 </tr>
+		 <tr> 
+		 	 <th class="formTitle">到站：</th>
+             <td class="formValue"><input id="dzm" type="text" class="txt"> </td>
+             <th class="formTitle">经由站：</th>
+             <td class="formValue"> <input id="jyzh" type="text" class="txt"></td>
+             <th class="formTitle">到报日期：</th>
+             <td class="formValue"><input id="dfrq" type="text" class="txt Wdate" onfocus="WdatePicker({maxDate:'%y-%M-%d',lang:'zh-cn'})"> </td>
+             <th class="formTitle">到报时间：</th>
+             <td class="formValue"> <input id="" type="text" class="txt"></td>
+		 </tr>
+		 <tr> 
+		     <th class="formTitle">制表人：</th>
+             <td class="formValue"><input id="zbr" type="text" class="txt"> </td>
+             <th class="formTitle">检查人：</th>
+             <td class="formValue"> <input id="jcr" type="text" class="txt"></td>
+             <th class="formTitle">PK值：</th>
+             <td class="formValue"> <input id="pk" type="text" class="txt"></td>
+		</tr>
+	</table>
+	</div>
+   		
+    <!-- -->
+    <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+		 <ul id="dropTree" class="ztree" style="margin-top:0; width:140px; height: 120px;"></ul>
+	</div> 
+
+ </div>
+</form>
+</div></body>
+</html>

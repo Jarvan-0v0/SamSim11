@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		 
+		<script src="../scripts/jquery/jquery.min.js"></script>
+        <script src="../scripts/jquery/jquery.browser.js"></script>
+        
+		<link href="../scripts/css/framework.css" rel="stylesheet" />
+    	<script src="../scripts/js/framework.js"></script>
+    	
+    	<script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
+    	<script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    	<script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    	<link href="../scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />
+    	<link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" media="screen" />
+
+        <link href="../scripts/tree/tree.css" rel="stylesheet" />
+    	<script src="../scripts/tree/tree.js"></script>
+    	<script src="../scripts/jquery/splitter.js"></script>
+    	
+        <script type="text/javascript">
+          $(document).ready(function () { Loadlayout();});
+       </script>
+</head>
+
+<body><div>
+<script>
+    $(function () {
+        GetTree();
+        GetGrid();
+    });
+    var curFolderId = "";
+    var FolderId = "", FileType = "";
+    function GetTree() {
+        var itemtree = {
+            onnodeclick: function (item) {
+                FolderId = item.id;  //文件夹Id
+                FileType = item.value;  //文件类别
+                GridFolderEvent(FolderId,FileType);
+                $("#titleinfo").text(item.text );
+            },//onnodeclick
+            
+            url: RootPath()+ "/pages/docCenter/doc_download_tree.json"
+        };
+        $("#ItemsTree").treeview(itemtree);
+    }
+    //表格文件夹点击事件. 获取该文件下所有文件
+    function GridFolderEvent(folderId,fileType) {
+        $("#gridTable").jqGrid('setGridParam', {
+            url:  RootPath()+ "/doc_download_init.do",
+            datatype:'json', 	             
+			postData:{FolderId:folderId,FileType:fileType}, 
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: RootPath()+ "/doc_download_init.do?FolderId=" + FolderId,
+            datatype: "json",
+            height: $(window).height() - 140,//有查询栏时：180,
+            autowidth: true,
+            colModel: [
+                {label: 'relativepath', name: 'relativepath', hidden: true },
+                {label: '文档编号', name: 'id', index: 'id', width: 100},
+                {label: '文档标题', name: 'name', index: 'name', width: 250, align: 'left'},
+                {label: '文件名', name: 'filename', index: 'filename', width: 300, align: 'left'},
+                {label: '文档类别', name: 'filetype', index: 'filetype', width: 150, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.filetype == '10') {return "技术标准"} 
+                        else if (rowObject.filetype == '20') {return "科研文献"}
+                        else if (rowObject.filetype == '30') {return "科技图书"}
+                        else if (rowObject.filetype == '40') {return "其他资料"}
+                        else if (rowObject.filetype == '80') {return "excel模板"}
+                        else if (rowObject.filetype == '90') {return "pdf模板"}
+                        else {return "未知"}
+                    }
+                 },
+                {label: '文档大小', name: 'filesize', index: 'filesize', width: 100, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return CountFileSize(cellvalue);
+                    }
+                },
+                {label:'文档简介', name: 'descript',index:'descript', width:600, sortable:false}
+            ],
+            viewrecords: true,
+            rowNum: "10",
+            rowList: [10,15,25,50], 
+            rownumbers: true,
+            sortname: 'id',
+            sortorder: 'desc',
+            shrinkToFit: false,
+            gridview: true,
+            jsonReader : {
+		         id: "id",
+		         root:"rows", 
+		       	 page: "page",
+		         total: "total",
+		         records: "records", 
+                 repeatitems : false 
+		     },
+		     page:1,
+		     pager: "#gridPager",
+		     pagerpos: "center",
+		     pgbuttons:true,
+		     recordpos:	"left",
+		     prmNames:{
+			    page:"page",  
+			    rows:"rows",  
+			    totalrows:"totalrows",
+			    sort: "sidx",
+				order: "sord"
+		     }, 
+            
+            ondblClickRow: function (id)//id为双击行的行号（系统内部用） 
+            {
+                var rowData = $("#gridTable").getRowData(id);  //根据ID拿到一行的数据  
+                if (rowData.filetype == "-1") {//选中的是文件夹
+                    GridFolderEvent(rowData.fullname + "\\", rowData.ispublic);
+                    curFolderId = rowData.fullname + "\\";
+                    var treeid = "ItemsTree_" + rowData.id.replace(/-/g, '_');
+                    $('#' + treeid + ' img').trigger("click");
+                }
+            }
+            
+        });
+       // LoadrightMenu("#gridTable");
+        //自应高度
+        $(window).resize(function () {
+            $("#gridTable").setGridHeight($(window).height() - 140);
+        });
+    }
+   
+     //下载
+   	function btn_download() {
+        var Path = GetJqGridRowValue("#gridTable", "relativepath");
+        if (IsChecked(Path)) {
+        	var Filename = GetJqGridRowValue("#gridTable", "filename");
+            var url = RootPath()+ "/doc_center_Download.do?Filename=" + Filename+"&Path=" +  Path;
+            location.href = url;
+        }
+    }
+      
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入  
+    }
+    
+</script>
+
+<div id="layout" class="layout">
+    <!--左边-->
+    <div class="layoutPanel layout-west">
+        <div class="btnbartitle">  <div> 文件夹目录  </div> </div>
+        <div class="ScrollBar" id="ItemsTree"></div>
+    </div>
+    
+    <!--中间-->
+    <div class="layoutPanel layout-center">
+        <div class="btnbartitle"><div>文档中心 - <span id="titleinfo">所有共享空间</span></div></div><!-- 标题行 -->
+        <!--工具栏-->
+        <div class="tools_bar" style="border-top: none; margin-bottom: 0px;">
+	        <div class="PartialButton">
+				<script type="text/javascript">
+				    $(document).ready(function () {
+				        PartialButton("/pages/docCenter/doc_download_button.json");
+				    });
+				</script>
+			</div>
+     	 </div><!--工具栏-->
+	     <!--列表-->
+	     <div id="grid_List" class="topline">
+	        <table id="gridTable"></table>
+	        <div id="gridPager"></div>
+	     </div>
+    </div><!--中间-->
+</div>
+
+<style>
+    .filelist-item {
+        background: 0;
+        border-radius: 2px;
+        border: 1px solid #fff;
+        float: left;
+        height: 115px;
+        margin: 0 5px 10px 0;
+        text-align: center;
+        width: 112px;
+        padding-top: 13px;
+        cursor: pointer;
+    }
+
+        .filelist-item:hover {
+            border: 1px solid #ccc;
+            background-color: #F7F7F7;
+        }
+
+    .filelist-text {
+        padding-top: 10px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        overflow: hidden;
+    }
+</style>
+
+</div>
+</body>
+</html>

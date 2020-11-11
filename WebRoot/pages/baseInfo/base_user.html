@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	
+	<script src="../scripts/jquery/jquery.min.js"></script>
+	<script src="../scripts/jquery/jquery.browser.js"></script>
+    
+    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    
+    <script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    <script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <link href="../scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />
+    <link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" media="screen" />
+	  <script src="../scripts/jquery/jquery.cookie.js"></script>   
+    <script type="text/javascript">
+	     $(document).ready(function () { Loadlayout();});
+	</script>
+</head>
+<body><div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetGrid(); //加载表格
+    });
+    function GetGrid() {//ParameterJson
+        $("#gridTable").jqGrid({
+            url: RootPath()+ "/base_user_init.do",//?KeyValue=" + KeyValue,
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 155,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                 { label: '工号（登录账号）', name: 'id', index: 'id', width: 100 },
+				 { label: '姓名', name: 'name', index: 'name', width: 100, sortable:false},
+				 { label: '所在单位', name: 'unitid', index: 'unitid', width: 200, sortable:false },
+				 { label: '手机', name: 'mobile', index: 'mobile', width: 100,sortable:false },
+				 { label: '电话', name: 'phone', index: 'phone', width: 100, sortable:false},
+				 { label: '邮箱', name: 'email', index: 'email', width: 150,sortable:false },
+				 { label: '微信号', name: 'weixin', index: 'weixin', width: 150,sortable:false },
+				 { label: 'QQ号', name: 'qq', index: 'qq', width: 150, sortable:false },
+				 { label: '性别', name: 'sex', index: 'sex', width: 50,sortable:false,formatter:function(cellValue) {
+    				if (cellValue == "0") { return "女"; }
+    				else if (cellValue == "1")  { return "男"; }
+    				else return "";
+    			  }},
+				 { label: '所在部门', name: 'departid', index: 'departid', width: 100, sortable:false },
+				 { label: '职务', name: 'dutyid', index: 'dutyid', width: 100, sortable:false },
+				 { label: '备注', name: 'descript', index: 'descript', width: 700,sortable:false }
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "25",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            rownumbers: true,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'id',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'desc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+        });
+    }
+    
+     //刷新表格
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入  
+    }
+    
+    //新增
+    function btn_add() {
+        var url = "/pages/baseInfo/base_user_add.html";
+        openDialog(url, "Form", "新增用户", 650, 300, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+               
+   //编辑
+   function btn_edit(){
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        if (IsChecked(KeyValue)) {
+            var url = "/pages/baseInfo/base_user_edit.html?KeyValue=" + escape(KeyValue);//中文乱码
+            openDialog(url, "FormInfo", "编辑信息", 650, 300, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    
+    //删除记录
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            //var delparm = {tableName:'user', KeyValue: KeyValue};
+            delConfig("/base_user_del.do",delparm, KeyValue.split(",").length);
+        }
+     }
+    
+     //用户角色
+    function btn_userrole() {
+        var UserId = GetJqGridRowValue("#gridTable", "id");
+        if (IsChecked(UserId)) {
+            var url = "/pages/baseInfo/base_user_role.html?UserId=" + escape(UserId);
+            openDialog(url, "UserRole", "用户角色设置", 400, 150, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    
+    //ResetPassword重置密码 AllotMember AllotPermission
+    function btn_resetpassword() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        if (IsChecked(KeyValue)) {
+            var url = "/pages/baseInfo/base_user_resetpassword.html?KeyValue=" + escape(KeyValue);//中文乱码
+            openDialog(url, "AllotPermission", "重置密码 ", 400, 150, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    
+    //搜索
+    function btn_Search() {
+        var keyvalue = $("#keyvalue").val();
+        if (QueryConChecked(keyvalue)) {
+	        $("#gridTable").jqGrid('setGridParam',{ //用于设置jqGrid的options选项。返回jqGrid对象
+	            url: RootPath()+ "/base_user_search.do", //缺省时，同GetGrid()的URL，即SysLog_init.do
+		        datatype:'json',//指定发送数据的格式 	             
+		        postData:{KeyValue:keyvalue}, //为发送请求的数据，以key:value的形式发送，多个参数可以以逗号”,”间隔；
+		        page:1 //指定查询结果跳转到第一页
+	        }).trigger('reloadGrid');//为重新载入jqGrid表格。
+       }
+    }
+    
+   
+</script>
+<!--布局开始-->
+<div class="leftline rightline" style="margin-left: 1px; margin-right: 1px;">
+    <!--工具栏 行开始-->
+    <div class="tools_bar" style="margin-top: 1px; margin-bottom: 0px;">
+       <div class="PartialButton"><!--工具条开始-->
+	  	   <script type="text/javascript">
+			   $(document).ready(function () { PartialButton("/pages/baseInfo/base_user_button.json");});
+			</script>
+		</div><!--工具条结束-->
+    </div><!--工具栏行 结束-->
+    <!-- 查询栏开始-->
+    <div class="QueryArea" >
+        <table border="0" class="form-find" style="height: 45px;">
+           <tr>
+              <th>工号：   </th>
+              <td><input id="keyvalue" type="text" class="txt" style="width: 200px" /></td>
+              <td><input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" /> </td>
+            </tr>
+        </table>
+    </div><!-- 查询栏结束 -->
+                  
+	<!-- 列表开始 -->
+    <div id="grid_List"  class="topline">
+       <table id="gridTable"></table>
+       <div id="gridPager"></div>
+     </div> <!-- 列表结束 -->
+</div> <!-- 布局结束 -->
+<style>
+    .ui-widget-content { border-left: none; }
+    .ui-jqgrid .ui-jqgrid-bdiv{ overflow-x: hidden; } <!-- 隐藏水平滚动条 -->
+</style>
+
+</div></body>
+</html>

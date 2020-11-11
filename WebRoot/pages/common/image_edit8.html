@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+		
+	<script src="../scripts/jquery/jquery.min.js"></script>
+    
+	<link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    <script src="../scripts/js/validator.js"></script>
+    
+    <script src="../scripts/My97DatePicker/WdatePicker.js"></script>
+    	
+    <script type="text/javascript">
+        $(document).ready(function () { Loadlayout();});
+    </script>
+</head>
+
+<body><div>
+<script type="text/javascript">
+	$(function (){
+
+		var id = GetQuery("Id"); 
+	    $("#id").val(id);
+	    var descript = GetQuery("Descript");
+	    $("#descript").val(descript);
+	    
+	    var data = GetQuery("Data");
+	    if(!IsNullOrEmpty(data))
+	    	data = CurrentDate();
+	    $("#uploaddate").val(data);
+	})
+
+    //保存事件
+    function AcceptClick(parent) {
+	   if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+        	var id = $("#id").val();
+            var postData = GetWebControls("#form1");
+            postData["TableName"] = "timageinfo";
+            postData["Ids"]= "id:" +  id;
+            getAjaxJson("/ComSQL_update.do", postData, function (data) {
+                tipDialog(data.Message,2, data.Code);
+                if(data.Code > 0 ){
+                	window.parent.frames[parent].brushImg();
+               	}
+ 
+                closeDialog();
+            });
+        }, 200);
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+     <div class="bd" style="border-bottom: none; margin-top: 1px; margin-bottom: 1px;">
+         <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+         <div class="tab_list_top" style="position: absolute">
+            <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">编辑基本信息</div>
+         </div></div>
+     </div>
+     
+    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+        <!--基本信息-->
+        <div id="basic" class="tabPanel">
+        <table id="tb_basic" class="form">
+           <tr>
+                <th class="formTitleShort">图片：</th>
+                <td class="formValue"><input id="id" type="text" class="txt" readOnly/> </td>
+           </tr>
+           <tr>
+               <th class="formTitleShort">上传时间：</th>
+               <td class="formValue"> <input id="uploaddate" type="text" class="txt Wdate" 
+               			onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})" > </td>
+           </tr>
+           <tr>
+                <th class="formTitleShort">图片描述： </th>
+                <td class="formValue" colspan="1"><textarea id="descript" class="txtArea" rows="2" ></textarea></td>
+           </tr>
+    </table>
+    </div><!--基本信息结束-->
+  
+</div></form></div></body></html>

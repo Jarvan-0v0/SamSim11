@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		
+	<script src="../scripts/jquery/jquery.min.js"></script>
+    <script src="../scripts/jquery/jquery.browser.js"></script>
+	<link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    <script src="../scripts/js/validator.js"></script>
+    	  <script src="../scripts/jquery/jquery.cookie.js"></script>   
+    <script type="text/javascript">
+        $(document).ready(function () { Loadlayout();});
+    </script>
+</head>
+ <body><div>
+  <script type="text/javascript">
+    $(function () { 
+        BindSelectItem(); 
+        InitControl();
+    })
+    //下拉框
+	function BindSelectItem() {
+	    BindDropItem("/pages/common/dropList.json","#danweileibie", "unit_type", "");
+	}
+	 //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {//接收地址栏参数，即获取传的参数值 
+            getAjaxJson("/base_unit_edit_init.do", {KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+                /*功能等同SetWebControls(data)*/
+                //var jsonText = JSON.stringify(data);
+  	            //var object = JSON.parse(jsonText);
+                 $("#oldId").val(data.id); 
+            });
+           /* $("#tb_basic tr").each(function () {
+	           	$(this).find('td').find('select').each(function ()  {
+		           var pk_id = $(this).attr('id');
+		           if (pk_id == "danweileibie") {//获取当前选中项的text: .find("option:selected").text()
+		                $("#" + pk_id).parent().html($("#danweileibie").find("option:selected").text());
+		            }
+		            else { $("#" + pk_id).parent().html($(this).val()); }
+	             })
+        	});*/
+        } else {
+        	alert('出错了！');
+        }
+    }
+    
+    //保存事件
+    function AcceptClick() {
+       if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+            var postData = GetWebControls("#form1");
+            
+            getAjaxJson("/base_unit_editsave.do", postData, function (data) {//AjaxJson
+                tipDialog(data.Message, 3, data.Code);
+                if(data.Code > 0 )
+                	top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }, 200);
+    }
+</script>
+  
+<form id="form1">
+<div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+<div class="bd" style="border-bottom: none; margin: 1px;">
+    <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+         <div class="tab_list_top" style="position: absolute">
+            <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">基本信息</div>
+          </div>
+     </div>
+</div>
+    
+<div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+      <input id="oldId" type="hidden" value="0">
+     <!--基本信息-->
+     <div id="basic" class="tabPanel""><table class="form">
+         <tr>
+           <th class="formTitle">单位编号：</th>
+           <td class="formValue">
+              <input id="id" type="text" class="txt required" datacol="yes" err="单位编号" checkexpession="NotNull" />
+           </td>
+           <th class="formTitle">单位名称：</th>
+           <td class="formValue">
+               <input id="name" type="text" class="txt required" datacol="yes" err="单位名称" checkexpession="NotNull" />
+           </td>
+         </tr>
+         <tr>
+            <th class="formTitle">联系人：</th>
+            <td class="formValue">
+                <input id="renmin" type="text" class="txt" datacol="yes" err="联系人"  />
+            </td>
+            <th class="formTitle">联系电话：</th>
+            <td class="formValue">
+                <input id="mobile" type="text" class="txt" datacol="yes" err="电话" checkexpession="MobileOrNull" />
+            </td>
+         </tr>
+         <tr>
+            <th class="formTitle">单位类别：</th>
+            <td class="formValue">
+                <select id="danweileibie" class="txtselect" ></select>
+            </td>
+         </tr>
+         <tr>
+             <th class="formTitle">备注： </th>
+             <td class="formValue" colspan="3">
+                  <textarea id="descript" class="txtArea" rows="6"></textarea>
+             </td>
+         </tr>
+      </table></div><!--基本信息结束-->
+
+</div>
+</form>
+</div></body>
+</html>

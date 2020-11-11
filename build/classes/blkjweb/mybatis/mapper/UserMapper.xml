@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<!-- 配置命名空间，区别映射文件的名称 --> 
+<mapper namespace="blkjweb.mybatis.mapper.UserMapper">    
+    <!--  查询单条记录  -->    
+   <select id="selectUserById" parameterType="java.lang.String" resultType="UserT">    
+        select * from user where id = #{userId}    
+    </select>    
+</mapper>  

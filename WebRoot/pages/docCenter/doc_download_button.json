@@ -1,0 +1,16 @@
+[
+
+{"ButtonId":"doccenter001","ParentId":"0","FullName":"刷新","Icon":"arrow_refresh.png","Category":"1","JsEvent":"Replace()","ActionEvent":"","Split":1,"Remark":"刷新当前(Ctrl+Q)"},
+{"ButtonId":"doccenter005","ParentId":"0","FullName":"下载","Icon":"inbox_download.png","Category":"1","JsEvent":"btn_download()","ActionEvent":"","Split":1,"Remark":"下载文件","Enabled":1},
+{"ButtonId":"dbcenter010","ParentId":"0","FullName":"离开","Icon":"back.png","Category":"1","JsEvent":"btn_back()","ActionEvent":"","Split":0,"Remark":"关闭当前窗口(Esc)"}
+
+]
+
+
+
+
+
+
+
+
+

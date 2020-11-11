@@ -1,0 +1,17 @@
+[
+
+{"id":"R1","text":"学习文库","value":"R1","IsPublic":"1","parentnodes":"0","showcheck":false,"isexpand":true,"complete":true,"hasChildren":true,
+"ChildNodes":[
+  {"id":"standard","text":"技术标准","value":"10","IsPublic":"1","parentnodes":"R1","showcheck":false,"isexpand":false,"complete":true,"hasChildren":false,"ChildNodes":[]},
+  {"id":"literature","text":"科研文献","value":"20","IsPublic":"1","parentnodes":"R1","showcheck":false,"isexpand":false,"complete":true,"hasChildren":false,"ChildNodes":[]},
+  {"id":"book","text":"科技图书","value":"30","IsPublic":"1","parentnodes":"R1","showcheck":false,"isexpand":false,"complete":true,"hasChildren":false,"ChildNodes":[]},
+  {"id":"other","text":"其它资料","value":"40","IsPublic":"1","parentnodes":"R1","showcheck":false,"isexpand":false,"complete":true,"hasChildren":false,"ChildNodes":[]}
+]},
+
+{"id":"R2","text":"模板中心","value":"R2","IsPublic":"1","parentnodes":"0","showcheck":false,"isexpand":true,"complete":true,"hasChildren":true,
+"ChildNodes":[
+	{"id":"template","text":"EXCEL模板","value":"80","IsPublic":"1","parentnodes":"R2","showcheck":false,"isexpand":false,"complete":true,"hasChildren":false,"ChildNodes":[]},
+	{"id":"template","text":"PDF模板","value":"90","IsPublic":"1","parentnodes":"R2","showcheck":false,"isexpand":false,"complete":true,"hasChildren":false,"ChildNodes":[]}
+]}
+
+]

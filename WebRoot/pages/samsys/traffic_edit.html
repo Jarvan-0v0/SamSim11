@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	
+	<script src="../scripts/jquery/jquery.min.js"></script>
+	<script src="../scripts/jquery/jquery.browser.js"></script>
+    
+    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    <script src="../scripts/js/validator.js"></script>
+      
+    <script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    <script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <link href="../scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />
+    <link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
+
+	<script src="../scripts/jquery/jquery.cookie.js"></script>   
+    <script type="text/javascript">
+	     $(document).ready(function () { Loadlayout();});
+	</script>
+	
+	<!-- jqgrid自动换行-->
+	<style>
+		.ui-jqgrid tr.jqgrow td { white-space: normal !important; height:auto; }
+		.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {color: blue;}
+	</style>
+	<!-- 可改变按钮的字体颜色
+	  <style type="text/css">
+	  a{display:block;height:30px;width:50px;line-height:30px;text-align:center;color:#f60}
+	</style> -->
+	
+</head>
+<body><div>
+<script type="text/javascript">
+	var qbid = -1;
+	var fxh = -1;
+	var cc = -1;
+	var gjhh = -1;
+    $(document).ready(function () {
+        GetGrid(); //加载表格
+        GetGrid2(); 
+        GetGrid3(); 
+        
+        GetGrid4(); //加载表格
+        GetGrid5(); 
+        GetGrid6(); 
+        GetGrid4ZT(); 
+        
+        GetGrid7(); //加载表格
+        GetGrid8(); 
+        GetGrid9(); 
+        
+      //方案输入绑定回车键
+       	$('#fangan').bind('keydown',function(event){
+        	if(event.keyCode == "13") {
+        		reloadGrid5();
+        	}
+    	}); 
+        
+    });
+    
+    //
+    function reloadGrid5() {
+    	var fangan = $("#fangan").val();
+		if(fangan == ""){
+			GetGrid5_2();
+		}
+		else{
+			var arry = fangan.split(",");
+			var keyValue = "";
+			keyValue += arry[0];
+			for(var i=1; i<arry.length; i++){
+				keyValue += "' OR fxh = '"
+				keyValue += arry[i];
+			}
+			
+    		GetGrid5_3(keyValue);
+		}
+	}
+    
+/********************到达界面开始*************************/
+   //加载到达信息
+    function GetGrid() {
+	   $("#gridTable").jqGrid({
+            url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"zd", queryWhere:"type", keyValue:"到达线' OR type = '直通线"}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 123,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: ($(window).width() - 190) * 0.4,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "确报id", name: 'qbid', index: 'qbid', width: 1, hidden: true},
+                {label: "来向", name: 'lx', index: 'lx', width: 45},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 45},
+                {label: "时间", name: 'ddsj', index: 'ddsj', width: 50},
+                {label: "状态", name: 'zhuangtai', index: 'zhuangtai', width: 40},
+                {label: "车次", name: 'cc', index: 'cc', width: 40},
+                {label: "场别", name: 'gdh', index: 'gdh', width: 30},
+                {label: "编组内容", name: 'bznr', index: 'bznr', width: 150},
+                {label: "直通", name: 'ztbz', index: 'ztbz', width: 30, align: 'center', sortable: false, editable: true, edittype: 'checkbox', editoptions: { value: "True:False" }, formatter: "checkbox"},
+                {label: "接续车次", name: 'jxcc', index: 'jxcc', width: 50},
+                {label: "重点", name: '', index: '', width: 50},
+                {label: "机车", name: '', index: '', width: 50},
+                {label: "车...", name: '', index: '', width: 50},
+                {label: "标记", name: '', index: '', width: 50},
+                {label: "车数", name: 'clzs', index: 'clzs', width: 30}
+                
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "50",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: true,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'zhuangtai',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'desc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+
+		     gridComplete: function() {  //增加编辑按钮
+	                var ids = $("#gridTable").jqGrid('getDataIDs');
+	                for (var i=0; i<ids.length; i++) {
+	                	$("#gridTable").jqGrid('editRow', ids[i], true);
+	                	var rowData = $("#gridTable").jqGrid("getRowData",ids[i]);
+	                	if(rowData.zhuangtai == "未到达"){
+	                		$('#'+ids[i]).find("td").css("background-color", "#7bec7b");
+	                	}
+	                }
+	                $("#gridTable").jqGrid('setLabel','rn', '序号', {'text-align':'center','vertical-align':'middle'},'');
+	            },
+		     onSelectRow : function(id) {  showDetail();  },
+             //ondblClickRow: function(){	 },
+ 		     
+	     });
+      }  
+      
+   	//正文内容
+   	function showDetail() {
+   		var rowid = $("#gridTable").jqGrid("getGridParam","selrow");   
+   	 	var rowData = $("#gridTable").jqGrid("getRowData",rowid);
+   	 	qbid = rowData.qbid;
+   	 	GetGrid2_2();
+   	 	GetGrid3_2();
+	}
+   
+  
+    //加载到达正文
+    function GetGrid2() {
+	   $("#gridTable2").jqGrid({
+            url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cch_dbzw",queryWhere:"qbid", keyValue:qbid}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 123,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: ($(window).width() - 190) * 0.6,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "顺位号", name: 'swh', index: 'swh', width: 50, editable: true},
+                {label: "匹配号", name: 'ppzt', index: 'ppzt', width: 50, editable: true},
+                {label: "车号", name: 'ch', index: 'ch', width: 80, editable: true},
+                {label: "车种", name: 'cz', index: 'cz', width: 50, editable: true},
+                {label: "自重", name: 'ziz', index: 'ziz', width: 50, editable: true},
+                {label: "换长", name: 'hc', index: 'hc', width: 50, editable: true},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 50, editable: true},
+                {label: "油种", name: 'yz', index: 'yz', width: 50, editable: true},
+                {label: "成组", name: 'chengzu', index: 'chengzu', width: 50, editable: true},
+                {label: "载重", name: 'zaiz', index: 'zaiz', width: 50, editable: true},
+                {label: "到站", name: 'dzm', index: 'dzm', width: 80, editable: true},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 50, editable: true},
+                {label: "到局", name: 'zdj', index: 'zdj', width: 50, editable: true},
+                {label: "品名", name: 'pm', index: 'pm', width: 100, editable: true},
+                {label: "发站", name: 'fzm', index: 'fzm', width: 80, editable: true},
+                {label: "篷布", name: 'pb', index: 'pb', width: 50, editable: true},
+                {label: "记事栏", name: 'jsl', index: 'jsr', width: 200, editable: true},
+                {label: "收货人", name: 'shr', index: 'shr', width: 200, editable: true}
+              
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "100",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'swh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            loadonce : true,	//一次加载所有数据
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager2",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){    },
+ 		     
+	     });
+      }  
+  //加载车流信息
+    function GetGrid3() {
+	   $("#gridTable3").jqGrid({
+            url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"tab_cheliu_all",queryWhere:"qbid", keyValue:qbid},
+            mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 123,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: 165,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 50},
+                {label: "车种", name: 'czjm', index: 'czjm', width: 50},
+                {label: "辆数", name: 'clzs', index: 'clzs', width: 50}
+              
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "25",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'fxh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager3",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+		     
+		     onSelectRow : function(id) {  changeColor();  },
+             //ondblClickRow: function(){	  },
+ 		     
+	     }).trigger('reloadGrid');  
+      }  
+  
+  	//根据方向号改变颜色
+  	function changeColor() {
+  		var rowid = $("#gridTable3").jqGrid("getGridParam","selrow");   
+   	 	var rowDataTab3 = jQuery("#gridTable3").jqGrid("getRowData",rowid);
+   	 	var fxh = rowDataTab3.fxh;
+   	 	
+   	 	var ids = $("#gridTable2").getDataIDs();	//获取 多行数据
+	   	for(var i=0; i<ids.length; i++){
+	   		var rowDataTab2 = $("#gridTable2").jqGrid('getRowData', ids[i]); 
+	   		if(rowDataTab2.fxh == fxh){
+	   			$('#'+ids[i]).find("td").css("color", "red");
+	   			$('#'+ids[i]).find("td").css("background-color", "#8cceee");
+	   		}
+	   		else{
+	   			$('#'+ids[i]).find("td").css("color", "black");
+	   			$('#'+ids[i]).find("td").css("background-color", "white");
+	   		}
+	    }
+	}
+   
+  	function GetGrid2_2() {
+  		$("#gridTable2").jqGrid('setGridParam',{
+  			url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cch_dbzw",queryWhere:"qbid", keyValue:qbid}, 
+         	datatype:'json',               
+         	page:1 ,
+        }).trigger('reloadGrid');
+	} 
+  	function GetGrid3_2() {
+  		$("#gridTable3").jqGrid('setGridParam',{
+  			url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+  			postData:{tableName:"tab_cheliu_all",queryWhere:"qbid", keyValue:qbid},
+         	datatype:'json',               
+         	page:1 ,
+        }).trigger('reloadGrid');
+	} 
+ 
+/********************到达界面结束*************************/
+
+/********************出发界面开始*************************/
+//加载出发信息
+    function GetGrid4() {
+	   $("#gridTable4").jqGrid({
+		    url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+		    postData:{tableName:"zd", queryWhere:"type", keyValue:"出发线"},
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 123,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: ($(window).width() - 525) ,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "确报ID", name: 'qbid', index: 'qbid', width: 1, hidden: true},
+                {label: "来向", name: 'lx', index: 'lx', width: 45},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 45},
+                {label: "时间", name: 'cfsj', index: 'cfsj', width: 50},
+                {label: "状态", name: 'zhuangtai', index: 'zhuangtai', width: 40},
+                {label: "车次", name: 'cc', index: 'cc', width: 40},
+                {label: "场别", name: 'gdh', index: 'gdh', width: 30},
+                {label: "编组内容", name: 'bznr', index: 'bznr', width: 150},
+                {label: "重点", name: '', index: '', width: 50},
+                {label: "机车", name: '', index: '', width: 50},
+                {label: "车...", name: '', index: '', width: 50},
+                {label: "标记", name: '', index: '', width: 50},
+                {label: "车数", name: 'clzs', index: 'clzs', width: 30}
+              
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "50",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'cfsj',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager4",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+	
+		     onSelectRow : function(id) {  showDetail2();  },
+             //ondblClickRow: function(){	 },
+ 		     
+	     }).trigger('reloadGrid');
+      }  
+   
+   	//正文内容
+   	function showDetail2() {
+   		var rowid = $("#gridTable4").jqGrid("getGridParam","selrow");   
+   	 	var rowData = jQuery("#gridTable4").jqGrid("getRowData",rowid);
+   	 	qbid = rowData.qbid;
+   	 	document.getElementById('cc').value = rowData.cc;
+   	 	GetGrid6_2();
+	}
+   
+    //加载结存车流
+    function GetGrid5() {
+	   $("#gridTable5").jqGrid({
+		   url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+           postData:{tableName:"tab_cheliu_C"}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 300,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: 275,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "确报ID", name: 'qbid', index: 'qbid', width: 1, hidden: true},
+                {label: "股道号", name: 'gdh', index: 'gdh', width: 1, hidden: true},
+                {label: "来源", name: 'fzm', index: 'fzm', width: 50},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 50},
+                {label: "车种", name: 'cz', index: 'cz', width: 50},
+                {label: "辆数", name: 'clzs', index: 'clzs', width: 50},
+                {label: "编入", name: 'bianru', index: 'bianru', width: 50}
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "100",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'fxh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            loadonce : true,	//一次加载所有数据
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager5",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){    },
+ 		     
+	     }).trigger('reloadGrid');
+      }  
+  //加载结存车流
+    function GetGrid6() {
+	   $("#gridTable6").jqGrid({
+            url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"tab_cheliu_all",queryWhere:"qbid", keyValue:qbid}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 300,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: 220,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "确报ID", name: 'qbid', index: 'qbid', width: 1, hidden: true},
+                {label: "股道号", name: 'gdh', index: 'gdh', width: 1, hidden: true},
+                {label: "来源", name: 'fzm', index: 'fzm', width: 50},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 50},
+                {label: "车种", name: 'cz', index: 'cz', width: 50},
+                {label: "辆数", name: 'clzs', index: 'clzs', width: 50}
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "100",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'fxh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            loadonce : true,	//一次加载所有数据
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager6",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){    },
+ 		     
+	     }).trigger('reloadGrid');
+      }  
+  //加载车流信息
+    function GetGrid4ZT() {
+	   $("#gridTable4ZT").jqGrid({
+            url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"zd", queryWhere:"type", keyValue:"直通线"},
+            mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: 70,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: 320,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "确报ID", name: 'qbid', index: 'qbid', width: 1, hidden: true},
+                {label: "方向", name: 'fxh', index: 'fxh', width: 50},
+                {label: "车次", name: 'cc', index: 'cc', width: 50},
+                {label: "时间", name: 'cfsj', index: 'cfsj', width: 50},
+                {label: "编组内容", name: 'bznr', index: 'bznr', width: 150}
+              
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "25",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'cfsj',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager4ZT",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+		     
+		     onSelectRow : function(id) {  changeColor2();  },
+             //ondblClickRow: function(){	  },
+ 		     
+	     }).trigger('reloadGrid');  
+      }  
+  
+  	function GetGrid5_2(keyValue) {
+  		$("#gridTable5").jqGrid('setGridParam',{
+  			url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"tab_cheliu_C"}, 
+         	datatype:'json',               
+         	page:1 ,
+        }).trigger('reloadGrid');
+	} 
+  	function GetGrid5_3(keyValue) {
+  		$("#gridTable5").jqGrid('setGridParam',{
+  			url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"tab_cheliu_C",queryWhere:"fxh", keyValue:keyValue}, 
+         	datatype:'json',               
+         	page:1 ,
+        }).trigger('reloadGrid');
+	} 
+  	function GetGrid6_2() {
+  		$("#gridTable6").jqGrid('setGridParam',{
+  			url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+  			postData:{tableName:"tab_cheliu_all",queryWhere:"qbid", keyValue:qbid},
+         	datatype:'json',               
+         	page:1 ,
+        }).trigger('reloadGrid');
+	} 
+
+  	//添加
+  	function btn_AddTo() {
+  		var rowId4 = $("#gridTable4").jqGrid("getGridParam","selrow");   
+ 		var rowData4 = $("#gridTable4").jqGrid("getRowData",rowId4);
+ 		var qbid = rowData4.qbid;
+ 		var gdh = rowData4.gdh;
+ 		var bznr = rowData4.bznr;
+ 		var cc = rowData4.cc;
+ 		
+ 		var rowId5 = $("#gridTable5").jqGrid("getGridParam","selrow");   
+ 		var rowData5 = $("#gridTable5").jqGrid("getRowData",rowId5);
+ 		var keyValue = rowData5.fxh + "' AND gdh = '" + rowData5.gdh;
+ 		bznr = bznr + "," + rowData5.fxh + "/" + rowData5.clzs;
+ 		
+ 		var postData = {tableName: "cch_dbzw", changeWhere: "fxh", keyValue: keyValue, qbid: qbid,
+ 				gdh: gdh};
+ 		getAjaxJson("/editSaveSamSystem.do", postData, function (data){
+ 			if(data.Code <= 0){
+            	tipDialog(data.Message, 3, data.Code);
+            	return false;
+            }
+ 			getAjaxJson("/editSaveSamSystem.do", {tableName: "zd", changeWhere: "cc", keyValue: cc, bznr: bznr}, function (data){
+ 	 			if(data.Code <= 0){
+ 	            	tipDialog(data.Message, 3, data.Code);
+ 	            	return false;
+ 	            }
+ 	 		});
+ 		});
+ 		windowload();
+	}
+  	
+  	//删除
+  	function btn_deleteTo() {
+  		var rowId4 = $("#gridTable4").jqGrid("getGridParam","selrow");   
+ 		var rowData4 = $("#gridTable4").jqGrid("getRowData",rowId4);
+ 		var bznr = rowData4.bznr;
+ 		var cc = rowData4.cc;
+ 		var newbznr = "";
+  		
+  		var rowId6 = $("#gridTable6").jqGrid("getGridParam","selrow");   
+ 		var rowData6 = $("#gridTable6").jqGrid("getRowData",rowId6);
+ 		var keyValue = rowData6.fxh + "' AND gdh = '" + rowData6.gdh;
+ 		var postData = {tableName: "cch_dbzw", changeWhere: "fxh", keyValue: keyValue, qbid: "",gdh: "C12"};
+  		
+ 		var arry = bznr.split(",");
+ 		for(var i=0; i<arry.length; i++){
+ 			var firarry = arry[i].split("/");
+ 			if(firarry[0] != rowData6.fxh){
+ 				if(i==0)
+ 					newbznr = arry[i];
+ 				else
+ 					newbznr = newbznr + "," + arry[i];
+ 			}
+ 			
+ 		}
+ 		
+ 		getAjaxJson("/editSaveSamSystem.do", postData, function (data){
+ 			if(data.Code <= 0){
+            	tipDialog(data.Message, 3, data.Code);
+            	return false;
+            }
+ 			getAjaxJson("/editSaveSamSystem.do", {tableName: "zd", changeWhere: "cc", keyValue: cc, bznr: newbznr}, function (data){
+ 	 			if(data.Code <= 0){
+ 	            	tipDialog(data.Message, 3, data.Code);
+ 	            	return false;
+ 	            }
+ 	 		});
+ 		});
+ 		windowload();
+	}
+/********************出发界面结束*************************/
+
+/********************调机界面开始*************************/
+//加载钩计划表格
+    function GetGrid7() {
+	   $("#gridTable7").jqGrid({
+		   	url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+           	postData:{tableName:"zd", queryWhere:"type", keyValue:"调机线' OR type = '取送车"}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 123,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: $(window).width() * 0.5,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "调机", name: 'dj', index: 'dj', width: 50},
+                {label: "开始时间", name: 'kssj', index: 'kssj', width: 50},
+                {label: "结束时间", name: 'jssj', index: 'jssj', width: 50},
+                {label: "作业项目", name: 'zyxm', index: 'zyxm', width: 50},
+                {label: "车次", name: 'cc', index: 'cc', width: 50},
+                {label: "场别", name: 'gdh', index: 'gdh', width: 50},
+                {label: "机车号", name: 'jch', index: 'jch', width: 50},
+                {label: "记事栏", name: 'jsl', index: 'jsl', width: 50},
+                {label: "长度", name: '', index: '', width: 50},
+                {label: "下达", name: 'zhuangtai', index: 'zhuangtai', width: 50},
+                {label: "钩计划id", name: 'gjhh', index: 'gjhh', width: 80},
+                {label: "站调处理标志", name: '', index: '', width: 150}
+              
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "500",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: true,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'kssj',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager7",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+	
+		     gridComplete:function(){
+	             var ids = $("#gridTable7").getDataIDs();
+	             for(var i=0;i<ids.length;i++){
+	                     var rowData = $("#gridTable7").getRowData(ids[i]);
+		                 if(rowData.gjhh != ""){	//如果钩计划id不为空，显示橘色
+		                     $('#'+ids[i]).find("td").css("background-color", "orange");
+		                 }
+	                 }
+	         },
+		     onSelectRow : function(id) {  showDetail3();  },
+             //ondblClickRow: function(){	 },
+ 		     
+	     });
+      }  
+   
+   	//目录和正文内容
+   	function showDetail3() {
+   		var rowid = $("#gridTable7").jqGrid("getGridParam","selrow");   
+   	 	var rowData = jQuery("#gridTable7").jqGrid("getRowData",rowid);
+   	 	gjhh = rowData.gjhh;
+   	 	GetGrid8_2();
+   	 	GetGrid9_2();
+	}
+   
+    //加载目录内容
+    function GetGrid8() {
+	   $("#gridTable8").jqGrid({
+            url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cqz_gjhml",queryWhere:"gjhh", keyValue:gjhh}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: 23,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: ($(window).width() * 0.5) - 20,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                      //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                      //{label: "", name: '', index: '', width: 1, hidden: true},
+                      {label: "作业项目", name: 'zyxm', index: 'zyxm', width: 50},
+                      {label: "计划编号", name: 'gjhh', index: 'gjhh', width: 50},
+                      {label: "调机号", name: 'dj', index: 'dj', width: 50},
+                      {label: "车次", name: 'cc', index: 'cc', width: 50},
+                      {label: "峰别或牵出线", name: '', index: '', width: 100},
+                      {label: "开始时间", name: 'jhkssj', index: 'jhkssj', width: 50},
+                      {label: "终了时间", name: 'jhjssj', index: 'jhjssj', width: 50},
+                      {label: "调车长", name: '', index: '', width: 50}
+                    
+           		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "10",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'gjhh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            loadonce : true,	//一次加载所有数据
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager8",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){    },
+ 		     
+	     });
+      }  
+  
+    //加载正文内容
+    function GetGrid9() {
+	   $("#gridTable9").jqGrid({
+		   url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+           postData:{tableName:"cqz_gjhzw",queryWhere:"gjhh", keyValue:gjhh}, 
+        	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
+            datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
+            height: $(window).height() - 222,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            width: ($(window).width() * 0.5) - 20,
+            colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "钩计划号", name: 'gjhh', index: 'gjhh', width: 1, hidden: true},
+                {label: "顺位", name: 'swh', index: 'swh', width: 50},
+                {label: "股道", name: 'gdjm', index: 'gdjm', width: 50},
+                {label: "方向", name: 'swbz', index: 'swbz', width: 50},
+                {label: "摘挂", name: 'zgbz', index: 'zgbz', width: 50},
+                {label: "车数", name: 'cs', index: 'cs', width: 50},
+                {label: "车号", name: 'ch', index: 'ch', width: 50},
+                {label: "车次", name: 'jbcc', index: 'jbcc', width: 50},
+                {label: "自动备注", name: 'ajsl', index: 'ajsl', width: 50},
+                {label: "手工备注", name: 'mjsl', index: 'mjsl', width: 50},
+                {label: "执行备注", name: '', index: '', width: 50},
+                {label: "经由", name: 'jy', index: 'jy', width: 50},
+                {label: "原计划", name: 'ygjhh', index: 'ygjhh', width: 50}
+                
+     		],
+     	    contentType : 'application/json',
+     	    viewrecords: true,//是否要显示总记录数
+            rowNum: "100",//每页显示记录数，设为-1则禁用此检查
+            //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
+            rowList: [10, 25, 50,100],//可调整每页显示的记录数 
+            scroll:true,	//显示所有数据
+            rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+            sortname: 'swh',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+            sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
+             //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
+            shrinkToFit: false,
+            //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
+            gridview: true,
+            loadonce : true,	//一次加载所有数据
+            
+           jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
+		         id: "id", //行id，相当于设置主键
+		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
+		       	 page: "page", //当前页  
+		         total: "total", //总页数
+		         records: "records", //查询出来的记录数 
+		         //设置成false，在后台设置值的时候，可以乱序。且并非每个值都得设,而所使用的name是来自于colModel中的name设定。   
+		         repeatitems : false 
+		     },
+		     page:1,//初始显示第几页
+		     pager: "#gridPager9",//分页工具栏
+		     pagerpos: "center",//指定分页栏的位置left
+		     pgbuttons:true, //是否显示翻页按钮
+		     //pginput:true, //是否显示跳转页面的输入框
+		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     
+		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
+		     prmNames:{
+			    page:"page",// 表示请求页码的参数名称  
+			    rows:"rows", // 表示请求行数的参数名称  
+			    totalrows:"totalrows", // 表示需从Server得到总共多少行数据的参数名称   
+			    sort: "sidx", // 表示用于排序的列名的参数名称
+				order: "sord" // 表示采用的排序方式的参数名称
+		     }, 
+
+		     //onSelectRow : function(id) {    },
+             //ondblClickRow: function(){    },
+ 		     
+	     });
+      }  
+  
+  
+  	function GetGrid8_2() {
+  		$("#gridTable8").jqGrid('setGridParam',{
+  			url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cqz_gjhml",queryWhere:"gjhh", keyValue:gjhh}, 
+         	datatype:'json',               
+         	page:1 ,
+//          	gridComplete:function(){
+// 	        	var ids = $("#gridTable8").getDataIDs();
+//                 var rowData = $("#gridTable8").getRowData(ids[0]);
+//                 qbid = rowData.qbid;
+//                 GetGrid9_2();
+// 	        },
+        }).trigger('reloadGrid');
+	} 
+  	function GetGrid9_2() {
+  		$("#gridTable9").jqGrid('setGridParam',{
+  			url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cqz_gjhzw",queryWhere:"gjhh", keyValue:gjhh}, 
+         	datatype:'json',               
+         	page:1 ,
+        }).trigger('reloadGrid');
+	} 
+
+/********************调机界面结束*************************/
+
+
+     //刷新表格
+    function windowload() {	//重新载入  
+       $("#gridTable").trigger("reloadGrid"); 
+       $("#gridTable2").trigger("reloadGrid"); 
+       $("#gridTable3").trigger("reloadGrid"); 
+       
+       $("#gridTable4").trigger("reloadGrid"); 
+       $("#gridTable5").trigger("reloadGrid"); 
+       $("#gridTable6").trigger("reloadGrid");
+       
+       $("#gridTable7").trigger("reloadGrid"); 
+       $("#gridTable8").trigger("reloadGrid"); 
+       $("#gridTable9").trigger("reloadGrid");
+       
+       reloadGrid5();
+	   GetGrid6_2();
+    }
+    
+    //转入车流数据
+    function btn_Cheliu() {
+		
+    }
+    
+  	//请求班计划
+    function btn_Banjihua() {
+    	AddTabMenu('70000', '/pages/facade/bjh.html', '日班计划', "date.png", 'ture');
+	}
+      
+</script>
+<!--布局开始-->
+<div class="leftline rightline" style="margin-left: 1px; margin-right: 1px;">
+     <!--工具栏 行开始-->
+    <div class="tools_bar" style="margin-top: 1px; margin-bottom: 0px;">
+       <div class="PartialButton"><!--工具条开始-->
+	  	   <script type="text/javascript">
+			   $(document).ready(function () {
+			       PartialButton("/pages/samsys/traffic_edit_button.json");  
+			    });
+			</script>
+		</div><!--工具条结束-->
+    </div>
+    <!--工具栏行 结束-->
+    
+    <!-- 底部标签 -->
+    <div class="bd" style="border: none;">
+    	<div class="bottom" style="position: absolute ">
+			<div id="TabArrive" class="bottom_div1 actived" onclick="Tabbuttomchange('Arrive')">到达</div>
+	    	<div id="TabLeave" class="bottom_div2" onclick="Tabbuttomchange('Leave')">出发</div>
+	    	<div id="TabTurn" class="bottom_div3" onclick="Tabbuttomchange('Turn')">调机</div>
+		</div>
+		
+		<div class="ScrollBar" style="margin: 1px; margin-bottom: 0px;">
+
+		<div id="Arrive" class="tabPanel" >
+			<table>
+			<tr>
+				<th></th>
+				<td><table id="gridTable"></table></td>
+				<th></th>
+				<td><table id="gridTable2"></table></td>
+				<th></th>
+				<td><table id="gridTable3"></table></td>
+			</tr>
+			</table>
+		</div>
+		
+		<div id="Leave" class="tabPanel" style="display: none;">
+			<table>
+				<tr>
+					<td>
+						<table id="gridTable4"></table>
+					</td>
+					<td>
+						<!-- 查询栏 -->
+						<div class="bottomline QueryArea" style="margin: 1px; margin-top: -5px; margin-bottom: 0px;">
+					        <table class="form-find" style="boder: 0px; height: 30px;">
+					           <tr>
+								   <th class="formTitle">车次：</th>
+					               <td class="formValueShort"> <input id="cc" type="text" style="width: 50px" class="txt"/></td>
+					               <th class="formTitle">方案：</th>
+					               <td class="formValueShort"> <input id="fangan" type="text" style="width: 100px" class="txt"/></td>
+					               <th class="formTitle">时间：</th>
+					               <td class="formValueShort"> <input id="dfsj" type="text" style="width: 50px" class="txt"/></td>
+								   <td><input id="btnAllUse" type="button" class="btnSearch" value="全用" onclick="btn_allUse()" /> </td>
+					           </tr>
+					        </table> 
+					    </div>
+						<div style="">
+							<table>
+								<tr>
+									<td>
+										<div style="">
+											<table>
+												<tr>
+													<td>结存车流<input id="btnAddTo" type="button" class="btnButton" style="margin-left: 20px; margin-top: -5px;" value="添加" onclick="btn_AddTo()" /> </td>
+												</tr>
+												<tr>
+													<td><table id="gridTable5"></table></td>
+												</tr>
+											</table>
+										</div>
+									</td>
+									<td>
+										<div style="">
+											<table>
+												<tr>
+													<td>出发车流<input id="btnDeleteTo" type="button" class="btnButton" style="margin-left: 20px; margin-top: -5px;" value="删除" onclick="btn_deleteTo()" /> </td>
+												</tr>
+												<tr>
+													<td><table id="gridTable6"></table></td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+								
+							</table>
+						</div>
+						<div style="">
+							<table>
+								<tr>
+									<td>
+										<div style="">
+											<table>
+												<tr>
+													<td>直通车<input id="btnStraightTo" type="button" class="btnButton" style="margin-left: 20px; margin-top: -5px;" value="选择" onclick="btn_StraightTo()" /> </td>
+												</tr>
+												<tr>
+													<td><table id="gridTable4ZT"></table></td>
+												</tr>
+											</table>
+										</div>
+									</td>
+									<td>
+										<table class="form-find" style="boder: 0px; height: 30px;">
+								           <tr>
+											   <th class="formTitle">辆数：</th>
+								               <td class="formValueShort"> <input id="clzs" type="text" style="width: 75px" class="txt"/></td>
+								           </tr>
+								           <tr>
+								               <th class="formTitle">总重：</th>
+								               <td class="formValueShort"> <input id="zongzhong" type="text" style="width: 75px" class="txt"/></td>
+								           </tr>
+								           <tr>
+								           	   <th class="formTitle">换长：</th>
+								               <td class="formValueShort"> <input id="hc" type="text" style="width: 75px" class="txt"/></td>
+								           </tr>
+								        </table> 
+									</td>
+								</tr>
+								
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div id="Turn" class="tabPanel" style="display: none;">
+			<table>
+				<tr>
+					<td>
+						<table id="gridTable7"></table>
+					</td>
+					<td>
+						<div style="">
+							<h1 style="font-size: 12pt;">目录</h1>
+							<table id="gridTable8"></table>
+						</div>
+						<div style="">
+							<h2 style="font-size: 12pt;">正文</h2>
+							<table id="gridTable9"></table>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+			
+		
+	</div>
+
+</div> <!-- 布局结束 -->
+
+</body>
+</html>

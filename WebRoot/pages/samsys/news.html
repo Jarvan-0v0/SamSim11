@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+
+<link href="../scripts/css/map.css" rel="stylesheet" />
+
+<script src="../scripts/jquery/jquery.min.js"></script>
+<script src="../scripts/js/framework.js"></script>
+  <script src="../scripts/jquery/jquery.cookie.js"></script>   
+<script src=" http://api.tianditu.com/api?v=4.0" type="text/javascript"></script>
+
+<script type="text/javascript">
+   
+    //把标注点名字画到地图上
+	 function loadText(){
+		var label =[];//标点名字图。
+		if (lnglats.length != 0) {
+			for (var i = 0; i < lnglats.length; i = i + 1) {
+				var config = {
+						text:lnglats[i].PName,
+						offset:new T.Point(-9,0),
+						position:new T.LngLat(lnglats[i].L,lnglats[i].B)
+					};
+        			label[i] = new T.Label(config);//创建地图文本对象
+        			label[i].setBorderLine (0);
+        			label[i].setOpacity(0);
+        			map.addOverLay(label[i]);
+        		}
+        	}
+       }
+       
+     //把轨迹点放到地图上
+	  function loadTrack () {
+			map.clearOverLays();
+			var iconurl0 = '../scripts/mapImages/0.png';//正常节点
+			var iconurl1 = '../scripts/mapImages/1.png';//起点
+			var iconurl2 = '../scripts/mapImages/2.png';//终点
+			
+       	   	if (Xlnglats.length != 0) {
+				for (var i = 0; i < lnglats.length; i++) {
+				  //创建图片对象
+				  var iconT = new T.Icon({
+			                 iconUrl: "../scripts/mapImages/"  + (i+1) +".png",
+          			         iconSize: new T.Point(19, 27),
+                             iconAnchor: new T.Point(10, 25)
+       			   });
+				  var iconMakersT  = new T.Marker(new T.LngLat(lnglats[i].L, lnglats[i].B),{icon: iconT});
+				  map.addOverLay(iconMakersT);
+		        }
+		   }
+	 }
+     //连线部分 轨迹
+     function showLine() {
+      	  //创建线对象solid
+           /*var line = new T.Polyline(Tlnglats, {
+      			strokeColor: "green",
+      			strokeWeight: 1,
+      			strokeOpacity: 1
+      		});*/
+      		 //创建面对象
+            /*var polygon = new T.Polygon(Tlnglats,{
+	                color: "blue", weight: 3, opacity: 0.5, fillColor: "#FFFFFF", fillOpacity: 0.5
+            });*/
+      		map.addOverLay(polygon);//向地图上添加线
+     }
+     
+    function windowHeight() {
+       var de = document.documentElement;
+       return self.innerHeight || (de && de.clientHeight) || document.body.clientHeight;
+    }
+</script>
+</head>
+
+<body>
+	<div style="line-height:50px;text-align:center;font-size:30px;color:#00c;">
+        	新闻公告  </div> 
+</body>
+</html>

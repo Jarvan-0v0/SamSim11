@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    
+    <script src="../scripts/jquery/jquery.min.js"></script>
+    <script src="../scripts/jquery/jquery.browser.js"></script>
+    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+   
+    <script src="../scripts/js/validator.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () { Loadlayout();});
+    </script>
+</head>
+<body><div>
+        
+<script type="text/javascript">
+    $(function () {LoadParent();})
+    //加载上级
+    function LoadParent() {
+        var selectedItemCode = GetQuery('selectedItemCode');
+        var selectedItemName = GetQuery('selectedItemName');
+        var id = GetQuery('id');
+        var name = GetQuery('name');
+        $("#DictName").val(selectedItemName);
+        $("#DictCode").val(selectedItemCode);
+        $("#id").val(id);
+        $("#oldId").val(id);
+        $("#name").val(name);
+    }
+   
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+            var postData = GetWebControls("#form1");
+            getAjaxJson("/sys_dict_edit.do?", postData, function (data) {//AjaxJson
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }, 200);
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class="formTitle">数据字典： </th>
+            <td class="formValue"> 
+              <input id="DictCode" type="hidden" value="0" />
+              <input id="DictName" type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class="formTitle">编码代号<font face="宋体">*</font>：</th>
+            <td class="formValue">
+                <input id="oldId" type="hidden" value="0" />
+                <input id="id" type="text" datacol="yes" err="字典项编码" checkexpession="NotNull" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class="formTitle">编码名称<font face="宋体">*</font>： </th>
+            <td class="formValue">
+                <input id="name" maxlength="200" type="text" datacol="yes" err="字典项编码值" checkexpession="NotNull" class="txt" />
+            </td>
+        </tr>
+    </table>
+    <div id="message" style="display: none"></div>
+</form>
+
+</div></body>
+</html>

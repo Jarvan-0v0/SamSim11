@@ -1,0 +1,18 @@
+[{"id":"R1","text":"运行车型","value":"01","IsTree":"","img":"../scripts/images/Icon16/molecule.png","parentnodes":"0","showcheck":true,"isexpand":true,"complete":true,"hasChildren":true,
+"ChildNodes":[
+      
+    {"id":"M1","text":"DF8B内燃机车","value":"DF8B内燃机车","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M2","text":"DF4B内燃机车","value":"DF4B内燃机车","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0, "hasChildren":false,"ChildNodes":[]},
+    {"id":"M3","text":"DF4D内燃机车","value":"DF4D内燃机车","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M4","text":"GKD1A内燃机车","value":"GKD1A内燃机车","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M5","text":"C62","value":"C62","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M6","text":"C64","value":"C64","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M7","text":"C70","value":"C70","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M8","text":"C70H","value":"C70H","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M9","text":"K18","value":"K18","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M10","text":"KZ70","value":"KZ70","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+ {"id":"M11","text":"KM70","value":"KM70","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+  {"id":"M12","text":"K13NA","value":"K13NA","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M13","text":"其他","value":"其他","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]}
+  ]
+}]

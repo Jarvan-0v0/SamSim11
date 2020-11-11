@@ -1,0 +1,6 @@
+[
+
+{"ModuleId":"S1001","FullName":"数据库管理","Icon":"server_database.png","Location":"/pages/system/db_center.jsp"},
+{"ModuleId":"S1002","FullName":"系统日志","Icon":"file_extension_log.png","Location":"/pages/system/log_center.jsp"}
+
+]

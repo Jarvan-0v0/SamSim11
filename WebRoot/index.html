@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"" />
+	<link rel="shortcut icon" href="pages/scripts/images/sam_title.png" type="image/x-icon" />
+	<title>编组站行车组织虚拟仿真实训平台</title>
+	<meta name="description" content="编组站行车组织虚拟仿真实训平台" />
+    <script type="text/javascript" src="pages/scripts/jquery/jquery.min.js"></script>
+   
+    <script src="pages/scripts/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="pages/scripts/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="pages/scripts/font-awesome/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="pages/scripts/artDialog/ui-dialog.css">
+	<script src="pages/scripts/artDialog/dialog-plus-min.js"></script>
+    <script src="pages/scripts/jquery/jquery.tips.js"></script>
+   
+    <script src="pages/scripts/jquery/jquery.cookie.js"></script>
+    
+    <script src="pages/scripts/jquery/jquery.md5.js" ></script>
+   <!--  <script src="pages/scripts/crypto-js/core.js" ></script>
+    <script src="pages/scripts/crypto-js/md5.js" ></script>
+     -->
+    <link rel="stylesheet" href="pages/scripts/css/loginpop.css" />
+    <link rel="stylesheet" href="pages/scripts/css/login.css" /> 
+    <script src="pages/scripts/js/validator.js"></script>
+    <script src="pages/scripts/js/framework.js"></script>
+    <script src="pages/scripts/js/login.js"></script>
+    
+   <script type="text/javascript">
+   $(function() {
+        $('#reg-btn').click(function(event) {//显示注册框
+			if ($('#login-box').hasClass('hide')) {
+			   $('#reg-box').fadeOut('slow').addClass('hide');
+			   $('#login-box').fadeIn('slow').removeClass('hide');
+			   $(this).addClass('btn-warning')
+			   $(this).removeClass('btn-danger')
+			   //$(this).text('注册');
+			 } else {
+			   $('#login-box').fadeOut('slow').addClass('hide');
+			   $('#reg-box').fadeIn('slow').removeClass('hide');
+			   $(this).addClass('btn-danger')
+			   $(this).removeClass('btn-warning')
+			  // $(this).text('登录');
+			   $('#login-pane').css('height', '430px');
+			}
+		  });
+        BindSelectItem(); 	//下拉框
+	})
+	function changeValidateCode() {
+	  var myimg = document.getElementById("validateCodeImg");
+	  var now = new Date();
+      myimg.src = "validateCode.do?validateCodeImg=" + now.getTime();
+	}
+	
+	function checkParent(){
+	   if(window != top)
+		  top.location.href = '/index.html';
+		 /*var _topWin = window;    
+		while (_topWin != _topWin.parent.window) {    
+    		 _topWin = _topWin.parent.window;    
+		}    
+		if (window != _topWin)_topWin.document.location.href = '/bridgeCMS/index.html';*/
+	}
+	//下拉框
+	  function BindSelectItem() {
+		  BindDropItem("/pages/common/dropList.json","#workType", "workType", );	//岗位类型
+		}
+
+</script>
+</head>
+<body onload="checkParent();" >
+
+<section>
+<div id="container">
+<div id="banner"></div>
+  <!-- 用户登录 -->
+  <div id="content">
+     <div id="img"></div>
+     <div class="form">
+        <!-- 右边登录表格 -->
+        <form class="form-horizontal" id="login-box">
+	       <div class="form-info"> <label id="login-err"></label></div>
+		    <!-- <input type="hidden" class="form-control" id="userID" value="user001" /> -->
+		   <div class="form-group"> <div class="col-md-12">
+		       <span style="font-size:18px; color:#009100"><strong>编组站行车组织虚拟仿真实训平台 </strong></span>
+		   </div> </div>
+		   <div class="form-group">
+	            <label class="control-label col-md-3 input-text">帐号</label>
+	            <div class="col-md-9">
+	               <input type="text" class="form-control" id="username" value="001" placeholder="请输入用户账号"/>
+	               <div class="Validform_checktip"></div>
+	             </div>
+	        </div>
+	       
+	       <div class="form-group">
+	           <label class="control-label col-md-3 input-text">密码</label>
+	           <div class="col-md-9">
+	              <input type="password" class="form-control" id="password" value="001" placeholder="请输入密码"/>
+	              <div class="Validform_checktip"></div>
+	            </div>
+	        </div>
+	        
+	        <div class="form-group">
+	           <label class="control-label col-md-3 input-text">岗位</label>
+	           <div class="col-md-9">
+	              <select class="form-control txtselect" id="workType"></select>
+	              <div class="Validform_checktip"></div>
+	            </div>
+	        </div>
+	       
+		    <div class="form-group">
+	             <label class="control-label col-md-3 input-text"></label>
+	             <div class="col-md-9">
+	             <!-- 
+	                <input id="validateCode" type="text" class="form-control" placeholder="请输入验证码"/>
+				    <img id="validateCodeImg" src="validateCode.do" width="50" height="28"/>
+				    <a href="javascript:changeValidateCode();">看不清，换一张 </a>
+				 -->
+	             </div>
+	             <!-- 
+	            <div id="reg-pwd">
+			        <a id="forget-pwd" data-toggle="modal" data-target="#findPwdModal">忘记密码</a>
+			     </div>
+			      --> 
+		     </div>	
+		     
+		    <div class="btn-pane">
+		        <a onclick="login();">
+			         <button class="btn2 btn-success" type="button" style="margin-top: -50px;">
+			             <span class="fa fa-key">登录</span>
+			         </button>
+ 		         </a>
+		     </div>
+		     <!-- <div class="btn-pane">
+				  <button class="btn btn-warning" id="reg-btn" type="button">
+				    <i class="ace-icon fa fa-arrow-left icon-on-left"></i>注册
+				  </button>
+				 <a onclick="login();">
+			         <button class="btn btn-success" type="button">
+			             <span class="fa fa-key">登录</span>
+			         </button>
+ 		         </a>
+             </div> -->
+       </form>
+			      
+	    <!-- 注册表Form -->
+		<div class="form-group hide" id="reg-box" row="form">
+		<form class="form-horizontal" action="" method="" id="reg-box-form">
+			<div><label id="reg-err"></label></div>
+			<div class="form-group">
+			   <label class="control-label col-md-3 input-text">用户名:</label>
+			   <div class="col-md-9">
+			     <input type="text" class="form-control tooltips" data-toggle="tooltip" id="usernameR" name='usernameR' class="inputxt" placeholder="用户名" />
+			     <div class="Validform_checktip"></div>
+			   </div>
+			</div>
+			<div class="form-group">
+			   <label class="control-label col-md-3 input-text">邮箱:</label>
+			   <div class="col-md-9">
+			     <input type="text" class="form-control tooltips" data-toggle="tooltip" id="email" name='email' class="inputxt" placeholder="邮箱" />
+			     <div class="Validform_checktip"></div>
+			   </div>
+			</div>
+			<div class="form-group">
+			   <label class="control-label col-md-3 input-text">密码:</label>
+			   <div class="col-md-9">
+			     <input type="password" class="form-control tooltips" data-toggle="tooltip" id="pwd" name='pwd' class="inputxt" placeholder="密码" />
+			     <div class="Validform_checktip"></div>
+			   </div>
+			</div>
+			<div class="form-group">
+			   <label class="control-label col-md-3 input-text">确认密码:</label>
+			   <div class="col-md-9">
+			     <input type="password" class="form-control tooltips" data-toggle="tooltip" name='pwd-again' class="inputxt" placeholder="确认密码" />
+			     <div class="Validform_checktip"></div>
+			   </div>
+			</div>
+			
+			<div class="btn-pane">
+			     <button type="reset" class="width-30 pull-left btn btn-sm">
+				    <i class="ace-icon fa fa-refresh"></i>
+				    <span class="bigger-110">复位</span>
+				  </button>
+				  <a onclick="register();">
+	  			     <button type="button" class="width-65 pull-right btn btn-sm btn-success">
+					   <span class="bigger-110">注册</span>
+				     </button>
+				  </a>
+             </div>
+		</form></div>
+		
+ </div> <!-- form -->
+ </div> <!-- content -->
+ </div> <!-- container --> 
+  <footer><p>
+    © 2020-<SCRIPT> clientdate=new Date();document.write(clientdate.getYear()>200 ? clientdate.getYear(): 1900+clientdate.getYear() );</script>
+       &nbsp北京交通大学&nbsp版权所有&nbsp&nbsp&nbsp&nbsp备案号：&nbsp<a style="color:#FFFFFF"  href="http://beian.miit.gov.cn">京ICP备2020038521号</a>
+  </p></footer>
+</section>
+ 
+<!-- 找回密码 -->
+<div class="modal fade" id="findPwdModal">
+<div class="modal-dialog">
+<div class="modal-content">
+   <div class="modal-header">
+      <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+      <h5 class="modal-title">找回密码</h5>
+	</div>
+	<div class="modal-body">
+	<p id="warm-hint"><span class="fa fa-smile-o"></span>提示：请输入注册账户时所用邮箱！</p>
+	<form class="form-horizontal" action="" method="" id="sendemail-form">
+	   <div class="form-group">
+	       <div class="col-md-8">
+		     <input type="text" class="form-control inputxt" id="get-pwd-input" value="" placeholder="请输入邮件地址" />
+		   </div>
+		   <a onclick="sendPWByEmail();">
+		     <button class="btn btn-primary" type="button" >发送邮件验证</button>
+		   </a>     
+	  </div>
+    </form>
+	</div>
+</div><!-- modal-content -->
+</div><!-- modal-dialog -->
+</div><!-- modal fade -->
+  
+  
+  
+<!-- 右边弹出框 
+<div class="main-im">
+    <div id="open_im" class="open-im">&nbsp;</div>
+    <div class="im_main" id="im_main">
+          <div id="close_im" class="close-im"><a href="javascript:void(0);" title="点击关闭">&nbsp;</a></div>
+          <div class="im-qq qq-a">
+               <div class="qq-container"></div>
+               <div class="qq-hover-c"><img class="img-qq" src="pages/scripts/images/qq.png"></div>
+               <span>联系信息</span>
+           </div >
+           <div class="im-tel">
+                <div>咨询热线</div>
+                <div class="tel-num">1501051939</div>
+                <div>咨询信箱</div>
+                <div class="tel-num">130209@qq.com</div>
+            </div>
+            <div class="im-footer" style="position: relative">
+                <div class="weixing-container">
+                    <div class="weixing-show">
+                        <div class="weixing-txt">微信扫一扫<br/>获取更多消息 </div>
+                        <img class="weixing-ma" src="pages/scripts/images/weixing-ma.png">
+                        <div class="weixing-sanjiao"></div>
+                        <div class="weixing-sanjiao-big"></div>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+     </div>
+</div>
+-->
+<script type="text/javascript">
+     $(function () {//在线客户
+           $('#close_im').bind('click', function () {
+               $('#main-im').css("height", "0");
+               $('#im_main').hide();
+               $('#open_im').show();
+            });
+            $('#open_im').bind('click', function (e) {
+                $('#main-im').css("height", "272");
+                $('#im_main').show();
+                $(this).hide();
+            });
+            $('.go-top').bind('click', function () {
+                $(window).scrollTop(0);
+            });
+            $(".weixing-container").bind('mouseenter', function () {
+                $('.weixing-show').show();
+            })
+            $(".weixing-container").bind('mouseleave', function () {
+                $('.weixing-show').hide();
+            });
+            $("#open_im").trigger("click");
+                $('.weixing-show').hide();
+        })
+ </script>
+ 
+</body></html>

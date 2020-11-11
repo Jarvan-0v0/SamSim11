@@ -1,0 +1,9 @@
+[{"id":"1","text":"数据字典","value":"01","IsTree":"","img":"../scripts/images/Icon16/molecule.png","parentnodes":"0","showcheck":false,"isexpand":true,"complete":true,"hasChildren":true,
+"ChildNodes":[
+   {"id":"pNode01","text":"用户权限字典","value":"Common","IsTree":"","parentnodes":"1","img":"../scripts/images/Icon16/hostname.png","showcheck":false,"isexpand":true,"complete":true,"hasChildren":true,
+    "ChildNodes":[
+	  {"id":"R1","text":"角色类别","value":"role","IsTree":"","parentnodes":"pNode01","showcheck":false,"isexpand":true,"complete":true,"hasChildren":false,"ChildNodes":[]},
+	  {"id":"P1","text":"权限类别","value":"permission","IsTree":"","parentnodes":"pNode01","showcheck":false,"isexpand":true,"complete":true,"hasChildren":false,"ChildNodes":[]}
+  ]} 
+ ]
+}]

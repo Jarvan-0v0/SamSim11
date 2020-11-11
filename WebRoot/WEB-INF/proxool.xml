@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
+
+<something-else-entirely>
+  <proxool>
+    <!--  alias是数据源的别名，需要在其他部分引用 -->
+    <alias>DBPool</alias>
+    <!-- 如果没有此项，用户名和密码为明码；如有使用加密的文本 解密的程序位于此   处理部分：org.logicalcobwebs.proxool.configuration.XMLConfigurator 
+     <encrypt>com.encryption.DBDecrypt</encrypt>
+     2016.8.30：  &useSSL=false
+    -->  
+    <driver-url>jdbc:MySQL://39.106.115.236:3306/xianche?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false</driver-url>
+    <driver-class>com.mysql.jdbc.Driver</driver-class>
+    <driver-properties>
+	     <property name="user" value="user"/>
+    	 <property name="password" value="123"/>
+     	 <property name="dbname" value="xianche"/>
+    </driver-properties>
+     
+     <!-- AdminServlet -->
+     <statistics>1m,15m,1d</statistics>
+     
+     <!--proxool自动侦察各个连接状态的时间间隔(毫秒),侦察到空闲的连接就马上回收,超时的销毁 默认30秒  -->   
+    <house-keeping-sleep-time>90000</house-keeping-sleep-time> 
+    <!-- 最少保持的空闲连接数(默认2个) -->  
+    <prototype-count>5</prototype-count> 
+    <!-- 是指在任一时刻，可以同时建立的最大连接数，即：已经请求的、但还没可用的新连接数量 --> 
+    <simultaneous-build-throttle>20</simultaneous-build-throttle> 
+    
+    <!--允许最大连接数(默认5个),超过了这个连接数,再有请求时,就排在队列中等候 -->     
+    <maximum-connection-count>1000</maximum-connection-count> 
+    <!--最小连接数(默认2个)--> 
+    <minimum-connection-count>10</minimum-connection-count> 
+    <!--连接最大时间活动 默认5分钟 -->
+    <maximum-active-time>300000</maximum-active-time>
+    -->
+    <!-- 连接最大生命时间 默认4小时 这里设置为5小时 -->
+    <maximum-connection-lifetime>18000000</maximum-connection-lifetime>
+    
+     <!-- 在分配连接前后是否进行有效性测试 -->
+	<test-before-use>true</test-before-use>
+	<test-after-use>true</test-after-use>
+	 
+    <!--用于保持连接的测试语句. 如果发现空闲的数据库连接.将会用这个语句来测试. 如果没有定义,测试过程将会被忽略 -->
+    <house-keeping-test-sql>select CURRENT_DATE</house-keeping-test-sql>
+    
+  </proxool>
+</something-else-entirely>

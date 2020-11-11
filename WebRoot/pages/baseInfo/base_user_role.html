@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		
+	<script src="../scripts/jquery/jquery.min.js"></script>
+    <script src="../scripts/jquery/jquery.browser.js"></script>
+	<link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    <script src="../scripts/js/validator.js"></script>
+    	  <script src="../scripts/jquery/jquery.cookie.js"></script>   	
+    <script type="text/javascript">
+        $(document).ready(function () { Loadlayout();});
+    </script>
+</head>
+
+<body><div>
+<script>
+    var UserId = GetQuery("UserId");//用户ID
+    $(function () {
+        BindSelectItem(); 
+        GetList(UserId);
+    })
+    //下拉框
+    function BindSelectItem() {
+       getAjaxJson("/drop_select_role.do", "", function (data) {
+            $("#roleid").html("");  
+            var jsonText = JSON.stringify(data);
+  	        var json = JSON.parse(jsonText);
+            var optionstring = "";  
+            for (var i = 0; i < json.length; i++) { 
+              	optionstring += "<option value=\"" + json[i].id + "\" >" + json[i].name + "</option>";
+             }
+             $("#roleid").html(optionstring);  
+        });
+	  //BindDropItem("/pages/common/dropList.json","#roleid", "user_role", "");
+    }
+    function GetList(userId) {
+        if (!!GetQuery("UserId")) {//接收地址栏参数，即获取传的参数值 
+            getAjaxJson("/base_user_role_init.do", {KeyValue: userId}, function (data) {
+               if(data.roleid == null)
+                   $("#id").val("目前还没有指定角色！");
+               else{
+                   //BindItem("/pages/common/dropList.json","#id", "user_role", data.roleid);
+                 	var jsonText = JSON.stringify(data);
+  	             	var object = JSON.parse(jsonText);
+                 	$("#id").val(object.rolename);
+               	}
+                //SetWebControls(data);
+            });
+        } else {
+        	alert('出错了！');
+        }
+    }
+
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = {Roleid: $("#roleid").val(),Userid: UserId  }
+        //var postData = GetWebControls("#form1");
+        getAjaxJson("/base_user_role_edit.do", postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            if(data.Code > 0)
+            	top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+
+</script>
+</head>
+<body><div>
+
+<form id="form1" style="margin: 1px">
+  <div style="height: 30px; line-height: 30px;">
+       <table class="form">
+           <tr>
+              <th class="formTitle">用户角色(原)： </th>
+              <td class="formValue">
+                 <input id="id" type="text" maxlength="10"  class="txt" readOnly="true" />
+              </td>
+           </tr>
+       </table>
+     </div>
+     <div class="bd" style="border-bottom: none; margin-top: 1px; margin-bottom: 1px;">
+            <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+                <div class="tab_list_top" style="position: absolute">
+                    <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">编辑信息</div>
+                </div>
+            </div>
+     </div>
+    
+    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+        <div id="basic" class="tabPanel">
+        <table class="form">
+           <tr>
+	           <th class="formTitle">用户角色：</th>
+                <td class="formValue"><select id="roleid" class="txtselect" readOnly="true"></select></td>
+            </tr>
+     </table>
+    </div>
+</div>
+
+</form>
+
+</div></body>
+</html>

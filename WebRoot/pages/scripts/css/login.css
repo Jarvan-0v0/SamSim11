@@ -1,0 +1,116 @@
+html, body {height: 100% }
+body {
+	font-family:'Open Sans';
+	font-size: 13px;
+	line-height: 1.5;
+	color: #555;
+	background: #005E9B;
+}
+.btn {
+	display: inline-block;
+	padding: 3px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+.btn2 {
+	width:150px;
+	display: inline-block;
+	padding: 3px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+.btn-primary {  color: #fff;  background-color: #428bca;  border-color: #357ebd;}
+.pull-right {   margin-right: 30px;}
+
+.login-layout {  background-color: #005E9B;}
+.btn-pane {  margin-left: 58px;  margin-top: 5px;}
+header {width: 100%;height: 60px;background: #004672;}
+section {
+	height: 100%;
+	background: url(../images/background2.png) no-repeat;
+	background-size: 100% 100%;
+	position: relative;
+}
+footer {width: 100%;height: 38px;background: #00476E;position: absolute;bottom: 0px;color:#fff;text-align: center;line-height: 38px;}
+footer p {	margin: 0;}
+#copyright{text-align: center; color:  #AF9595; position: absolute; top: 100%; margin-top: -50px; width: 97%; font-family: Microsoft Yahei; line-height:25px;}
+
+@-webkit-keyframes 'form-in'
+{
+	0% {opacity: 0; -webkit-transform:translate(0px, -50px);}
+	100% {opacity: 1; -webkit-transform:translate(0px,0px);}
+}
+@-moz-keyframes form-in
+{
+	0% {opacity: 0; -moz-transform:translate(0px, -50px);}
+	100% {opacity: 1; -moz-transform:translate(0px,0px);}
+}
+#form {
+	opacity: 0;
+	-webkit-animation: form-in 0.8s ease-out 0.2s 1 forwards;
+	-moz-animation: form-in 0.8s ease-out 0.2s 1 forwards;
+	animation: form-in 0.7s ease-out 0.2s 1 forwards;
+}
+#container {
+	width: 700px;height:400px;position: absolute;top:50%;left:50%;margin-top:-280px;margin-left: -350px;
+	}
+#logo{margin: auto; margin-top: 8%; width: 698px; height: 100px;background: url(../images/logo.png) no-repeat;}
+#banner-0 {width: auto;height: 70px;margin-left: 20px;margin-right: 20px;
+         background: url(../images/logo_large.png) no-repeat;/*   background-size: contain;*/}
+#banner {width: 700px; height:90px; background: url(../images/background1.png) no-repeat;background-size: cover;}
+
+/*#banner {width: 700px; height:90px; background: url(../images/) no-repeat;background-size: cover;} */
+#content {height: 310px;background: #fff;}
+#content2 {height: 300px;width: 100%;background: #fff;}
+
+#img {width: 410px;height: 290px;float: left;background: #fff url(../images/FirstFace.jpg) no-repeat 15px 15px;background-size: 380px 260px;}
+.form{width: 290px; height: 290px;float: left; position: relative;}
+#form {width: 290px;height: 290px;float: left;position: relative;}
+#welcome {	font-size: 18px;	margin-top: 30px;}
+.input-text {width: 42px;padding-left: 0;padding-right: 0;}
+.control-label {font-weight: normal;}
+#reg-box-form .input-text {width: 68px;}
+#reg-box-form .form-group{  margin-bottom: 2px;}
+.Validform_checktip {color: #777;	height: 19px;}
+#login, #reg-btn {width: 98px;height: 30px;margin-right: 11px;}
+#reg-btn {background: #E46D15;}
+#login {background: #398B22;}
+#reg-pwd {text-align: right;padding-right: 52px;padding-top: 43px;}
+#reg {width: 211px;height: 31px;margin-left: 68px;background: #E46D15;color: #fff;}
+#shadow {height: 20px;background: url(../images/shadow.png) no-repeat;background-size: contain;}
+.modal-header {background: #007CC7;color: #fff;padding: 9px 9px 9px 15px;}
+.modal-dialog {width: 703px;}
+.modal-body {padding: 10px 40px 10px 40px;}
+#warm-hint {color: #777;}
+#get-pwd-input { width: 300px; float: right;}
+#warm-hint .fa{color: #96D1F3;font-size: 19px;font-weight: 700;margin-right: 8px;position: relative;top: 2px;}
+#sendemail-form {padding-top: 36px;padding-bottom: 36px;}
+#send-email {background: #358936;background: #509751;height: 32px;}
+.btn {border-radius: 2px; }
+.modal-header .close {opacity: 1;color: #ddd;}

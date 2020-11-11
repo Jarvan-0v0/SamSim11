@@ -1,0 +1,118 @@
+﻿#mapDiv{
+	width: 100%;
+	margin: 0px;
+	border: 1px solid #ccc;
+}
+
+.parent{
+  margin:-10px;
+  float:center;
+}
+.children{
+  margin:0px 0px; 
+  display:inline-block;
+  *display:inline;
+  *zoom:1;
+}
+.children2{
+  text-align: left;
+  height:24px;
+}
+.children3{
+   text-align:center;
+}
+.mapInput{
+   width:100%; 
+   height:24px; 
+   text-align: center; 
+   background: #5596de;
+   color: #FFF;
+   border: none;
+   display:block;
+   cursor: pointer;
+}
+.mapSrc{
+   float:center;
+   margin:0px 0px; 
+   width: 100%;
+   height:80px;
+}
+
+
+.toolcss
+{
+       background-color: White;
+       border: 1px solid blue;
+       width: 90px;
+       position: absolute;
+       top: 11px;
+       right: 80px;
+       text-align: center;
+       z-index: 1000;
+}
+
+
+.opt_station_hover{
+		background: rgb(77,103,130);
+		font-size: 12px;
+		width: 150px;
+		height: 47px;
+		border-radius: 5px;
+}
+.opt_station_hover_ul{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		line-height: 23px;
+		text-indent: 4px;
+		color: white;
+		position: relative;
+}
+.opt_station_hover_ul li{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		height: 23px;
+}
+.opt_station_hover img{
+		position: absolute;
+		left: 50%;
+		margin-left: -5px;
+}
+.opt_li_left{
+		width: 65px;
+		display: bolck;
+		float: left;
+		text-align: right;
+}
+
+#divtanchu
+        {
+            display: none;
+            float: right;
+            border: 1px solid red;
+            width: 350px;
+            height: 200px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: White;
+        }
+        body, html
+        {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+        #container
+        {
+            width: 100%;
+            height: 100%;
+        }
+        p
+        {
+            margin-left: 5px;
+            font-size: 14px;
+        }

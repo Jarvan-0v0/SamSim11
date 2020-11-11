@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	
+	<script src="../scripts/jquery/jquery.min.js"></script>
+	<script src="../scripts/jquery/jquery.browser.js"></script>
+    
+    <link href="../scripts/css/framework.css" rel="stylesheet" />
+    <script src="../scripts/js/framework.js"></script>
+    
+    <script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    <script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <link href="../scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />
+    <link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
+
+    <script type="text/javascript">
+	     $(document).ready(function () { Loadlayout();});
+	</script>
+</head>
+<body><div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetGrid(); //加载表格
+    });
+   //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: RootPath()+ "/base_role_init.do",
+            datatype: "json",
+            height: $(window).height() - 135,//105
+            autowidth: true,
+            colModel:[
+                {label: "用户工号（账号）", name: 'userid', index: 'userid', width: 150,hidden:false},
+                {label: "用户名 ", name: 'username', index: 'username', width: 200},
+                {label: "角色编码", name: 'roleid', index: 'roleid', width:100,hidden:true},
+                {label: "角色", name: 'rolename', index: 'rolename', width:200}           
+            ],
+     	    pager: "false",
+            rowNum: 1000,
+            rownumbers: true,
+            shrinkToFit: false,
+        });
+       
+        //自应高度
+        $(window).resize(function () {
+            $("#gridTable").setGridHeight($(window).height() - 135);
+        });
+    }
+     //刷新表格
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入  
+    }
+    
+    //新增
+    function btn_add() {
+        var url = "/pages/baseInfo/base_role_add.html";
+        openDialog(url, "Form", "角色分配", 300,140, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+               
+   //编辑
+   function btn_edit(){
+        var UserID = GetJqGridRowValue("#gridTable", "userid");
+        var UserName = GetJqGridRowValue("#gridTable", "username");
+        var RoleID = GetJqGridRowValue("#gridTable", "roleid");
+        
+        if (IsChecked(RoleID)) {
+            var url = "/pages/baseInfo/base_role_edit.html?RoleID=" + escape(RoleID)+
+                                                            "&UserID=" + escape(UserID)+
+                                                            "&UserName=" + escape(UserName);
+            openDialog(url, "FormInfo", "编辑角色", 300, 120, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    
+    //删除记录
+    function btn_delete() {
+        var RoleID = GetJqGridRowValue("#gridTable", "roleid");
+        var UserID = GetJqGridRowValue("#gridTable", "userid");
+
+        if (IsDelData(RoleID)) {
+            var delparm = {RoleID:RoleID, UserID: UserID};
+            delConfig("/base_role_del.do",delparm,"1");
+        }
+     }
+    
+</script>
+<!--布局开始-->
+<div class="leftline rightline" style="margin-left: 1px; margin-right: 1px;">
+    <!--工具栏 行开始-->
+    <div class="tools_bar" style="margin-top: 1px; margin-bottom: 0px;">
+       <div class="PartialButton"><!--工具条开始-->
+	  	   <script type="text/javascript">
+			   $(document).ready(function () {
+			       PartialButton("/pages/baseInfo/base_role_button.json");  
+			    });
+			</script>
+		</div><!--工具条结束-->
+    </div><!--工具栏行 结束-->
+    <div id="grid_List"  class="topline">
+       <table id="gridTable"></table>
+    </div>>
+</div> <!-- 布局结束 -->
+
+</div></body>
+</html>

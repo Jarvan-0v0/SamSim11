@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+
+<link href="../scripts/css/map.css" rel="stylesheet" />
+<script src="../scripts/jquery/jquery.min.js"></script>
+<script src=" http://api.tianditu.com/api?v=4.0"  type="text/javascript"></script>
+
+</head>
+
+<body>
+<form >
+	 <div id="mapDiv" > </div> 
+	 <!-- 地图  <div class="toolcss"><span id="tool_ceju" style="cursor: pointer;">获取经纬度</span></div> -->
+</form>
+
+<script type="text/javascript">
+ 	  //设置地图容器的高度
+      $("#mapDiv").css("height", windowHeight());
+      
+      var map,lnglat,zoom,scale;
+      loadMap();//装入地图
+  
+  	  /*$("#tool_ceju").click(function () {
+           addEvent(); //点击获取经纬度
+       });*/
+      
+      addEvent();
+      
+	  function addEvent(){
+	     removeMapClick();
+	     map.addEventListener("click",MapClick);//点击事件 
+	  }
+	  function removeMapClick()
+	  {
+	     map.removeEventListener("click",MapClick);
+	  }
+	  function MapClick(e){
+	     alert("经度:"+e.lnglat.getLng() + "   纬度: " +e.lnglat.getLat());
+	  }
+	  
+      //加载基本地图和导航
+      function loadMap(){
+		  try {
+				 map =new T.Map("mapDiv");//初始化地图对象
+				 //参数1：地理经度。参数2：地理纬度
+	             lnglat = new T.LngLat(114.602913, 38.353672)//确定经纬度坐标114.602913, 38.353672
+	  			 //设置显示地图的中心点和级别
+  	  			 zoom = 6;
+  	             map.centerAndZoom(lnglat,zoom);
+  	             map.enableScrollWheelZoom();//允许鼠标滚轮缩放地图
+                 scale = new T.Control.Scale(); //创建比例尺控件对象
+                 map.addControl(scale);//添加比例尺控件 
+	             control = new T.Control.Zoom();//创建缩放平移控件对象
+                 map.addControl(control);//添加缩放平移控件
+			} catch(err) {
+			    alertDialog('天地图加载不成功，请稍候再试！你可以先使用其他功能！','-1');
+			}
+       }
+       
+     function windowHeight() {
+       var de = document.documentElement;
+       return self.innerHeight || (de && de.clientHeight) || document.body.clientHeight;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+[{"id":"R1","text":"墩台材料","value":"01","IsTree":"","img":"../scripts/images/Icon16/molecule.png","parentnodes":"0","showcheck":true,"isexpand":true,"complete":true,"hasChildren":true,
+"ChildNodes":[
+      
+    {"id":"M1","text":"混凝土","value":"混凝土","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M2","text":"钢筋混凝土","value":"钢筋混凝土","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0, "hasChildren":false,"ChildNodes":[]},
+    {"id":"M3","text":"片石混凝土","value":"片石混凝土","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M4","text":"块石混凝土","value":"块石混凝土","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M5","text":"预应力钢筋混凝土","value":"预应力钢筋混凝土","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M6","text":"浆砌片石","value":"浆砌片石","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M7","text":"浆砌块石","value":"浆砌块石","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M8","text":"料石","value":"料石","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M9","text":"砖","value":"砖","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]},
+    {"id":"M11","text":"钢","value":"钢","IsTree":"","showcheck":true,"isexpand":true,"complete":true,"checkstate":0,"hasChildren":false,"ChildNodes":[]}
+ ]
+
+}]

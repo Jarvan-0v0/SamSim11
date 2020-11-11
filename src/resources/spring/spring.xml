@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/cache
+		http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task.xsd"
+>
+    <!-- Spring的主配置文件 -->
+ 
+     <!-- 每隔五秒执行一次.五秒：  */5 * * * * ?  ； 五分钟0 */5 * * * ? ;每天中午12点触发:0 0 12 * * ?  -->
+ 	<!-- 定时器开关
+ 	<task:annotation-driven />   
+    <bean id="MyTaskAnnotation" class="blkjweb.job.SpringTask"></bean>  
+    <task:scheduled-tasks>  
+        <task:scheduled ref="MyTaskAnnotation" method="second" cron="0 */1 * * * ?" />
+        <task:scheduled ref="MyTaskAnnotation" method="day" cron="0 0 12 * * ?"/>
+    </task:scheduled-tasks>-->
+    
+    <!-- 启用注解,如@autowired等。默认是不启用的.  -->
+    <context:annotation-config />
+    
+    <!-- 该 BeanPostProcessor 将自动对标注 @Autowired 的 Bean 进行注入 -->     
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> 
+                       
+ 	<!-- 启动组件扫描，排除@Controller组件，该组件由SpringMVC配置文件扫描 -->
+	<context:component-scan base-package="blkjweb">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+    <!-- 定义国际化的消息资源文件(只用做标题可以：classpath:resources/messages/message_zh_CN） -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:resources/messages/message">
+         </property>
+     </bean>
+    <!-- 获取本地 -->  
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>  
+  
+    <!-- 事务    
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>  
+    -->
+    <!-- 自定义exception处理  
+    <bean id="exceptionResolver" class="org.blkj.exception.CommonExceptionHandler"/> 
+     -->
+     <!-- 引入属性文件:application.properties(DataSource连接参数) -->
+	<context:property-placeholder location="classpath:application.properties" />
+ 
+	<!-- Hikari Datasource -->  
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"  destroy-method="shutdown">  
+		 <property name="driverClassName" value="${jdbc.driver}" />  
+		 <property name="jdbcUrl" value="${jdbc.url}"/>  
+		 <property name="username" value="${jdbc.username}" />  
+		 <property name="password" value="${jdbc.password}" />  
+		  <!-- 连接只读数据库时配置为true， 保证安全 -->  
+		 <property name="readOnly" value="false" />  
+		 <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->  
+		 <property name="connectionTimeout" value="30000" />  
+		 <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->  
+		 <property name="idleTimeout" value="600000" />  
+		 <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->  
+		 <property name="maxLifetime" value="1800000" />  
+		 <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->  
+		 <property name="maximumPoolSize" value="15" />  
+	 </bean>
+	
+	 <!-- 阿里 druid 数据库连接池
+     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" >    
+         <property name="url" value="${jdbc.url}" />    
+         <property name="username" value="${jdbc.username}" />    
+         <property name="password" value="${jdbc.password}" />    
+         <property name="driverClassName" value="${jdbc.driver}" /> 
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"	value="20" />   
+      </bean >   -->  
+	
+	<!-- 配置数据库源  proxool.DBPool是 proxool.xml中的别名 
+	<bean id="dataSource"  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName"> <value>org.logicalcobwebs.proxool.ProxoolDriver</value> </property>
+	    <property name="url"><value>proxool.DBPool</value></property>
+    </bean>-->
+    
+	<!-- 配置多数据库源  
+	<bean id="dataSource" class="org.blkj.sql.datasource.DataSources">  
+       <property name="targetDataSources">  
+           <map key-type="java.lang.String">  
+               <entry value-ref="datasource_master" key="datasource_master"></entry>  
+               <entry value-ref="datasource_slave" key="datasource_slave"></entry>  
+           </map>  
+       </property>  
+       <property name="defaultTargetDataSource" ref="datasource_master"></property>  
+	</bean> 
+ 	<bean id="datasource_master" class="org.logicalcobwebs.proxool.ProxoolDataSource">  
+	    <property name="driver" value="com.mysql.jdbc.Driver"> </property>  
+	    <property name="driverUrl" value="jdbc:mysql://localhost:3306/bl_metro"> </property>  
+	    <property name="user" value="root"/>  
+        <property name="password" value="123456"/>  
+        <property name="alias" value="proxool.a2"/>
+        <property name="maximumActiveTime" value="1800000"/>  
+        <property name="maximumConnectionCount" value="20"/>
+        <property name="prototypeCount" value="5"/>  
+        <property name="minimumConnectionCount" value="1"/>
+        <property name="simultaneousBuildThrottle" value="100"/>
+        <property name="houseKeepingTestSql" value="select CURRENT_DATE"/>  
+	</bean> 
+	<bean id="datasource_slave" class="org.logicalcobwebs.proxool.ProxoolDataSource">  
+	    <property name="driver" value="com.mysql.jdbc.Driver"> </property>  
+	    <property name="driverUrl" value="jdbc:mysql://localhost:3306/hw_bridge"> </property>  
+	    <property name="user" value="root"/>  
+        <property name="password" value="123456"/>  
+        <property name="alias" value="proxool.a1"/>
+        <property name="maximumActiveTime" value="1800000"/>  
+        <property name="maximumConnectionCount" value="20"/>
+        <property name="prototypeCount" value="5"/>  
+        <property name="minimumConnectionCount" value="1"/>
+        <property name="simultaneousBuildThrottle" value="100"/>
+        <property name="houseKeepingTestSql" value="select CURRENT_DATE"/> 
+	</bean> -->
+    <!-- 数据库连接池还可以是com.alibaba.druid.pool.DruidDataSource（class=的类）等  --> 
+	<!-- bean id="datasource_master" class="org.apache.commons.dbcp2.BasicDataSource">  
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>  
+	    <property name="url" value="jdbc:mysql://localhost:3306/bl_metro"></property>  
+	    <property name="username" value="root"></property>  
+	    <property name="password" value="123456"></property>  
+	</bean -->
+	
+    <!-- 支持文件上传 -->  
+    <bean id="multipartResolver"  
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+        <property name="defaultEncoding" value="UTF-8" />
+    	<property name="maxUploadSize" value="104857600" />
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>  
+    
+    <!-- 支持定时器 -->
+	<!-- 方法一： 整合quartz2.2，quartz-scheduler定时任务，Spring定时任务 。 简单的静态配置（完全由方法一的配置参数决定） --> 
+	<!-- 1、配置任务bean类  
+	<bean id="taskJob" class="blkjweb.job.SimpleQuartzJob"></bean>  -->
+	<!-- 2、配置方法映射工厂类   任务类可以不实现Job接口，通过targetMethod指定调用方法 -->
+	<!-- concurrent : false表示等上一个任务执行完后再开启新的任务 ；要执行的方法名称 runTask
+	<bean id="SpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+    	<property name="targetObject" ref="taskJob"></property>  
+    	<property name="targetMethod" value="runTask"></property>
+    	<property name="concurrent" value="false"></property>  
+	</bean>	-->
+	<!-- 3、方法一：配置定时任务的执行时间或周期，同时关联任务详细jobDetail. 时间单位是 毫秒 
+	<bean id="myTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">  
+        <property name="jobDetail" ref="jobDetail"/>  
+        <property name="startDelay" value="5000"/>   
+        <property name="repeatInterval" value="5000"/>  
+    </bean>   -->
+    <!-- 3、方法二： 调度触发器。 5秒： 0/5 * * * * ?    
+    <bean id="myTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="SpringQtzJobMethod"></property>  
+        <property name="cronExpression" value="0 0 1 ? * L"></property> 
+        <property name="startDelay" value="3000"></property>  
+    </bean>  -->
+	<!-- 4、 调度工厂。 配置SchedulerFactoryBean类，调用时间触发 
+	<bean id="schedulerFactoryBean2" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	    <property name="triggers">  
+	        <list> <ref bean="myTrigger"/> </list>  
+	    </property>  
+	</bean> --> 
+	
+    <!-- 方法二：动态改变定时时间(由网页上来设置). 去掉原先"taskJob"、"myTrigger"等配置  只需如下一条语句
+     	                  动态配置将 Factory作为一个service一样的接口 QuartzJobFactory.java
+     	      <property name="autoStartup" value="true"/>    -->
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> </bean>
+ 
+    <!-- ehCache缓存配置 -->  
+    <!-- 启用缓存注解功能(请将其配置在Spring主配置文件中)  
+    <cache:annotation-driven cache-manager="cacheManager"/>  
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">  
+        <property name="caches">  
+            <set><bean name="myCache" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/></set>  
+        </property>  
+    </bean>  
+      --> 
+	<!-- EhCache缓存配置。 Spring提供的基于的Ehcache实现的缓存管理器    -->
+      <bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:resources/cache/ehcache.xml"/>
+        <property name="shared" value="true"/> 
+    </bean>
+    <!-- 配置缓存工厂bean对象, 并设置所使用的Cache name -->
+	<bean id="methodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+	    <property name="cacheManager" ref="ehCacheManagerFactory" />
+	    <!-- 见ehcache.xml中的缓存配置value  -->
+	    <property name="cacheName" value="myCache" />
+	</bean>
+
+    
+    <!-- 配置MyBatis:指定使用的数据源,引入mybatis核心配置文件-->
+    <!-- 在使用mybatis时 spring使用sqlsessionFactoryBean来管理mybatis的sqlsessionFactory-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" /> 
+        <property name="configLocation" value="classpath:resources/mybatis/myBatis.xml" />
+    </bean> 
+    <!-- 自动扫描所有的Mapper接口  -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       <property name="basePackage" value="blkjweb.mybatis.mapper"></property>
+    </bean>
+    
+    <!-- 添加JasperReport的视图解析器 
+    <bean id="jasperReportResolver" class="org.springframework.web.servlet.view.XmlViewResolver">   
+      <property name="order" value="2"></property>  
+      <property name="location">  
+       <value>classpath:resources/jasperreport/jasper-views.xml</value>  
+      </property>  
+    </bean>  -->
+    
+
+</beans>

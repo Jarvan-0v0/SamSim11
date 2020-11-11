@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		 
+		<script src="../scripts/jquery/jquery.min.js"></script>
+        <script src="../scripts/jquery/jquery.browser.js"></script>
+        
+        <link href="../scripts/css/framework.css" rel="stylesheet" />
+    	<script src="../scripts/js/framework.js"></script>
+    	<script src="../scripts/js/validator.js"></script>
+    	 	  <script src="../scripts/My97DatePicker/WdatePicker.js"></script>
+     	<!--第三方统计图start-->
+        <script src="../scripts/highcharts/highcharts.js"></script>
+    
+        <script type="text/javascript">
+	        $(document).ready(function () { Loadlayout();});
+	    </script>
+</head>
+<body><div>
+<script>
+    $(function () {
+    	
+    	start_JianzhiBridge();
+    	start_Jianzhi3Bridge();
+   	/*start_LianxuBridge();
+    	start_Lianxu3Bridge();*/
+    });
+    function start_JianzhiBridge()
+    {
+ 	   var d=new Date();
+ 	   $("#Jianzhiyear").val(d.getFullYear());
+ 	   $("#JianzhiBlock_Search").click(function()
+ 			   {
+ 		 
+ 		  
+ 		   Get_JianzhiChart();
+ 			   });
+ 	    }
+    
+    function start_Jianzhi3Bridge()
+    {
+ 	   var d=new Date();
+ 	   
+ 	   $("#Jianzhi3year").val(d.getFullYear());
+ 	 
+ 	   $("#Jianzhi3Block_Search").click(function()
+ 			   {
+ 		      
+ 		   Get_Jianzhi3Chart();
+ 			   });
+ 	    }
+    function start_LianxuBridge()
+    {var d=new Date();
+ 	   $("#Lianxuyear").val(d.getFullYear());
+ 	   $("#Lianxu_Block_Search").click(function()
+ 			   {
+ 		
+ 		   Get_LianxuChart();
+ 			   });
+ 	    }
+    function start_Lianxu3Bridge()
+    {
+ 	   var d=new Date();
+ 	   $("#Lianxu3year").val(d.getFullYear());
+ 	   $("#Lianxu3_Block_Search").click(function()
+ 			   {
+ 		
+ 		   Get_lianxu3Chart();
+ 			   });
+ 	    }
+    
+    
+    
+     function Get_JianzhiChart() {
+         var options = {
+                chart: {renderTo: 'JianzhiContainer', type: 'column' },//报表类型 'bar' 等
+                title: { text: '简支梁统计' },
+                yAxis: { min: 0, title: {  text: '桥梁数量/孔' },labels: { overflow: 'justify'}},
+                xAxis: { categories: [{},{},{}], title: {text: null},crosshair: true  },
+                series: [{},{},{},{},{}] //对应每一年的三组数据
+           };//options
+           var url =  RootPath() + "/JianzhiChart.do";
+           
+           var postData = jQuery.parseJSON('{' + "" + '}');
+           postData["Year"] = $("#Jianzhiyear").val();
+           getAjaxJson("/JianzhiChart.do",postData, function (data) //{
+           
+         //  $.getJSON(url,function(data)
+           { 
+             //alert(data);
+                var i,len=data.length; 
+                for( i=0;i<len;i++){ 
+                      options.xAxis.categories[i]=data[i].year;
+                      options.series[i].color = data[i].color;
+                      options.series[i].name = data[i].name;
+                      options.series[i].data = data[i].list;
+                 }  
+                 var chart = new Highcharts.Chart(options);
+            });
+  	 }
+  	 
+    function Get_Jianzhi3Chart() {
+          var options = {
+                chart: {renderTo: 'Jianzhi3Container', type: 'column' },//报表类型 'bar' 等
+                title: { text: '简支梁近三年统计' },
+                yAxis: { min: 0, title: {  text: '桥梁数量/座' },labels: { overflow: 'justify'}},
+                xAxis: { categories: [{},{},{}], title: {text: null},crosshair: true  },
+                series: [{},{},{},{},{}] //对应每一年的三组数据
+           };//options
+           var url =  RootPath() + "/Jianzhi3Chart.do";
+        
+           var postData = jQuery.parseJSON('{' + "" + '}');
+           postData["Year"] = $("#Jianzhi3year").val();
+           getAjaxJson("/Jianzhi3Chart.do", postData, function (data){
+                     
+             alert(data);
+                var i,len=data.length; 
+                for( i=0;i<len;i++){ 
+                     options.xAxis.categories[i]=data[i].year;
+                      options.series[i].color = data[i].color;
+                      options.series[i].name = data[i].name;
+                      options.series[i].data = data[i].list;
+                 }  
+                 var chart = new Highcharts.Chart(options);
+            });
+  	 }
+  	
+  	 function Get_LianxuChart() {
+  	      var options = {
+                chart: {renderTo: 'LianxuContainer', type: 'column' },//报表类型 'bar' 等
+                title: { text: '连续梁' },
+                yAxis: { min: 0, title: {  text: '桥梁数量/座' },labels: { overflow: 'justify'}},
+                xAxis: { categories: [{}], title: {text: null},crosshair: true  },
+                series: [{},{},{},{},{}] //对应每一年的三组数据
+           };//options
+           var url =  RootPath() + "/LianxuChart.do";
+           var postData = jQuery.parseJSON('{' + "" + '}');
+           postData["Year"] = $("#Lianxuyear").val();
+           getAjaxJson("/LianxuChart.do", postData, function (data){
+         
+                          var i,len=data.length; 
+                for( i=0;i<len;i++){ 
+                      //对报表X轴显示名称赋值
+                      options.xAxis.categories[i]=data[i].year;
+                      //y坐标 series：data
+                      options.series[i].data = data[i].list;    
+                      options.series[i].name = data[i].name;
+                 }  
+                 var chart = new Highcharts.Chart(options);
+            });
+     }
+  	 function Get_Lianxu3Chart(){
+        var options = {
+                chart: {renderTo: 'Lianxu3Container', type: 'column' },//报表类型 'bar' 等
+                title: { text: '连续梁近三年统计' },
+                //subtitle: { text: '副标题' },
+               /* tooltip: {
+            			headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            			pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            			'<td style="padding:0"><b>{point.y:.1f}坐</b></td></tr>',
+            			footerFormat: '</table>',shared: true, useHTML: true 
+            	 },
+            	plotOptions: {column: {pointPadding: 0.2,borderWidth: 0}},
+            	*/
+                yAxis: { min: 0, title: {  text: '桥梁数量/座' },labels: { overflow: 'justify'}},
+                xAxis: { categories: [{},{},{}], title: {text: null},crosshair: true  },
+                series: [{},{},{},{},{}] //对应每一年的三组数据
+           };//options
+           var url =  RootPath() + "/Lianxu3Chart.do";
+           var postData = jQuery.parseJSON('{' + "" + '}');
+           postData["Year"] = $("#Lianxu3year").val();
+           getAjaxJson("/Lianxu3Chart.do", postData, function (data){
+             //alert(data);
+                var i,len=data.length; 
+                for( i=0;i<len;i++){ 
+                      //对报表X轴显示名称赋值
+                      options.xAxis.categories[i]=data[i].year;
+                      //y坐标 series：data
+                      options.series[i].data = data[i].list;    
+                      options.series[i].name = data[i].name;
+                 }  
+                 var chart = new Highcharts.Chart(options);
+            });
+     }
+  	 
+  	   //高度宽度自适应 
+      $(window).resize(function () {
+    	/*var width_frm = $(document.body).width();  
+    	var height_frm = $(document.body).height();  
+        var width_div = width_frm - 10;  
+    	var height_div = height_frm - 50;  
+		$('#JianzhiContainer').css("height", height_div);  
+    	$('#JianzhiContainer').css("width", width_div);  
+        */
+        Get_JianzhiChart();
+        Get_Jianzhi3Chart();
+        Get_LianxuChart();
+        Get_Lianxu3Chart();
+      });
+</script>
+<!-- 布局开始
+     <div id="TabLianxuChart" class="tab_list bd" onclick="Tabchange('LianxuChart')">连续梁</div>
+  <div id="TabLianxu3Chart" class="tab_list bd" onclick="Tabchange('Lianxu3Chart')">连续梁近三年</div>
+-->
+<div class="bd" style="border: none;">
+<div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+    <div class="tab_list_top" style="position: absolute ">
+         <div id="TabJianzhiChart" class="tab_list bd actived" onclick="Tabchange('JianzhiChart')">简支梁</div>
+         <div id="TabJianzhi3Chart" class="tab_list bd" onclick="Tabchange('Jianzhi3Chart')">简支梁近三年</div>
+       <!--  <div id="TabLianxuChart" class="tab_list bd" onclick="Tabchange('LianxuChart')">连续梁</div>
+  		<div id="TabLianxu3Chart" class="tab_list bd" onclick="Tabchange('Lianxu3Chart')">连续梁近三年</div>-->
+    </div>
+</div>
+
+<div class="ScrollBar" style="margin: 1px; margin-bottom: 0px;">
+    <div id="JianzhiChart" class="tabPanel" >
+    <div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">  
+      <table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Jianzhiyear" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="JianzhiBlock_Search" type="button" class="btnSearch" value="统计" /> </td>
+		      
+		      
+		  </tr>
+       </table>
+</div>
+</div>
+    <form id="form1">
+       <div id="JianzhiContainer" style="width: 90%; height: 600px; margin: 0 auto;float:center;"> </div>
+    </form>
+    </div>
+   
+   <div id="LianxuChart" class="tabPanel" style="display: none;">
+    <div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">  
+      <table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Lianxuyear" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="LianxuBlock_Search" type="button" class="btnSearch" value="统计" /> </td>
+		      
+		  </tr>
+       </table>
+</div>
+</div>
+   
+   <form id="form2">
+       <div id="LianxuContainer" style="width: 90%; height: 600px; margin: 0 auto"></div>
+    </form>
+   </div>
+   
+   <div id="Jianzhi3Chart" class="tabPanel" style="display: none;" >
+    <div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">  
+      <table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Jianzhi3year" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="Jianzhi3Block_Search" type="button" class="btnSearch" value="统计" /> </td>
+		      
+		  </tr>
+       </table>
+</div>
+</div>
+    <form id="form3">
+       <div id="Jianzhi3Container" style="width: 90%; height: 600px; margin: 0 auto"></div>
+    </form>
+   </div>
+   
+   <div id="Lianxu3Chart" class="tabPanel" style="display: none;">
+    <div class="tools_bar leftline rightline" style="margin-bottom: 0px;">
+<div style="float: left;">  
+      <table border="0" class="form-find" style="height: 45px;">
+         <tr>
+         	  <th>年度：</th> 
+		       <td><input id="Lianxu3year" type="text" class="txt Wdate" 
+		           onclick="WdatePicker({dateFmt:'yyyy',lang:'zh-cn'})"/>
+		      </td>
+		      <td><input id="Lianxu3Block_Search" type="button" class="btnSearch" value="统计" /> </td>
+	      
+		  </tr>
+       </table>
+</div>
+</div>
+  <!--  <form id="form4">
+   
+       <div id="Lianxu3Container" style="width: 90%; height: 600px; margin: 0 auto"></div>
+   </form>-->
+   </div>
+   
+</div><!-- class="ScrollBar" -->
+</div><!--class="bd" -->
+</div></body>
+</html>

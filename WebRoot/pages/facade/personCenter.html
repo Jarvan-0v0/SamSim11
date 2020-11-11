@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		
+		<link href="../scripts/css/framework.css" rel="stylesheet" />
+		<script src="../scripts/jquery/jquery.min.js"></script>
+		
+       	<script src="../scripts/jquery/jquery.cookie.js"></script>
+        <script src="../scripts/jquery/jquery.md5.js"></script>
+	    
+	    <script src="../scripts/js/framework.js"></script>
+	    <script src="../scripts/js/validator.js"></script>
+</head>
+<body><div>
+   <script>
+    //var KeyValue = "${sessionScope.USERNAME}";
+    var KeyValue = $.cookie("USERNAME");
+    /*基本信息begin=====================================*/
+    $(function () {
+       // BindSelectItem();
+        InitControl(); 
+    })
+    //初始化个人信息
+    function InitControl() {
+       getAjaxJson("/personInfo.do", {id: KeyValue}, function (data){
+            SetWebControls(data);
+            //对于密码。页面上的id同后台bean的id不一致。所以需要特殊处理
+            var jsonText = JSON.stringify(data);
+  	        var object = JSON.parse(jsonText);
+            $("#OldPassword").val(object.password);
+           
+            //$("#sex").val(data.sex);     
+            if(data.sex == "0")
+              $("#sex").val("女");
+            else
+              $("#sex").val("男");
+        });
+     }
+     
+    //下拉框
+	function BindSelectItem() {
+	  BindDropItem("/pages/common/dropList.json","#sex", "gender", "");
+	}
+    /*基本信息end=====================================*/
+          
+    /*修改密码begin================================*/
+    function EditPassword() {
+        var OldPassword = $("#OldPassword").val();
+        var NewPassword = $("#NewPassword").val();
+        var ConfirmNewPassword = $("#ConfirmNewPassword").val();
+        if (OldPassword == "") {
+            $("#OldPassword").parent().next().html("<div class=\"form-error-text\">请输入登陆密码</div>");
+            return false;
+        }
+        if (NewPassword == "") {
+            $("#NewPassword").parent().next().html("<div class=\"form-error-text\">请输入新密码</div>");
+            return false;
+        }
+        if (ConfirmNewPassword == "") {
+            $("#ConfirmNewPassword").parent().next().html("<div class=\"form-error-text\">请再输入一遍新密码</div>");
+            return false;
+        }
+        
+        if ( $("#ConfirmNewPassword").val() != $("#NewPassword").val()) {
+                $("#ConfirmNewPassword").parent().next().html("<div class=\"form-error-text\">两次输入的新密码不一致！</div>")
+            return false;
+        }
+   
+      /*if (confirm('您确认要修改密码？')) {
+            window.setTimeout(function () {
+                var postData = { id: KeyValue, oldpw: $("#OldPassword").val(), newpw: $("#NewPassword").val()   }
+                getAjaxJson("updatePW.do", postData, function (data) {
+                    tipDialog(data.Message,3,1);
+                    location.reload();
+                });
+            }, 200);
+        }*/
+        confirmDialog("提示信息",'您确认要修改密码？', function (r) {
+       	  if(r){
+	            //Loading(true, "正在提交数据...");Password: $.md5($("#NewPassword").val())
+	          var oldpw = $("#OldPassword").val();
+              var newpw = $("#NewPassword").val();
+       		  if(KeyValue=="admin"){
+			      oldpw= $.md5(oldpw);
+			      newpw = $.md5(newpw);
+		      }
+              window.setTimeout(function () {
+	              var postData = {id: KeyValue, oldpw: oldpw, newpw: newpw }
+                  getAjaxJson("/modifyPW.do", postData, function (data) {
+	                    tipDialog(data.Message,3,1);
+	                    location.reload();
+	                   // window.top.location.href = "/Login/Index";
+	               });
+	            }, 200);
+	        }
+	    });
+	    
+    }
+    /*修改密码end================================*/
+</script>
+
+<div class="bd" style="border-bottom: none; margin: 1px;">
+    <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+        <div class="tab_list_top" style="position: absolute">
+            <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">基本信息</div>
+            <!-- <div id="TabEditPassword" class="tab_list bd " onclick="Tabchange('EditPassword')">修改密码</div> -->
+        </div>
+    </div>
+</div>
+
+<div class="ScrollBar" style="margin: 1px">
+    <!--基本信息-->
+    <div id="basic" class="tabPanel">
+        <table id="tb_basic" class="form">
+            <tr>
+                <th class="formTitle">学号：</th>
+                <td class="formValue"> <input id="id" type="text" class="txt" readOnly="true"/></td>
+                <th class="formTitle">姓名：</th>
+                <td class="formValue"><input id="name" type="text" class="txt" readOnly="true"/> </td>
+            </tr>
+            <tr>
+                <th class="formTitle">性别：</th>
+                <td class="formValue"> <input id="sex" type="text" class="txt" readOnly="true"/></td>
+                <th class="formTitle">班级：</th>
+                <td class="formValue"><input id="unitid" type="text" class="txt" readOnly="true"/> </td>
+            </tr>
+            <tr>
+                <th class="formTitle">联系手机：</th>
+                <td class="formValue"><input id="mobile" type="text" class="txt" readOnly="true"/></td>
+                <th class="formTitle">联系电话：</th>
+                <td class="formValue"><input id="phone" type="text" class="txt" readOnly="true"/></td>
+            </tr>
+            <tr>
+                <th class="formTitle">QQ：</th>
+                <td class="formValue"><input id="qq" type="text" class="txt" readOnly="true"/></td>
+                <th class="formTitle">微信号：</th>
+                <td class="formValue"><input id="weixin" type="text" class="txt" readOnly="true"/> </td>
+            </tr>
+            <tr>
+	            <th class="formTitle">电子邮箱：</th>
+                <td class="formValue"><input id="email" type="text" class="txt" readOnly="true"/></td>
+                <th class="formTitle">角色：</th>
+                <td class="formValue"><input id="role" type="text" class="txt" readOnly="true"/></td>
+            </tr>
+            <tr>
+                 <th class="formTitle">说明： </th>
+                 <td class="formValue" colspan="3">
+                    <textarea id="description" class="txtArea" rows="6" readOnly="true"></textarea>
+                 </td>
+            </tr>
+        </table>
+    </div>
+       
+    <!--修改密码-->
+    <div id="EditPassword" class="tabPanel" style="display: none; margin: 20px;margin-top:10px;">
+        <table style="width: 100%">
+            <tr>
+                <td class="bottomdashed" style="width: 13%; text-align: right; line-height: 35px;">原密码：</td>
+                <td class="bottomdashed" style="width: 200px;">
+                    <input id="OldPassword" type="password" class="keyword" style="width: 200px;" />
+                </td>
+                <td class="bottomdashed"></td>
+            </tr>
+            <tr>
+                <td class="bottomdashed" style="width: 13%; text-align: right; line-height: 35px;">新密码：</td>
+                <td class="bottomdashed" style="width: 200px;">
+                    <input id="NewPassword" type="password" class="keyword" style="width: 200px;" />
+                </td>
+                <td class="bottomdashed"></td>
+            </tr>
+            <tr>
+                <td class="bottomdashed" style="width: 13%; text-align: right; line-height: 35px;">确认密码：</td>
+                <td class="bottomdashed" style="width: 200px;">
+                    <input id="ConfirmNewPassword" type="password" class="keyword" style="width: 200px;" />
+                </td>
+                <td class="bottomdashed"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="line-height: 35px; text-align: center;">
+                    <input id="btnSearch" type="button" class="btnSearch" value="确认修改" onclick="EditPassword()" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+      </div>
+</div>
+
+</div></body>
+</html>

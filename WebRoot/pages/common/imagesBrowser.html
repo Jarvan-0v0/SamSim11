@@ -1,0 +1,96 @@
+﻿<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<script src="../scripts/jquery/jquery.min.js"></script>
+    <script src="../scripts/js/framework.js"></script>
+    <link rel="stylesheet" href="../scripts/css/picture.css" type="text/css">
+	<!-- <script src="../scripts/js/slide.js"></script>-->
+</head>
+ 
+<body style="text-align:center">
+<script type="text/javascript">  
+     var prePaht = "../../bridgeImgs/";
+     var filePath;
+     var num;
+     var ext;
+     var titleArry = new Array(); //定义一数组
+     
+     $(function(){
+         filePath = GetQuery("path");
+         filePath=unescape(filePath);
+         num = GetQuery("num");
+         ext = GetQuery("ext");
+         
+         title = GetQuery("title");
+         titleArry = title.split(";"); //字符分割
+         
+	     displayFirstImage();
+	     bighookBtn();
+	     $("#title").text(titleArry[0] + "-----" + (1+"/"+num));
+     });
+     function displayFirstImage(){
+          src = prePaht +  filePath + "-1" + ext;//第一张图片，编号为1
+          $("#image").attr("src", src);
+     }
+     var index = 1;
+     function bighookBtn(){
+       $('#bigpicarea p span')
+           .filter('#big_play_prev, #big_play_next')
+           .bind('click', function(){
+           		var id = this.id;
+           		if (id == 'big_play_prev') {
+               		index--;
+                	if (index < 1) index = 1;
+            	}
+            	else{
+               		index++;
+               		if (index > num) index = num;
+            	}
+           		
+           		if(index==num){
+            		$("#big_play_prev").css("display","block");
+            		$("#big_play_next").css("display","none");
+            	}else if(index == 1){
+            		$("#big_play_prev").css("display","none");
+            		$("#big_play_next").css("display","block");
+            	}else{
+            		$("#big_play_prev").css("display","block");
+            		$("#big_play_next").css("display","block");
+            	}
+           	 
+           		 $("#title").text(titleArry[index-1] + "-----" + (index+"/"+num));
+            	
+            	slideImage(index);
+       	});
+      }
+      function slideImage(i){
+		    src = prePaht +  filePath + "-" + i +  ext;
+		    $("#image").attr("src", src);
+		    //document.getElementById("image").src=src;
+	 }
+	 function getNaturalWidth(img) {//获取图片的原始尺寸 宽度
+		var image = new Image();
+		image.src = img.src;
+		return image.width;
+	 }
+	 function getNaturalHeight(img) {//获取图片的原始尺寸 宽度
+		var image = new Image();
+		image.src = img.src;
+		return image.Height;
+	}  
+	
+</script>  
+    
+<!-- 图轮换区 width: auto  height:100%  -->
+<div style="HEIGHT: 500px; PADDING-TOP: 30px" class="wrap picshow">
+	<div style="MARGIN: 0px auto; WIDTH: 774px; HEIGHT: 436px; OVERFLOW: hidden" id=bigpicarea>
+	<P class=bigbtnPrev><span id=big_play_prev></span></P>
+	<div class=image> <img id="image" src="" width=772 height=434 > </div>
+	<P class=bigbtnNext><span id=big_play_next></span></P>
+	</div>
+<p style="display:block;text-align:center;font-size:16px;color:red" id="title"><p>
+</div>
+
+</body></html>
+  

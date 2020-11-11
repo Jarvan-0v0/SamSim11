@@ -1,0 +1,124 @@
+﻿.tableForm{
+	margin:0px;
+	padding:0px;
+	border-collapse:collapse;
+	border-width:3px 1px 1px; 
+	border-right:1px solid #ccc;
+	table-layout:fixed;
+	position:relative;
+	width: 100%;
+}
+
+.chart 
+{
+  width: 90%; 
+  height: 400px; 
+  margin: 0 auto;
+}
+
+	
+.tableButton 
+{
+ margin: 0 auto; 
+ display: block;
+}
+
+/**上内边距 右内边距   下内边距   左内边距**/		
+.tableTitleLeftTop 
+{
+  border:solid windowtext 1pt;
+  padding:0cm 0pt 0cm 0pt; 
+}
+
+.fixedThead{
+    background-color:#F5F5F5;
+	display: block;
+}
+
+.scrollTbody{
+	display: block;
+	overflow: auto;
+	width: 100%;
+}
+
+
+.tableTitle
+{
+  align:center;
+  text-align:center;
+  border-right: 1pt solid windowtext;
+  border-top: 1pt solid windowtext; 
+  border-bottom: 1pt solid windowtext;
+  padding: 0cm 0pt; 
+  border-left-style: none;
+  border-left-color: inherit;
+  border-left-width: medium;
+}
+  		
+.tableCol_0 {
+   align:center;
+   text-align:center;
+   border:solid windowtext 1pt;
+   border-top:none;
+   padding:0cm 0pt 0cm 0pt;
+}
+
+.tableCol_1 {
+	height:20px;
+	align:center;
+	text-align: center;
+	border-top:none;
+	border-left:none;
+	border-bottom:solid windowtext 1pt;
+	border-right:solid windowtext 1pt;
+	padding:0cm 0pt 0cm 0pt; 
+	border-left-style: none;
+	border-left-color: inherit;
+	border-left-width: medium; 
+	border-top-style: none; 
+	border-top-color: inherit;
+	border-top-width: medium;
+}
+
+
+  
+.tableCol_2 {
+	height:20px;
+	border-top:none;
+	border-left:none;
+	border-bottom:solid windowtext 1pt;
+	border-right:solid windowtext 1pt;
+  	padding:0cm 0pt 0cm 0pt;
+}
+
+.tableCol_3 {
+   height:20px;
+   align:left;
+   text-align:left;
+   font-size:14px;
+   font-weight:bold;//normal;
+   border:solid windowtext 1pt;
+   border-top:none;
+   padding:0cm 0pt 0cm 0pt;
+}
+
+.tableCol_4 {
+	height:20px;
+	align:center;
+	text-align: center;
+	border-top:none;
+	border-left:none;
+	border-bottom:solid windowtext 1pt;
+	border-right:solid windowtext 1pt;
+	padding:0cm 0pt 0cm 0pt; 
+	border-left-style: none;
+	border-left-color: inherit;
+	border-left-width: medium; 
+	border-top-style: none; 
+	border-top-color: inherit;
+	border-top-width: medium;
+}
+
+.tableForm .tableCol_2 .txtArea{border:none;width:100%;margin:0px;padding:0px;overflow:auto;}
+
+

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:noNamespaceSchemaLocation="ehcache.xsd"
+               updateCheck="true" 
+               monitoring="autodetect"  
+               dynamicConfig="true">  
+<!--
+	name：Cache的唯一标识
+	maxElementsInMemory：内存中最大缓存对象数
+	maxElementsOnDisk：磁盘中最大缓存对象数，若是0表示无穷大
+	eternal：Element是否永久有效，一但设置了，timeout将不起作用
+	overflowToDisk：配置此属性，当内存中Element数量达到maxElementsInMemory时，Ehcache将会Element写到磁盘中
+	timeToIdleSeconds：设置Element在失效前的允许闲置时间。仅当element不是永久有效时使用，可选属性，默认值是0，也就是可闲置时间无穷大
+	timeToLiveSeconds：设置Element在失效前允许存活时间。最大时间介于创建时间和失效时间之间。仅当element不是永久有效时使用，默认是0.，也就是element存活时间无穷大 
+	diskPersistent：是否缓存虚拟机重启期数据
+	diskExpiryThreadIntervalSeconds：磁盘失效线程运行时间间隔，默认是120秒
+	diskSpoolBufferSizeMB：这个参数设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区
+    memoryStoreEvictionPolicy：当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用） 
+-->  
+ <!-- 指定一个文件目录，当EhCache把数据写到硬盘上时，将把数据写到这个文件目录下
+  	  user.home – 用户主目录   
+      user.dir      – 用户当前工作目录   
+      java.io.tmpdir – 默认临时文件路径. Solaris: java.io.tmpdir:[/var/tmp/] Linux: java.io.tmpdir: [/tmp] Mac OS X: java.io.tmpdir: [/tmp]           
+   <diskStore path="java.io.tmpdir"/> -->
+    <diskStore path="D:\\blkj\\ehcache" />
+    <!-- 设定缓存的默认数据过期策略 -->
+   <defaultCache maxEntriesLocalHeap="10000" 
+   				 maxEntriesLocalDisk="10000000"
+   				 eternal="false"
+        		 diskSpoolBufferSizeMB="30"
+        		 timeToIdleSeconds="900" 
+        		 timeToLiveSeconds="120"
+        		 diskExpiryThreadIntervalSeconds="120"
+                 memoryStoreEvictionPolicy="LRU"
+                 statistics="true">
+                 <persistence strategy="localTempSwap" />
+    </defaultCache>
+
+    <!--对象缓存  diskExpiryThreadIntervalSeconds="120" -->
+    <cache name="myCache"
+        maxElementsInMemory="10000"
+        eternal="false"
+        overflowToDisk="true"
+        timeToIdleSeconds="900"
+        timeToLiveSeconds="0"
+        diskPersistent="false"
+        memoryStoreEvictionPolicy="LFU" >
+	</cache>
+	
+    <!--页面缓存  -->
+    <cache name="SimplePageCachingFilter" 
+        maxElementsInMemory="10000" 
+        eternal="false"
+        overflowToDisk="false" 
+        timeToIdleSeconds="0"
+        timeToLiveSeconds="0"
+        memoryStoreEvictionPolicy="LFU" />
+   
+  
+    <!--   
+        timeToLiveSeconds：设定对象允许存在于缓存中的最长时间，以秒为单位。
+                   当对象自从被存放到缓存中后，如果处于缓存中的时间超过了 timeToLiveSeconds属性值，  这个对象就会过期，EHCache将把它从缓存中清除。只有当eternal属性为false，该属性才有效。
+                   如果该属性值为0，则表示对象可以无限期地存在于缓存中。timeToLiveSeconds必须大于timeToIdleSeconds属性，才有意义
+         
+         timeToIdleSeconds="900" 
+        timeToLiveSeconds="1800"
+    <cache name="movieFindCache" 
+		maxEntriesLocalHeap="10000"
+		maxEntriesLocalDisk="1000" 
+		eternal="false" 
+		diskSpoolBufferSizeMB="20"
+		timeToIdleSeconds="300" 
+		timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU" 
+		transactionalMode="off">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	-->
+    </ehcache>
+ <!--配置自定义缓存
+        maxElementsInMemory：缓存中允许创建的最大对象数
+        eternal：缓存中对象是否为永久的，如果是，超时设置将被忽略，对象从不过期。
+        timeToIdleSeconds：缓存数据的钝化时间，也就是在一个元素消亡之前，
+                    两次访问时间的最大时间间隔值，这只能在元素不是永久驻留时有效，
+                    如果该值是 0 就意味着元素可以停顿无穷长的时间。
+        timeToLiveSeconds：缓存数据的生存时间，也就是一个元素从构建到消亡的最大时间间隔值，
+                    这只能在元素不是永久驻留时有效，如果该值是0就意味着元素可以停顿无穷长的时间。
+        overflowToDisk：内存不足时，是否启用磁盘缓存。
+        memoryStoreEvictionPolicy：缓存满了之后的淘汰算法。
+        
+        
+ 添加数据到缓存：
+net.sf.ehcache.Cache ehCache=ApplicationContextUtils.getBean("ehCache");
+net.sf.ehcache.Element lgEle=new net.sf.ehcache.Element("loginName", users.getLoginName());
+net.sf.ehcache.Element pwdEle=new net.sf.ehcache.Element("password", users.getPassword());
+ehCache.put(lgEle);
+ehCache.put(pwdEle); 
+在spring管理的bean中，也可：
+
+private Cache  ehCache; 
+     
+    @Resource(name="ehCache") 
+    public void setEhCache(Cache ehCache) { 
+        this.ehCache = ehCache; 
+    }  
+    
+    -->

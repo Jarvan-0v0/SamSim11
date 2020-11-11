@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- 用于配置映射类的别名并配置Mapper文件的路径
+             如果不与Spring整合，此配置文件还需要配置数据源信息，与Spring整合之后数据源就配置在Spring配置文件applicationContext.xml中
+-->
+<configuration>  
+   <!-- 配置映射类的别名 -->  
+    <typeAliases> <typeAlias alias="UserT" type="blkjweb.mybatis.model.UserT"/> </typeAliases>    
+   <!-- 配置Mapper文件的路径 -->  
+   <mappers>
+      <mapper resource="blkjweb/mybatis/mapper/UserMapper.xml"/>
+   </mappers>  
+   
+</configuration> 
