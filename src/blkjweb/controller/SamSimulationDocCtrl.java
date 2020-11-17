@@ -329,6 +329,8 @@ public class SamSimulationDocCtrl extends AbstractBase
 			int iresut = 1;
 			String cch_dbml = "cch_dbml";
 			String cch_dbzw = "cch_dbzw";
+			String cch_dbml_backup = "cch_dbml_backup";
+			String cch_dbzw_backup = "cch_dbzw_backup";
 			int stuNum = 3;				//学生组数
 			String sql = "";
 			
@@ -365,6 +367,16 @@ public class SamSimulationDocCtrl extends AbstractBase
 				
 			}
 			
+			//请空备份目录
+			iresut = systemService.broom(cch_dbml_backup);
+			//复制选定模板到备份表
+			sql = "";
+			sql += "INSERT INTO ";
+			sql += cch_dbml_backup;
+			sql += " SELECT * FROM ";
+			sql += cch_dbml_new;
+			bresult = systemService.execute(sql);
+			
 /**********************************对正文进行设置**************************************/
 			//请空原来的正文
 			iresut = systemService.broom(cch_dbzw);
@@ -394,10 +406,60 @@ public class SamSimulationDocCtrl extends AbstractBase
 				
 			}
 			
+			//请空备份正文
+			iresut = systemService.broom(cch_dbzw_backup);
+			//复制选定模板到备份表
+			sql = "";
+			sql += "INSERT INTO ";
+			sql += cch_dbzw_backup;
+			sql += " SELECT * FROM ";
+			sql += cch_dbzw_new;
+			bresult = systemService.execute(sql);
+			
 			return message(code,message);
 		}	
 		
-		
+		//学生恢复数据
+		@RequestMapping(value="/recDataSamSystem", produces="application/json; charset=utf-8")  
+		@ResponseBody 
+		public Object recDataSamSystem() 
+		{
+			String code = "2";
+			String message = "成功恢复数据!";
+			boolean bresult = true;
+			
+			String cch_dbml = "cch_dbml";
+			String cch_dbzw = "cch_dbzw";
+			String cch_dbml_backup = "cch_dbml_backup";
+			String cch_dbzw_backup = "cch_dbzw_backup";
+			
+			PageTool pd = new PageTool();
+			pd = this.getPageData();
+			//获取学生的组号
+			String teamnum =  pd.getString("teamnum");
+			
+			/******************************************
+			 * 删除该组，位于目录和正文的现存数据
+			 * 将备份中的数据的组号改为该组
+			 * 将备份数据拷贝到目录和正文
+			 * ***************************************/			
+			String where = " WHERE teamnum = '" + teamnum + "'";
+			String[] batchSQLStr = new String[9];					//用于同时删除多个表格
+			batchSQLStr[0] = "DELETE FROM " + cch_dbml + where;		//删除记录语句
+			batchSQLStr[1] = "DELETE FROM " + cch_dbzw + where;		//删除记录语句
+			batchSQLStr[2] = "UPDATE " + cch_dbml_backup + "SET teamnum = '" + teamnum + "'";		//更新记录语句
+			batchSQLStr[3] = "UPDATE " + cch_dbzw_backup + "SET teamnum = '" + teamnum + "'";		//更新记录语句
+			batchSQLStr[4] = "INSERT INTO " + cch_dbml + " SELECT * FROM " + cch_dbml_backup;		//拷贝备份记录语句
+			batchSQLStr[5] = "INSERT INTO " + cch_dbzw + " SELECT * FROM " + cch_dbzw_backup;		//拷贝备份记录语句
+			bresult = systemService.batchMultiTable(batchSQLStr);	//执行指令
+
+			
+			if (! bresult){//不成功 <= 0
+				code = "-1";
+				message = "删除记录失败!";
+			}
+			return message(code,message);
+		}
 		
 
 }

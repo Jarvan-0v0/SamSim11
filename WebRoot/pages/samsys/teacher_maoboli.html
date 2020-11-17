@@ -195,16 +195,45 @@
      		 FullWidthDialog(url, "Maoboli_Details_Form", "股道详细信息--[股道号："+ gdh + "]");
        }
     }
+ 
+   	/* 
+   	请求Ajax 带返回值。 远程调用用。
+   	重写是由于原本为同步操作，此处构造异步函数
+   	解决调用ajax时，显示提示信息
+    */
+   function getAjaxJsonTrue(url, postData, callBack)
+   {
+   	//alert("OK:"+ url);///pite
+   	$.ajax({
+   		type: 'POST',
+   		dataType: "json", //json--返回json数据类型；xml--返回xml 
+   		url:  RootPath() + url,//
+   		data: postData,  
+   		processData : true, //contentType为xml时，值为false  
+   		cache: false,
+   		async: true, 		//true为异步操作，false为同步操作
+   		scriptCharset: 'utf-8',
+   		success: function (data) { 
+   			callBack(data);
+   		},
+   		error: function (data) {
+   			//把array 或者 object类型的数据转换为JSON格式
+   			//alert("error:" + JSON.stringify(data));//将 JavaScript 值转换为 JavaScript 对象表示法 (Json) 字符串。 
+   			Loading(false);
+   		}
+   	});
+   }
+
+ 
 	//设置实验场景
 	function btn_Set(){
-		tipDialog('正在设置，请稍后...', 10, 'warning');	
+		tipDialog('正在设置毛玻璃，请等待...', 10, -3);
 		var postData = {cch_dbml:cch_dbml, cch_dbzw:cch_dbzw, };
-	  	getAjaxJson("/setMBLSamSystem.do", postData, function (data) {
-	  		tipDialog(data.Message, 3, data.Code);
+		getAjaxJsonTrue("/setMBLSamSystem.do", postData, function (data) {
+	  		tipDialog(data.Message, 2, data.Code);
             if(data.Code > 0)
            		windowload();
        });
-	 
     }
  
  	//改变实验名称
@@ -217,7 +246,6 @@
  
  	//改变毛玻璃
  	function change_MBL(textname) {
- 		//var maoboli = $("#maoboli").val();
  		var keyValue = "maoboli_" + textname;
  		cch_dbml = "cch_dbml_" + textname;
  		cch_dbzw = "cch_dbzw_" + textname;
@@ -240,13 +268,17 @@
 	    	<tr>
 	        	<th class="formTitleLong" style="font-size: 16px;">实训名称：</th>
 	        	<td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="textname" class="txtselect" onchange="change_text()"></select></td>
-	
 	            <td><input id="btnSet" type="button" class="btnSearch" value="设置" onclick="btn_Set()" /> </td>
 	        </tr>
 	     </table> 
 	</div>
 	 	
 	<table id="gridTable"></table>
+<!-- 	<div id="alert" style="width: 220px; height: 40px; position: absolute; left: 40%; top: 40%; -->
+<!-- 		background-color: blue; display: none; z-index: 999;"> -->
+<!-- 		<a style="font-size: 12pt; color: white; margin-left: 10px; margin-top: 7px; display: block;">正在设置毛玻璃，请等待... </a> -->
+	
+<!-- 	</div> -->
 </div>
 
 </div> <!-- 布局结束 -->

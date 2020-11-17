@@ -23,6 +23,9 @@
 	    	*{font-size:10pt;}
 		</style>
 	   <script>
+ function Tiao(){
+		 window.open("http://www.bzzxczz.com:8089/wwwroot/shuomingshu/编组站行车组织实训云平台使用手册V1.0.pdf");
+	 }
         /**初始化**/
         $(document).ready(function () {
             ServerCurrentTime();
@@ -224,26 +227,7 @@
             return count;
         }
         /*导航菜单end====================*/
-        var iFlag = false;
-        function tab_hidden() {
-        	var con_style = document.getElementById("NavCon").style;
-        	var menu_style = document.getElementById("right_menu").style;
-        	if(iFlag){
-        		con_style.display = "none";
-        		menu_style.left = "0px";
-        		menu_style.bottom = "20px";
-        		menu_style.backgroundPosition = "0px";
-        		iFlag = false;
-        	}
-        	else{
-        		con_style.display = "block";
-        		menu_style.left = "280px";
-        		menu_style.bottom = "114px";
-        		menu_style.backgroundPosition = "-20px";
-        		iFlag = true;
-        	}
-        	
-		}
+        
     </script>
 </head>
 <body onbeforeunload="PageClose()" onselectstart="return false;" style="-moz-user-select: none; overflow: hidden;">
@@ -280,8 +264,9 @@
                     <a id="nav_3"><span class="c3"></span>帮助中心
                         <div class="popup"><i></i>
                            <ul>
-                             <li onclick="Support()"><img src="../scripts/images/Icon16/premium_support.png"/>技术支持</li>
+                             <li onclick="Tiao()"> <img src="../scripts/images/Icon16/premium_support.png"/>技术支持</li>
                              <li onclick="About()"><img src="../scripts/images/Icon16/information.png"/>关于我们</li>
+                             <li onclick="RecoverData()"><img src="../scripts/images/Icon16/backups.png"/>恢复数据</li>
                            </ul>
                         </div>
                     </a>
@@ -316,7 +301,7 @@
         <div id="navigationtitle"><!-- 左菜单 时钟 -->
         	<div style="float: left; padding-left: 12px;">
 	           <!-- &nbsp;技术支持：<a href="" target="_blank" style="color: white;"> 北京交通大学</a>-->
-	           &nbsp;当前用户：<script> document.write($.cookie("TIP"));</script>
+	           	当前用户：<script> document.write($.cookie("TIP"));</script>
 	      </div> 
            <!-- <div id="CurrentDate" style="float: left; padding-left: 12px;"></div> -->
              <!--XBM 删除下列这条语句， 左边的主菜单就不会消失  
@@ -340,19 +325,6 @@
             </div>
         </div>
     </div>
-    <!-- 页面悬浮窗 -->
-    <div id="NavTop">
-<!--     	<input id="btnMenu" type="button" class="btnSearch btnmenu" value="隐藏" onclick="tab_hidden()" /> -->
-		<div id="NavCon" style="display: none;">
-		    <ul>
-		    <li><a href="#">用户：<script> document.write($.cookie("TIP"));</script> </a> </li>
-		    <li><a href="#">所属组别：</a></li>
-		    <li><a href="#">实验名称：调车计划编制-含扣修车错错</a></li>
-	        <li><a href="#">试验进度：</a></li>
-	        </ul>
-    	</div>
-    	<div id="right_menu" onclick="tab_hidden()" ></div>
-	</div>
     <!-- 中间panel class="navigation"-->
     <div class="mainPannel">
         <div class="navigation"><ul id="accordion" class="accordion"> </ul></div><!-- 左菜单 -->
@@ -363,7 +335,9 @@
 	<div id="footer" class="cs-south" style="height: 25px; margin-top: -25px">
 	      <div class="number" style="width: 30%; text-align: left; float: left; line-height: 25px;">
 	           <!-- &nbsp;技术支持：<a href="" target="_blank" style="color: white;"> 北京交通大学</a>-->
-	           &nbsp;当前用户：<script> document.write($.cookie("TIP"));</script>
+<!-- 	          	&nbsp;当前实验：<script> document.write($.cookie("TIP"));</script> -->
+					&nbsp;&nbsp;当前实训：<script> document.write("车流线编辑");</script>
+					&nbsp;&nbsp;&nbsp;&nbsp;进度：<script> document.write("25%");</script>
 	      </div> 
 	      <div class="number" style="width: 40%; text-align: center; float: left; line-height: 25px;">
 	           &copy; 2020-<SCRIPT> clientdate=new Date();document.write(clientdate.getYear()>200 ? clientdate.getYear(): 1900+clientdate.getYear() );</script>

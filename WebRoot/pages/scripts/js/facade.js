@@ -107,6 +107,19 @@ function Support()
    aboutDialog("技术支持","<p>暂未开发</p>", 0);
 }
 
+//恢复数据
+function RecoverData()
+{
+	confirmDialog("提示", "您确定要恢复数据吗？(将删除现在所有记录！)", function (r) {
+		if (r) {
+			
+			
+		}
+		
+	});
+
+}
+
 //修改密码
 function ResetPassword()
 {

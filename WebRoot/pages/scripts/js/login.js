@@ -37,7 +37,7 @@ function login(){
 						$.cookie("AUTHMODULE",authModuleId);
 						$.cookie("AUTHOP",authOperation);
 						var leftMenu = "";
-						if(workType == 0 && username == "AdMin"){
+						if(workType == 0 && authModuleId == "90"){
 							leftMenu = "admin_menu.json";
 						}
 						//else if(authModuleId == "90")
