@@ -164,7 +164,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 			}
 	
 	//删除选定的桥的所有记录
-	@RequestMapping(value="/delSamSystem")  
+	@RequestMapping(value="/delSamSystem", produces="application/json; charset=utf-8")  
 	@ResponseBody //作用是将返回的对象作为响应，发送给页面
 	public Object delSamSystem() 
 	{
@@ -194,7 +194,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 	}
 	
 	//保存编辑后的信息
-		@RequestMapping(value="/editSaveSamSystem")  
+		@RequestMapping(value="/editSaveSamSystem", produces="application/json; charset=utf-8")  
 		@ResponseBody
 		public Object editSaveSamSystem() 
 		{
@@ -248,7 +248,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 		}
 
 		//增加一条记录
-		@RequestMapping(value="/addSamSystem")  
+		@RequestMapping(value="/addSamSystem", produces="application/json; charset=utf-8")  
 		@ResponseBody 
 		public Object addSamSystem() 
 		{
@@ -270,7 +270,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 			return message(code,message);
 		}	
 		
-		@RequestMapping(value="/changeTrackSamStstem")  
+		@RequestMapping(value="/changeTrackSamStstem", produces="application/json; charset=utf-8")  
 		@ResponseBody 
 		public Object changeTrackSamStstem() 
 		{
@@ -316,5 +316,88 @@ public class SamSimulationDocCtrl extends AbstractBase
 			}
 			return message(code,message);
 		}
+		
+		//教师端设置毛玻璃
+		@RequestMapping(value="/setMBLSamSystem", produces="application/json; charset=utf-8")  
+		@ResponseBody 
+		public Object setMBLSamSystem() 
+		{
+			String code = "2";
+			String message = "成功设置模板!";
+			
+			boolean bresult = true;
+			int iresut = 1;
+			String cch_dbml = "cch_dbml";
+			String cch_dbzw = "cch_dbzw";
+			int stuNum = 3;				//学生组数
+			String sql = "";
+			
+			PageTool pd = new PageTool();
+			pd = this.getPageData();
+			String cch_dbml_new = pd.getString("cch_dbml");
+			String cch_dbzw_new = pd.getString("cch_dbzw");
+			
+/**********************************对目录进行设置**************************************/
+			//请空原来的目录
+			iresut = systemService.broom(cch_dbml);
+			if (iresut < 0){//不成功
+				code = "-1";
+				message = "删除目录失败!";
+				return message(code,message);
+			}
+			for(int i=1; i<=stuNum; i++){
+				//修改模板数据库组号
+				sql = "";
+				sql = "UPDATE ";		
+				sql += cch_dbml_new;
+				sql += " SET teamnum = '";
+				sql += i;
+				sql += "'";
+				
+				bresult = systemService.execute(sql);
+				
+				sql = "";
+				sql += "INSERT INTO ";
+				sql += cch_dbml;
+				sql += " SELECT * FROM ";
+				sql += cch_dbml_new;
+				bresult = systemService.execute(sql);
+				
+			}
+			
+/**********************************对正文进行设置**************************************/
+			//请空原来的正文
+			iresut = systemService.broom(cch_dbzw);
+			if (iresut < 0){//不成功
+				code = "-1";
+				message = "删除正文失败!";
+				return message(code,message);
+			}
+			
+			for(int i=1; i<=stuNum; i++){
+				//修改模板数据库组号
+				sql = "";
+				sql = "UPDATE ";		
+				sql += cch_dbzw_new;
+				sql += " SET teamnum = '";
+				sql += i;
+				sql += "'";
+				
+				bresult = systemService.execute(sql);
+				
+				sql = "";
+				sql += "INSERT INTO ";
+				sql += cch_dbzw;
+				sql += " SELECT * FROM ";
+				sql += cch_dbzw_new;
+				bresult = systemService.execute(sql);
+				
+			}
+			
+			return message(code,message);
+		}	
+		
+		
+		
 
 }

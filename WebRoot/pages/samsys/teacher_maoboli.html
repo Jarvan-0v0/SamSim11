@@ -195,9 +195,15 @@
      		 FullWidthDialog(url, "Maoboli_Details_Form", "股道详细信息--[股道号："+ gdh + "]");
        }
     }
- //设置实验场景
-   function btn_Set(){
-	    
+	//设置实验场景
+	function btn_Set(){
+		tipDialog('正在设置，请稍后...', 10, 'warning');	
+		var postData = {cch_dbml:cch_dbml, cch_dbzw:cch_dbzw, };
+	  	getAjaxJson("/setMBLSamSystem.do", postData, function (data) {
+	  		tipDialog(data.Message, 3, data.Code);
+            if(data.Code > 0)
+           		windowload();
+       });
 	 
     }
  
@@ -205,18 +211,17 @@
  	function change_text() {
  		var textname = $("#textname").val();
  		if (IsChecked(textname)) {
- 			document.getElementById('maoboli').value = textname; 	
- 			change_MBL();
+ 			change_MBL(textname);
  		}
 	}
  
  	//改变毛玻璃
- 	function change_MBL() {
- 		var maoboli = $("#maoboli").val();
- 		var keyValue = "maoboli_" + maoboli;
- 		cch_dbml = "cch_dbml_" + maoboli;
- 		cch_dbzw = "cch_dbzw_" + maoboli;
-        if (IsChecked(maoboli)) {
+ 	function change_MBL(textname) {
+ 		//var maoboli = $("#maoboli").val();
+ 		var keyValue = "maoboli_" + textname;
+ 		cch_dbml = "cch_dbml_" + textname;
+ 		cch_dbzw = "cch_dbzw_" + textname;
+        if (IsChecked(textname)) {
         	getTrainData(cch_dbml);
         	$("#gridTable").jqGrid('setGridParam',{
 	  			url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
@@ -235,8 +240,6 @@
 	    	<tr>
 	        	<th class="formTitleLong" style="font-size: 16px;">实训名称：</th>
 	        	<td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="textname" class="txtselect" onchange="change_text()"></select></td>
-	            <th class="formTitleLong" style="font-size: 16px;">毛玻璃：</th>
-	            <td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="maoboli" class="txtselect" onchange="change_MBL()"></select></td>
 	
 	            <td><input id="btnSet" type="button" class="btnSearch" value="设置" onclick="btn_Set()" /> </td>
 	        </tr>
