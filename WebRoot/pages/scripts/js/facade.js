@@ -86,7 +86,7 @@ function IndexOut()
 	$.dialog.confirm('确定要退出系统吗？', function ()	{
 	     getAjaxJson("/logout.do", "", function (data) {
 		    if("logout" == data.result){
-				   window.location.href = "http://www.railwills.xyz:8089/wwwroot/new4/logout.asp";
+				   window.location.href = "http://www.bzzxczz.com:8089/wwwroot/new4/logout.asp";
 			}
 		 });
 	}, function () {
