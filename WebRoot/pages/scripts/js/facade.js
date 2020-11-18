@@ -107,12 +107,30 @@ function Support()
    aboutDialog("技术支持","<p>暂未开发</p>", 0);
 }
 
+//技术支持---用户手册
+function Tiao(){
+	 window.open("http://www.bzzxczz.com:8089/wwwroot/shuomingshu/编组站行车组织实训云平台使用手册V1.0.pdf");
+}
+
 //恢复数据
 function RecoverData()
 {
-	confirmDialog("提示", "您确定要恢复数据吗？(将删除现在所有记录！)", function (r) {
+	confirmDialog("提示", "您确定要恢复数据吗？(此操作将删除现在所有记录！)", function (r) {
 		if (r) {
+			var user_id = $.cookie("USERNAME");
+			var objData = {};
+			//查询得到该学生组号
+			getAjaxJson("/searchOneSamSystem.do", {tableName:"syt_users", queryWhere: "user_id", keyValue: user_id}, function (data){
+                objData = data;
+	        });
 			
+			var teamnum = objData.user_teamnum;
+			var postData =  {teamnum: teamnum};
+			getAjaxJson("/recDataSamSystem.do", postData, function (data) {
+		  		tipDialog(data.Message, 2, data.Code);
+	            if(data.Code > 0)
+	           		windowload();
+	       });
 			
 		}
 		
@@ -170,4 +188,16 @@ function Shortcuts() {
 function SkinIndex() {
     Dialog("/pages/mainframe/mainframe_skinindex.jsp", "SkinIndex", "个性化设置", 580, 400);
 }
+
+//根据师生角色调用不同首页
+function initHomePage() {
+	var userid = $.cookie("USERNAME");
+    if(userid > 500){
+    	AddTabMenu('11000', 'http://www.bzzxczz.com:8089/wwwroot/new4/teacher/teacher.asp?userid=' + userid, '公告通知', "gonggao.png", 'ture');
+    }
+    else{
+      	AddTabMenu('11000', 'http://www.bzzxczz.com:8089/wwwroot/new4/student/student.asp?userid=' + userid, '公告通知', "gonggao.png", 'ture');
+    }
+}
+
 

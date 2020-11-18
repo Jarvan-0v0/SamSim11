@@ -447,8 +447,8 @@ public class SamSimulationDocCtrl extends AbstractBase
 			String[] batchSQLStr = new String[9];					//用于同时删除多个表格
 			batchSQLStr[0] = "DELETE FROM " + cch_dbml + where;		//删除记录语句
 			batchSQLStr[1] = "DELETE FROM " + cch_dbzw + where;		//删除记录语句
-			batchSQLStr[2] = "UPDATE " + cch_dbml_backup + "SET teamnum = '" + teamnum + "'";		//更新记录语句
-			batchSQLStr[3] = "UPDATE " + cch_dbzw_backup + "SET teamnum = '" + teamnum + "'";		//更新记录语句
+			batchSQLStr[2] = "UPDATE " + cch_dbml_backup + " SET teamnum = '" + teamnum + "'";		//更新记录语句
+			batchSQLStr[3] = "UPDATE " + cch_dbzw_backup + " SET teamnum = '" + teamnum + "'";		//更新记录语句
 			batchSQLStr[4] = "INSERT INTO " + cch_dbml + " SELECT * FROM " + cch_dbml_backup;		//拷贝备份记录语句
 			batchSQLStr[5] = "INSERT INTO " + cch_dbzw + " SELECT * FROM " + cch_dbzw_backup;		//拷贝备份记录语句
 			bresult = systemService.batchMultiTable(batchSQLStr);	//执行指令
@@ -456,7 +456,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 			
 			if (! bresult){//不成功 <= 0
 				code = "-1";
-				message = "删除记录失败!";
+				message = "恢复数据失败!";
 			}
 			return message(code,message);
 		}
