@@ -40,11 +40,18 @@
     var $zhitong = $("#zhitong");	//直通选项
     if(jxcc == cc){
 		 $zhitong.prop('checked', true);
-         $zhitong.data('checked', true);
+         $zhitong.data('checked', true);		//直通
+         document.getElementById('zhitong').value = true;
+         $("#diao_no").prop('checked', true);
+         $("#diao_no").data('checked', true);	//无调
+         document.getElementById('zhitong').value = true;
 	}
 	else{
 		$zhitong.prop('checked', false);
-        $zhitong.data('checked', false);
+        $zhitong.data('checked', false);		//非直通
+        document.getElementById('zhitong').value = false;
+        $("#diao_yes").prop('checked', true);
+        $("#diao_yes").data('checked', true);	//有调
 	}
     qbid = GetQuery("qbid");	//确报ID
   	document.getElementById('qbid').value = qbid;
@@ -63,6 +70,7 @@
     BindSelectItem(); 	//下拉框
     RadioSelectItem();	//点击选项
   });
+  	
   
 	//radio lable事件
   	function RadioSelectItem() {
@@ -93,7 +101,14 @@
   
   //下拉框
   function BindSelectItem() {
-	  BindDropItem("/pages/common/dropList.json","#gdh", "gdh", "");
+	  var $zhitong = $("#zhitong");
+	  if($zhitong.data('checked')){
+		  BindDropItem("/pages/common/dropList.json","#gdh", "fcgd", "");		  
+	  }
+	  else{
+		  BindDropItem("/pages/common/dropList.json","#gdh", "gdh", "");
+	  }
+	  
 	  BindDropItem("/pages/common/dropList.json","#jrfx", "jrfx", "");
 	  BindDropItem("/pages/common/dropList.json","#lx", "lx", "");
 	  BindDropItem("/pages/common/dropList.json","#jcr", "jcr", "");
@@ -167,7 +182,7 @@
 			 <td class="formValue"><select id="lx" class="txtselect"></select></td>
 
 			 <th><label for="diao_yes" style="margin-left: 10px;">有调</label></th>
-			 <td><input type="radio" id="diao_yes" name="diao" checked value="true" /></td>
+			 <td><input type="radio" id="diao_yes" name="diao" value="true" /></td>
 			 <th><label for="diao_no" style="margin-left: 10px;">无调</label></th>
 			 <td><input type="radio" id="diao_no" name="diao" value="false" /></td>
 		 </tr>
@@ -179,7 +194,7 @@
 			 <th class="formTitleShort1">检查人：</th>
 			 <td class="formValue"><select id="jcr" class="txtselect"></select></td>
 			 <th><label for="zhitong" style="margin-left: 10px;">直通</label></th>
-			 <td><input type="radio" id="zhitong" name="zhitong" /></td>
+			 <td><input type="radio" id="zhitong" name="zhitong" value="" /></td>
 		 </tr>
 		 <tr>
           	 <th class="formTitleShort1">正点日期：</th>

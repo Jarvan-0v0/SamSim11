@@ -222,7 +222,11 @@
  	   var dfrq = $("#dfrq").val();
  	   var dfsj = $("#dfsj").val();
  	   var zhuangtai = $("#zhuangtai").val();
-	   if(zhuangtai == "CF"){
+ 	   var actual = $("#actual").val();
+ 	   if(!IsCheckedValue(actual, "值班员没有报点！")){
+ 		  return false;
+ 	   }
+ 	   else if(zhuangtai == "CF"){
 		   tipDialog('请勿重复发送!', 2, 'warning');
  			return false;
 	   }
@@ -321,6 +325,8 @@
                 <td style="display:none; position: absolute;"> <input id="gdh"/></td>
                 <th style="display:none; position: absolute;">状态：</th>
                 <td style="display:none; position: absolute;"> <input id="zhuangtai"/></td>
+                <th style="display:none; position: absolute;">报点状态：</th>
+                <td style="display:none; position: absolute;"> <input id="actual"/></td>
             </tr>
         </table>
     </div><!-- 查询栏结束 -->

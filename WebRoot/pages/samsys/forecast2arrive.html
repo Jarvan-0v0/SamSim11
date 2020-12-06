@@ -35,11 +35,11 @@
 </head>
 <body><div>
 <script type="text/javascript"> 
-	var cc, allRow;
+	var cc, allRow, actual;
 	$(document).ready(function () {
 		cc = GetQuery("cc");
 		ch = GetQuery("ch");
-		
+		actual = GetQuery("actual");
 		GetGrid();		//加载表格
 		document.getElementById('zongzhong').value = Number($("#yyzaz").val()) + Number($("#ziz").val());	//总重
 	});
@@ -238,19 +238,22 @@
   
   //转股道
     function btn_Change() {
- 	   var cc = $("#cc").val();
- 	   var jxcc = $("#jxcc").val();
- 	   var qbid = $("#qbid").val();
- 	   var clzs = $("#clzs").val();
- 	   var dfrq = $("#dfrq").val();
- 	   var dfsj = $("#dfsj").val();
-       if (QueryConCheckedV2(cc)) {
-        	var url ="/pages/samsys/change_track.html?cc=" + escape(cc) + "&jxcc=" + escape(jxcc) + "&qbid=" +escape(qbid)
-        			+ "&clzs=" +escape(clzs) +"&dfrq=" +escape(dfrq) + "&dfsj=" +escape(dfsj);      			
-        	openDialog(url, "Change_Track_Form", "到报转入股道", 800, 250, function (iframe) {
-                 top.frames[iframe].AcceptClick();
-            });
-        } 
+ 	   if(IsCheckedValue(actual, "值班员没有报点！")){
+ 		  var cc = $("#cc").val();
+ 	 	   var jxcc = $("#jxcc").val();
+ 	 	   var qbid = $("#qbid").val();
+ 	 	   var clzs = $("#clzs").val();
+ 	 	   var dfrq = $("#dfrq").val();
+ 	 	   var dfsj = $("#dfsj").val();
+ 	       if (QueryConCheckedV2(cc)) {
+ 	        	var url ="/pages/samsys/change_track.html?cc=" + escape(cc) + "&jxcc=" + escape(jxcc) + "&qbid=" +escape(qbid)
+ 	        			+ "&clzs=" +escape(clzs) +"&dfrq=" +escape(dfrq) + "&dfsj=" +escape(dfsj);      			
+ 	        	openDialog(url, "Change_Track_Form", "到报转入股道", 800, 250, function (iframe) {
+ 	                 top.frames[iframe].AcceptClick();
+ 	            });
+ 	        } 
+ 	   }
+	   
   	}
     
 </script>

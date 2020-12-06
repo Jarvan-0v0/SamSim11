@@ -123,6 +123,7 @@
             autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
             colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
                 //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+                {label: "值班员报点", name: 'actual', index: 'actual', width: 1, hidden: true},
                 {label: "车次", name: 'cc', index: 'cc', width: 100},
                 {label: "流水号", name: 'lsh', index: 'lsh', width: 100},
                 {label: "匹配率", name: 'ppl', index: 'ppl', width: 50},
@@ -345,8 +346,9 @@
  //预报详细信息
    function btn_detail_fore(){
         var cc = GetJqGridRowValue("#gridTableFore", "cc");
+        var actual = GetJqGridRowValue("#gridTableFore", "actual");
         if (IsChecked(cc)) {
-           var url ="/pages/samsys/forecast2arrive.html?cc=" + escape(cc);   
+           var url ="/pages/samsys/forecast2arrive.html?cc=" + escape(cc) + "&actual=" + actual;   
      	   FullWidthDialog(url, "Forecast2Arrive_Form", "股道详细信息--[车次："+ cc + "]");
        }
     }
