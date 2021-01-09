@@ -38,6 +38,7 @@
 	var rowId, rowData;
 	var iFlag = false;
 	var objData = {};
+	var stnum = $.cookie("USERNAME");
     $(document).ready(function () {
     	getTrainData();
     	GetGrid(); //加载表格
@@ -49,7 +50,7 @@
     function GetGrid() {
 	   $("#gridTable").jqGrid({
             url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"tab_mbl_1"}, 
+            postData:{tableName:"tab_mbl_1", stnum:stnum}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 126,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -118,7 +119,7 @@
     function GetGrid2() {
 	   $("#gridTableLeave").jqGrid({
             url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"my_leave"}, 
+            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"my_leave", stnum:stnum}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 119,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -205,7 +206,7 @@
     function GetGrid3() {
 	   $("#gridTableAssign").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"cch_dbml",queryWhere:"zhuangtai", keyValue:"FB"}, 
+            postData:{tableName:"cch_dbml",queryWhere:"zhuangtai", keyValue:"FB", stnum:stnum}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 80,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -290,7 +291,7 @@
    
   	//获取dbml信息
     function getTrainData() {
-    	getAjaxJson("/initSamSystem.do", {tableName:"cch_dbml", rows:100, page:1}, function (data){
+    	getAjaxJson("/initSamSystem.do", {tableName:"cch_dbml", stnum:stnum, rows:100, page:1}, function (data){
         	objData = data;
 	    });
 	}

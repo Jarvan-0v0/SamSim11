@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import blkjweb.service.*;
 import blkjweb.utils.Const;
 
-//主要要考虑用户的密码。 这里的所有方法都不涉及管理员，即用户名为gly的用户
+//主要要考虑用户的密码。 这里的所有方法都不涉及管理员，即用户名为001的用户
 @Controller
 public class SamSimulationDocCtrl extends AbstractBase
 {
@@ -39,9 +39,13 @@ public class SamSimulationDocCtrl extends AbstractBase
 		int page = pd.getInt("page");   
 		String sort = pd.getString("sidx");
 		String order = pd.getString("sord");
+		
+		//增加用户筛选
+		String stnum = pd.getString("stnum");
+		String where = "stnum = '" + stnum + "'";
+		
 		int index = (page - 1) * pageSize;   
 	
-		String where = "";
 		//Map<String, Object> mapRecordT = new HashMap<String, Object>();
 		//mapRecordT = systemService.queryOne(tableName,where); 
 		//String sql = (String)mapRecordT.get("sql_val");
@@ -73,8 +77,10 @@ public class SamSimulationDocCtrl extends AbstractBase
 			String tableName =  pd.getString("tableName");
 			String queryWhere = pd.getString("queryWhere");
 			String keyValue = pd.getString("keyValue");
-
-			String where = queryWhere + "= '" + keyValue + "'";
+			
+			//增加用户筛选
+			String stnum = pd.getString("stnum");
+			String where = queryWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
 
 			Map<String, Object> mapRecord = new HashMap<String, Object>();
 			mapRecord = systemService.queryOne(tableName,where); 
@@ -97,7 +103,9 @@ public class SamSimulationDocCtrl extends AbstractBase
 		String queryWhere = pd.getString("queryWhere");
 		String keyValue = pd.getString("keyValue");
 		
-		String where = queryWhere + "= '" + keyValue + "'";
+		//增加用户筛选
+		String stnum = pd.getString("stnum");
+		String where = queryWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
 		int pageSize = pd.getInt("rows");
 		int page = pd.getInt("page");   
 		String sort = pd.getString("sidx");
@@ -147,7 +155,9 @@ public class SamSimulationDocCtrl extends AbstractBase
 				
 				//lists = systemService.executeQuery(sql);
 				
-				where = "";
+				//增加用户筛选
+				String stnum = pd.getString("stnum");
+				where = "stnum = '" + stnum + "'";
 				long totalRecord = 0l;  
 				totalRecord = systemService.queryCount(tableName,where);
 				lists= systemService.query(sql_tableName,sort,order, where,new Object[] {index, pageSize});
@@ -178,7 +188,9 @@ public class SamSimulationDocCtrl extends AbstractBase
 		String deletWhere = pd.getString("deletWhere");
 		String keyValue = pd.getString("keyValue");
 
-		String where = " WHERE " + deletWhere + "= '" + keyValue + "'";
+		//增加用户筛选
+		String stnum = pd.getString("stnum");
+		String where = " WHERE " + deletWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
 		String[] batchSQLStr = new String[9];	//用于同时删除多个表格
 
 		batchSQLStr[0] = "DELETE FROM " + tableName + where;		//删除记录语句
@@ -214,10 +226,12 @@ public class SamSimulationDocCtrl extends AbstractBase
 			String changeWhere = pd.getString("changeWhere");
 			String keyValue = pd.getString("keyValue");
 
+			//增加用户筛选
+			String stnum = pd.getString("stnum");
 			String where = "";
 			boolean isUpdateKey = false; 
 			if(! StringTool.isNullEmpty(keyName)){	//如果主键名不为空，传过来了主键信息
-				where = keyName + "= '"+ oldID +"' AND " + changeWhere + "=" + keyValue;
+				where = keyName + "= '"+ oldID +"' AND " + changeWhere + "=" + keyValue +"' AND stnum = '" + stnum + "'";
 				if(! StringTool.isNullEmpty(id) && //新编号不空 且 新旧编号不等 
 						! oldID.equals(id)){
 					isUpdateKey = true; //更新主键
@@ -225,7 +239,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 				}
 			}
 			else{
-				where = changeWhere + "= '" + keyValue + "'";
+				where = changeWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
 			}
 			
 			//系统会自动过滤到无用字段
@@ -285,9 +299,11 @@ public class SamSimulationDocCtrl extends AbstractBase
 			String cc = pd.getString("cc");
 			String qbid = pd.getString("qbid");
 
+			//增加用户筛选
+			String stnum = pd.getString("stnum");
 			boolean isUpdateKey = false; 
-			String where1 = "cc='"+ cc +"'";
-			String where2 = "qbid='"+ qbid +"'";
+			String where1 = "cc='"+ cc + "' AND stnum = '" + stnum + "'";
+			String where2 = "qbid='"+ qbid + "' AND stnum = '" + stnum + "'";
 			
 			//系统会自动过滤到无用字段
 			Set set = mapRecord.entrySet();/// 返回此映射所包含的映射关系的 Set 视图。  
@@ -317,7 +333,13 @@ public class SamSimulationDocCtrl extends AbstractBase
 			return message(code,message);
 		}
 		
-		//教师端设置毛玻璃
+		
+		/*************
+		 * 此部分无用，删除
+		 * 
+		 * @return
+		 */
+/*		//教师端设置毛玻璃
 		@RequestMapping(value="/setMBLSamSystem", produces="application/json; charset=utf-8")  
 		@ResponseBody 
 		public Object setMBLSamSystem() 
@@ -339,7 +361,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 			String cch_dbml_new = pd.getString("cch_dbml");
 			String cch_dbzw_new = pd.getString("cch_dbzw");
 			
-/**********************************对目录进行设置**************************************/
+*//**********************************对目录进行设置**************************************//*
 			//请空原来的目录
 			iresut = systemService.broom(cch_dbml);
 			if (iresut < 0){//不成功
@@ -377,7 +399,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 			sql += cch_dbml_new;
 			bresult = systemService.execute(sql);
 			
-/**********************************对正文进行设置**************************************/
+*//**********************************对正文进行设置**************************************//*
 			//请空原来的正文
 			iresut = systemService.broom(cch_dbzw);
 			if (iresut < 0){//不成功
@@ -438,11 +460,11 @@ public class SamSimulationDocCtrl extends AbstractBase
 			//获取学生的组号
 			String teamnum =  pd.getString("teamnum");
 			
-			/******************************************
+			*//******************************************
 			 * 删除该组，位于目录和正文的现存数据
 			 * 将备份中的数据的组号改为该组
 			 * 将备份数据拷贝到目录和正文
-			 * ***************************************/			
+			 * ***************************************//*			
 			String where = " WHERE teamnum = '" + teamnum + "'";
 			String[] batchSQLStr = new String[9];					//用于同时删除多个表格
 			batchSQLStr[0] = "DELETE FROM " + cch_dbml + where;		//删除记录语句
@@ -460,6 +482,6 @@ public class SamSimulationDocCtrl extends AbstractBase
 			}
 			return message(code,message);
 		}
-		
+		*/
 
 }

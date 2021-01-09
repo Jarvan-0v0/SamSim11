@@ -67,7 +67,7 @@
 	    
 		tableName = "cch_dbzw"; 
         queryWhere = "gdh";
-        keyValue = $("#gdh").val();
+        keyValue = gdh;
 		getGridTab(tableName, queryWhere, keyValue);
 	}
    
@@ -83,7 +83,7 @@
             postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, 
         	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-            height: $(window).height() + 200,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+            height: $(window).height() + 250,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
             width: $(window).width() + 1000,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
             //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
             colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
@@ -189,7 +189,7 @@
     	if (!CheckDataValid('#form1')) {
             return false;
         }
-		var keyValue = $("#gdh").val();
+		var keyValue = gdh;
 		var qbid = $("#qbid").val();
 	   	var postData = {tableName:"cch_dbzw", changeWhere:"gdh", keyValue:keyValue, qbid:qbid };
 	        
@@ -213,66 +213,10 @@
 	    });
 	}
   
-  //发送发报
-    function btn_Change() {
-       var gdh = $("#gdh").val();
-	   var cc = $("#cc").val();
- 	   var qbid = $("#qbid").val();
- 	   var clzs = $("#clzs").val();
- 	   var dfrq = $("#dfrq").val();
- 	   var dfsj = $("#dfsj").val();
- 	   var zhuangtai = $("#zhuangtai").val();
- 	   var actual = $("#actual").val();
- 	   if(!IsCheckedValue(actual, "值班员没有报点！")){
- 		  return false;
- 	   }
- 	   else if(zhuangtai == "CF"){
-		   tipDialog('请勿重复发送!', 2, 'warning');
- 			return false;
-	   }
-	   
-	   var postData = {tableName:"cch_dbzw", changeWhere:"gdh", keyValue:gdh, qbid:qbid };
-	        
-		getAjaxJson("/editSaveSamSystem.do", postData, function (data) {	//修改正文内容
-	                    tipDialog(data.Message, 3, data.Code);
-	    	if(data.Code > 0){
-	        	top.frames[tabiframeId()].windowload();
-	        	//closeDialog();
-	        }
-	    });
-		postData = GetWebControls("#form1"); 
-		postData.tableName = "cch_dbml"; 
-		postData.changeWhere = "qbid"; 
-	    postData.keyValue = $("#qbid").val();
-		getAjaxJson("/editSaveSamSystem.do", postData, function (data) {	//修改目录内容
-	                    tipDialog(data.Message, 3, data.Code);
-	    	if(data.Code > 0){
-	        	top.frames[tabiframeId()].windowload();
-	           	//closeDialog();
-	        }
-	    });
-		
-       if (QueryConCheckedV2(cc)) {
-    	   var url ="/pages/samsys/execute_leave.html?cc=" + escape(cc) + "&qbid=" +escape(qbid)
-			+ "&clzs=" +escape(clzs) +"&dfrq=" +escape(dfrq) + "&dfsj=" +escape(dfsj) + "&gdh=" +escape(gdh);      			
-        	openDialog(url, "Execute_leave_Form", "执行列车出发", 750, 200, function (iframe) {
-                 top.frames[iframe].AcceptClick();
-            });
-        } 
-  	}
-    
 </script>
 <!--布局开始-->
 <div class="leftline rightline" style="margin-left: 1px; margin-right: 1px;">
     <form id="form1">
-    <!-- 查询栏开始-->
-    <div class="bottomline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
-        <table class="form-find" style="boder: 0px; height: 45px;">
-           <tr>
-               <td><input id="btnChange" type="button" class="btnChange" value="发送发报" onclick="btn_Change()" /> </td>
-           </tr>
-        </table> 
-        </div>
         <!-- 表头 --> 
         <div class="" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
         <table class="form" style="border: 0px; height: 45px;">   

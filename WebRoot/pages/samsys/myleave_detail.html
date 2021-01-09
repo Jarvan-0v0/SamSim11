@@ -38,7 +38,7 @@
 <script type="text/javascript"> 
 	var cc, allRow, ch, idNum;
 	var iFlag = false;
-
+	var stnum = $.cookie("USERNAME");
 	$(document).ready(function () {
 		cc = GetQuery("cc");
 		ch = GetQuery("ch");
@@ -51,7 +51,7 @@
 		var keyValue = cc;
 	    var queryWhere = "cc";
 	    var tableName = $("#tableTitle").val(); 
-		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, function (data){
+		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, function (data){
                 SetWebControls(data);
 	        });
 		if(IsCheckedNull(ch)){
@@ -74,7 +74,7 @@
    function getGridTab(tableName, queryWhere, keyValue) {
 	   $("#gridTable").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, 
+            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, 
         	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() + 230,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。

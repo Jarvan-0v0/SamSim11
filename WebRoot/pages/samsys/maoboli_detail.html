@@ -39,6 +39,7 @@
 <body><div>
 <script>
     var gdh;
+    var stnum = $.cookie("USERNAME");
     $(function () {
     	gdh = GetQuery("gdh");
         
@@ -50,7 +51,7 @@
     	var tableName = $("#tableName").val();
     	 $("#gridTable_GuDao").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",
-            postData:{tableName:tableName, queryWhere:"gdh", keyValue:gdh}, 
+            postData:{tableName:tableName, queryWhere:"gdh", keyValue:gdh, stnum:stnum}, 
             datatype: "json",
             height: $(window).height() - 50,
             width: $(window).width() - 20,
@@ -100,7 +101,7 @@
           //$("#gridTable_Girder").trigger("reloadGrid"); //不起作用，原因不明，重新载入
          $("#gridTable_GuDao").jqGrid('setGridParam',{
                 url: RootPath()+ "/searchSamSystem.do",
-                postData:{tableName:tableName, queryWhere:"gdh", keyValue:gdh}, 
+                postData:{tableName:tableName, queryWhere:"gdh", keyValue:gdh, stnum:stnum}, 
                 datatype:'json', 
                 page:1
           }).trigger('reloadGrid');  

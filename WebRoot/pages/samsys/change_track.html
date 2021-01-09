@@ -32,6 +32,7 @@
   <script type="text/javascript">
   
   var cc, jxcc, qbid, clzs, dfrq, dfsj;
+  var stnum = $.cookie("USERNAME");
   $(function () {
 	  
   	cc = GetQuery("cc");	//当前转股道车次
@@ -62,7 +63,7 @@
   	dfsj = GetQuery("dfsj");	//到报时间
   	document.getElementById('dfsj').value = dfsj;
   	
-  	getAjaxJson("/searchSQLSamSystem.do", {tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maxlsh", rows:1, page:1}, function (data){
+  	getAjaxJson("/searchSQLSamSystem.do", {tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maxlsh", stnum:stnum, rows:1, page:1}, function (data){
 		var maxlsh = Number(data.rows[0].maxlsh) + 1;	//获取数据库最大流水号信息
 		document.getElementById('lsh').value = maxlsh;
     });
@@ -142,7 +143,8 @@
     function uploadData() {
     	Loading(true, "正在提交数据...");
         window.setTimeout(function () {
-        var postData = GetWebControls("#form1");    
+        var postData = GetWebControls("#form1"); 
+        postData.stnum = stnum;
         getAjaxJson("/changeTrackSamStstem.do", postData, function (data) {
                 tipDialog(data.Message, 3, data.Code);
                if(data.Code > 0)

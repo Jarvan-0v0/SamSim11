@@ -36,6 +36,7 @@
 <body><div>
 <script type="text/javascript"> 
 	var cc, allRow, actual;
+	var stnum = $.cookie("USERNAME");
 	$(document).ready(function () {
 		cc = GetQuery("cc");
 		ch = GetQuery("ch");
@@ -48,7 +49,7 @@
 		var keyValue = cc;
 	    var queryWhere = "cc";
 	    var tableName = $("#tableTitle").val(); 
-		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, function (data){
+		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, function (data){
                 SetWebControls(data);
 	        });
 		if(IsCheckedNull(ch)){
@@ -81,13 +82,14 @@
    function getGridTab(tableName, queryWhere, keyValue) {
 	   $("#gridTable").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, 
+            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, 
         	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() + 230,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
             width: $(window).width() + 868,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
             //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
             colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
+                //{label: "确报ID", name: 'qbid', index: 'qbid', hidden: true},   
                 {label: "顺位号", name: 'swh', index: 'swh', width: 50, editable: true},
                 {label: "匹配号", name: 'ppzt', index: 'ppzt', width: 50, editable: true},
                 {label: "车号", name: 'ch', index: 'ch', width: 80, editable: true},
@@ -173,7 +175,7 @@
         var keyValue = GetJqGridRowValue("#gridTable", deletWhere);
         var tableName = $("#tableName").val();
         if (IsDelData(deletWhere)) {
-           var delparm = {tableName:tableName, deletWhere:deletWhere, keyValue:keyValue};
+           var delparm = {tableName:tableName, deletWhere:deletWhere, keyValue:keyValue, stnum:stnum};
            delConfig("/delSamSystem.do",delparm,"1");
            windowload();
         }
@@ -194,7 +196,7 @@
 		queryWhere = "qbid";
         keyValue = $("#qbid").val();
         var objData = {};
-        getAjaxJson("/searchSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, rows:100, page:1}, function (data){
+        getAjaxJson("/searchSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum, rows:100, page:1}, function (data){
         	objData = data;
 	    });
 	  	var ids = $("#gridTable").getDataIDs();	//获取 多行数据
@@ -205,6 +207,8 @@
     		rowData["tableName"] = $("#tableName").val();
     		rowData["changeWhere"] = "ch";
         	rowData["keyValue"] = rowData.ch;
+        	rowData["qbid"] = $("#qbid").val();
+        	rowData["stnum"] = stnum;
         	
     		for(var j=0;j<objData.records;j++){
             	if(rowData.swh == objData.rows[j].swh){

@@ -33,9 +33,10 @@
   <script type="text/javascript">
   
 	var gdh;
+	var stnum = $.cookie("USERNAME");
   $(function () {
 	var qbid, clzs;
-	getAjaxJson("/searchSQLSamSystem.do", {tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maxqbid", rows:1, page:1}, function (data){
+	getAjaxJson("/searchSQLSamSystem.do", {tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maxqbid", stnum:stnum, rows:1, page:1}, function (data){
         qbid = Number(data.rows[0].maxqbid) + 1;	//获取数据库最大车次信息，
     });
     document.getElementById('cc').value = qbid;
@@ -78,7 +79,8 @@
     		Loading(true, "正在提交数据...");
             window.setTimeout(function () {
             document.getElementById('tableName').value = "cch_dbml";
-	    	var postData = GetWebControls("#form1");    
+	    	var postData = GetWebControls("#form1"); 
+	    	postData.stnum = stnum;
             getAjaxJson("/addSamSystem.do", postData, function (data) {	//新增目录信息
                     tipDialog(data.Message, 3, data.Code);
                     if(data.Code > 0)
