@@ -153,11 +153,15 @@ public class SamSimulationDocCtrl extends AbstractBase
 				String sql_tableName = (String)mapRecord.get("sql_value");	//获取相应SQL语句
 				List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
 				
-				//lists = systemService.executeQuery(sql);
-				
 				//增加用户筛选
 				String stnum = pd.getString("stnum");
-				where = "stnum = '" + stnum + "'";
+				if(keyValue.equals("maoboli")){
+					where = "(stnum = '" + stnum + "' or stnum IS NULL) GROUP BY gdh";
+				}
+				else{
+					where = "stnum = '" + stnum + "'";
+				}
+				
 				long totalRecord = 0l;  
 				totalRecord = systemService.queryCount(tableName,where);
 				lists= systemService.query(sql_tableName,sort,order, where,new Object[] {index, pageSize});

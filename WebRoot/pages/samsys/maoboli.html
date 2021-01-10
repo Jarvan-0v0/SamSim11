@@ -45,8 +45,8 @@
    //加载毛玻璃表格
     function GetGrid() {
 	   $("#gridTable").jqGrid({
-            url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"tab_mbl_1", stnum:stnum}, 
+		    url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maoboli", stnum:stnum}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 56,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。

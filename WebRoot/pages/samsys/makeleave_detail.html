@@ -48,7 +48,7 @@
 		
 		GetGrid(); //加载表格
 	    document.getElementById('swbz').value = "0";
-	    getAjaxJson("/searchSQLSamSystem.do", {tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maxlsh", rows:1, page:1}, function (data){
+	    getAjaxJson("/searchSQLSamSystem.do", {tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maxlsh", stnum:stnum, rows:1, page:1}, function (data){
 			var maxlsh = Number(data.rows[0].maxlsh) + 1;	//获取数据库最大流水号信息
 			document.getElementById('lsh').value = maxlsh;
 	    });
