@@ -2,9 +2,7 @@ package blkjweb.controller;
 
 import java.util.*;
 import java.util.Map.Entry;
-
 import javax.annotation.Resource;
-
 import org.blkj.utils.ConvertTool;
 import org.blkj.utils.DateTool;
 import org.blkj.utils.FileTool;
@@ -13,11 +11,19 @@ import org.blkj.utils.StringTool;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import blkjweb.service.*;
 import blkjweb.utils.Const;
 
-//主要要考虑用户的密码。 这里的所有方法都不涉及管理员，即用户名为001的用户
+
+/**
+ * 主要要考虑用户的密码。 这里的所有方法都不涉及管理员，即用户名为001的用户
+ * 当传过来的信息既有queryWhere 和 keyValue时，以此二者组成条件语句where。
+ * 否则直接以传过来的where为准
+ * @author Administrator
+ * 2021年1月13日	by ljw
+ * 
+ */
+
 @Controller
 public class SamSimulationDocCtrl extends AbstractBase
 {
@@ -41,15 +47,9 @@ public class SamSimulationDocCtrl extends AbstractBase
 		String order = pd.getString("sord");
 		
 		//增加用户筛选
-		String stnum = pd.getString("stnum");
-		String where = "stnum = '" + stnum + "'";
+		String where = pd.getString("where");
 		
 		int index = (page - 1) * pageSize;   
-	
-		//Map<String, Object> mapRecordT = new HashMap<String, Object>();
-		//mapRecordT = systemService.queryOne(tableName,where); 
-		//String sql = (String)mapRecordT.get("sql_val");
-
 		List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
 		//lists = systemService.executeQuery(sql);
 		
@@ -68,29 +68,35 @@ public class SamSimulationDocCtrl extends AbstractBase
 	}
 	
 	//查询单条，返回一条记录
-		@RequestMapping(value="/searchOneSamSystem", produces="application/json; charset=utf-8")  
-		@ResponseBody 
-		public Object searchOneSamSystem() 
-		{
-			PageTool pd = new PageTool();
-			pd = this.getPageData();
-			String tableName =  pd.getString("tableName");
-			String queryWhere = pd.getString("queryWhere");
-			String keyValue = pd.getString("keyValue");
-			
-			//增加用户筛选
-			String stnum = pd.getString("stnum");
-			String where = queryWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
-
-			Map<String, Object> mapRecord = new HashMap<String, Object>();
-			mapRecord = systemService.queryOne(tableName,where); 
-			mapRecord = ConvertTool.changeNullSpace((ConvertTool.json2Map(ConvertTool.map2json(mapRecord))));
-
-			if(mapRecord != null && mapRecord.size() > 0)
-				return mapRecord ;
-			else
-				return "";
+	@RequestMapping(value="/searchOneSamSystem", produces="application/json; charset=utf-8")  
+	@ResponseBody 
+	public Object searchOneSamSystem() 
+	{
+		PageTool pd = new PageTool();
+		pd = this.getPageData();
+		String tableName =  pd.getString("tableName");
+		String queryWhere = pd.getString("queryWhere");
+		String keyValue = pd.getString("keyValue");
+		
+		//增加用户筛选,当queryWhere和keyVaule都不为空时，使用二者组成where语句，
+		//否则使用传递过来的where语句
+		String where = "";
+		if(!StringTool.isNullEmpty(queryWhere) && !StringTool.isNullEmpty(keyValue)){
+			where = queryWhere + "= '" + keyValue + "'";
 		}
+		else {
+			where = pd.getString("where");
+		}
+
+		Map<String, Object> mapRecord = new HashMap<String, Object>();
+		mapRecord = systemService.queryOne(tableName,where); 
+		mapRecord = ConvertTool.changeNullSpace((ConvertTool.json2Map(ConvertTool.map2json(mapRecord))));
+
+		if(mapRecord != null && mapRecord.size() > 0)
+			return mapRecord ;
+		else
+			return "";
+	}
 		
 	//查询多条，返回表格
 	@RequestMapping(value="/searchSamSystem", produces="application/json; charset=utf-8")  
@@ -103,19 +109,23 @@ public class SamSimulationDocCtrl extends AbstractBase
 		String queryWhere = pd.getString("queryWhere");
 		String keyValue = pd.getString("keyValue");
 		
-		//增加用户筛选
-		String stnum = pd.getString("stnum");
-		String where = queryWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
+		//增加用户筛选,当queryWhere和keyVaule都不为空时，使用二者组成where语句，
+		//否则使用传递过来的where语句
+		String where = "";
+		if(!StringTool.isNullEmpty(queryWhere) && !StringTool.isNullEmpty(keyValue)){
+			where = queryWhere + "= '" + keyValue + "'";
+		}
+		else {
+			where = pd.getString("where");
+		}
 		int pageSize = pd.getInt("rows");
 		int page = pd.getInt("page");   
 		String sort = pd.getString("sidx");
 		String order = pd.getString("sord");
 		int index = (page - 1) * pageSize;  
 		
-		long totalRecord = 0l;  
-		
+		long totalRecord = 0l;  	
 		List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
-		
 		totalRecord = systemService.queryCount(tableName,where);
 		lists= systemService.query(tableName,sort,order, where,new Object[] {index, pageSize});
 
@@ -131,51 +141,49 @@ public class SamSimulationDocCtrl extends AbstractBase
 	}
 
 	//查询sql语句数据库，并返回信息
-			@RequestMapping(value="/searchSQLSamSystem", produces="application/json; charset=utf-8")  
-			@ResponseBody 
-			public Object searchSQLSamSystem() 
-			{
-				PageTool pd = new PageTool();
-				pd = this.getPageData();
-				String tableName =  pd.getString("tableName");
-				String queryWhere = pd.getString("queryWhere");
-				String keyValue = pd.getString("keyValue");
-				String where = queryWhere + "= '" + keyValue + "'";
-				
-				int pageSize = pd.getInt("rows");
-				int page = pd.getInt("page");   
-				String sort = pd.getString("sidx");
-				String order = pd.getString("sord");
-				int index = (page - 1) * pageSize; 
+	@RequestMapping(value="/searchSQLSamSystem", produces="application/json; charset=utf-8")  
+	@ResponseBody 
+	public Object searchSQLSamSystem() 
+	{
+		/**
+		 * 此函数，须传入两部分，一个queryWhere和keyValue为查询SQL语句的条件
+		 * 再传入where条件为，后续根据SQL语句进行查询的条件
+		 */
+		PageTool pd = new PageTool();
+		pd = this.getPageData();
+		String tableName =  pd.getString("tableName");
+		String queryWhere = pd.getString("queryWhere");
+		String keyValue = pd.getString("keyValue");
+		String where = queryWhere + "= '" + keyValue + "'";
+		
+		int pageSize = pd.getInt("rows");
+		int page = pd.getInt("page");   
+		String sort = pd.getString("sidx");
+		String order = pd.getString("sord");
+		int index = (page - 1) * pageSize; 
 
-				Map<String, Object> mapRecord = new HashMap<String, Object>();
-				mapRecord = systemService.queryOne(tableName,where);	
-				String sql_tableName = (String)mapRecord.get("sql_value");	//获取相应SQL语句
-				List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
-				
-				//增加用户筛选
-				String stnum = pd.getString("stnum");
-				if(keyValue.equals("maoboli")){
-					where = "(stnum = '" + stnum + "' or stnum IS NULL) GROUP BY gdh";
-				}
-				else{
-					where = "stnum = '" + stnum + "'";
-				}
-				
-				long totalRecord = 0l;  
-				totalRecord = systemService.queryCount(tableName,where);
-				lists= systemService.query(sql_tableName,sort,order, where,new Object[] {index, pageSize});
-				long totalPage = totalRecord % pageSize == 0 ? totalRecord/pageSize : totalRecord/pageSize + 1;
+		Map<String, Object> mapRecord = new HashMap<String, Object>();
+		mapRecord = systemService.queryOne(tableName,where);	
+		String sql_tableName = (String)mapRecord.get("sql_value");	//获取相应SQL语句
+		List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
+		
+		//增加用户筛选，根据传递过来的where进行查询
+		where = pd.getString("where");
+		
+		long totalRecord = 0l;  
+		totalRecord = systemService.queryCount(sql_tableName,where);
+		lists= systemService.query(sql_tableName,sort,order, where,new Object[] {index, pageSize});
+		long totalPage = totalRecord % pageSize == 0 ? totalRecord/pageSize : totalRecord/pageSize + 1;
 
-				String rowList = ConvertTool.list2json((ArrayList<?>)lists);
+		String rowList = ConvertTool.list2json((ArrayList<?>)lists);
 
-				String json = "{\"page\":" + page +"," +
-						" \"total\":" + totalPage +"," + 
-						" \"records\":" + totalRecord +"," + 
-						" \"rows\":" + rowList +"}";
+		String json = "{\"page\":" + page +"," +
+				" \"total\":" + totalPage +"," + 
+				" \"records\":" + totalRecord +"," + 
+				" \"rows\":" + rowList +"}";
 
-				return json; 
-			}
+		return json; 
+	}
 	
 	//删除选定的桥的所有记录
 	@RequestMapping(value="/delSamSystem", produces="application/json; charset=utf-8")  
@@ -192,9 +200,15 @@ public class SamSimulationDocCtrl extends AbstractBase
 		String deletWhere = pd.getString("deletWhere");
 		String keyValue = pd.getString("keyValue");
 
-		//增加用户筛选
-		String stnum = pd.getString("stnum");
-		String where = " WHERE " + deletWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
+		//增加用户筛选,当queryWhere和keyVaule都不为空时，使用二者组成where语句，
+		//否则使用传递过来的where语句
+		String where = "";
+		if(!StringTool.isNullEmpty(deletWhere) && !StringTool.isNullEmpty(keyValue)){
+			where = deletWhere + "= '" + keyValue + "'";
+		}
+		else {
+			where = pd.getString("where");
+		}
 		String[] batchSQLStr = new String[9];	//用于同时删除多个表格
 
 		batchSQLStr[0] = "DELETE FROM " + tableName + where;		//删除记录语句
@@ -210,132 +224,142 @@ public class SamSimulationDocCtrl extends AbstractBase
 	}
 	
 	//保存编辑后的信息
-		@RequestMapping(value="/editSaveSamSystem", produces="application/json; charset=utf-8")  
-		@ResponseBody
-		public Object editSaveSamSystem() 
-		{
-			String code = "2";
-			String message = "成功更新!";
-			
-			PageTool pd = new PageTool();
-			pd = this.getPageData();
-			Map<String, Object> mapRecord = new HashMap<String, Object>();
-			mapRecord = pd.getMap();
-
-			String tableName =  pd.getString("tableName");
-			String keyName = pd.getString("keyName");
-			String id = pd.getString("id");
-			String oldID = pd.getString("oldID");
-			
-			String changeWhere = pd.getString("changeWhere");
-			String keyValue = pd.getString("keyValue");
-
-			//增加用户筛选
-			String stnum = pd.getString("stnum");
-			String where = "";
-			boolean isUpdateKey = false; 
-			if(! StringTool.isNullEmpty(keyName)){	//如果主键名不为空，传过来了主键信息
-				where = keyName + "= '"+ oldID +"' AND " + changeWhere + "=" + keyValue +"' AND stnum = '" + stnum + "'";
-				if(! StringTool.isNullEmpty(id) && //新编号不空 且 新旧编号不等 
-						! oldID.equals(id)){
-					isUpdateKey = true; //更新主键
-					mapRecord.put(keyName, id);
-				}
-			}
-			else{
-				where = changeWhere + "= '" + keyValue + "' AND stnum = '" + stnum + "'";
-			}
-			
-			//系统会自动过滤到无用字段
-			Set set = mapRecord.entrySet();/// 返回此映射所包含的映射关系的 Set 视图。  
-	        Iterator iterator = set.iterator();  
-	  
-	        while (iterator.hasNext()) {  
-	            Map.Entry mapentry = (Map.Entry) iterator.next(); /////Map.Entry－－Map的内部类，描述Map中的按键/数值对。    
-	            System.out.println(mapentry.getKey() + "   " + mapentry.getValue()+"in " + tableName + " edit save");  
-	  
-	        }  
-				
-			int result = systemService.update(tableName, mapRecord,isUpdateKey, where);
-
-			if (result <= 0){//不成功
-				code = "-1";
-				message = "更新失败!";
-			}
-			return message(code,message);
-		}
-
-		//增加一条记录
-		@RequestMapping(value="/addSamSystem", produces="application/json; charset=utf-8")  
-		@ResponseBody 
-		public Object addSamSystem() 
-		{
-			String code = "2";
-			String message = "成功保存记录!";
-			
-			Map<String, Object> mapRecord = new HashMap<String, Object>();
-			PageTool pd = new PageTool();
-			pd = this.getPageData();
-			mapRecord = pd.getMap();
-			
-			String tableName = pd.getString("tableName");
-			int result = systemService.updateInsert(tableName, mapRecord);
-					
-			if (result < 0){//不成功
-				code = "-1";
-				message = "保存记录失败!";
-			}
-			return message(code,message);
-		}	
+	@RequestMapping(value="/editSaveSamSystem", produces="application/json; charset=utf-8")  
+	@ResponseBody
+	public Object editSaveSamSystem() 
+	{
+		String code = "2";
+		String message = "成功更新!";
 		
-		@RequestMapping(value="/changeTrackSamStstem", produces="application/json; charset=utf-8")  
-		@ResponseBody 
-		public Object changeTrackSamStstem() 
-		{
-			String code = "2";
-			String message = "成功更新!";
-			
-			PageTool pd = new PageTool();
-			pd = this.getPageData();
-			Map<String, Object> mapRecord = new HashMap<String, Object>();
-			mapRecord = pd.getMap();
+		PageTool pd = new PageTool();
+		pd = this.getPageData();
+		Map<String, Object> mapRecord = new HashMap<String, Object>();
+		mapRecord = pd.getMap();
 
-			String cc = pd.getString("cc");
-			String qbid = pd.getString("qbid");
+		String tableName =  pd.getString("tableName");
+		String keyName = pd.getString("keyName");
+		String id = pd.getString("id");
+		String oldID = pd.getString("oldID");
+		
+		String changeWhere = pd.getString("changeWhere");
+		String keyValue = pd.getString("keyValue");
 
-			//增加用户筛选
-			String stnum = pd.getString("stnum");
-			boolean isUpdateKey = false; 
-			String where1 = "cc='"+ cc + "' AND stnum = '" + stnum + "'";
-			String where2 = "qbid='"+ qbid + "' AND stnum = '" + stnum + "'";
+		//增加用户筛选,当queryWhere和keyVaule都不为空时，使用二者组成where语句，
+		//否则使用传递过来的where语句
+		String where = "";
+		boolean isUpdateKey = false; 
+		if(! StringTool.isNullEmpty(keyName)){	//如果主键名不为空，传过来了主键信息
+			if(!StringTool.isNullEmpty(changeWhere) && !StringTool.isNullEmpty(keyValue)){
+				where = keyName + "= '"+ oldID +"' AND " + changeWhere + "=" + keyValue +"'";
+			}
+			else {
+				where = keyName + "= '"+ oldID +"' AND " + pd.getString("where");
+			}
+			if(! StringTool.isNullEmpty(id) && //新编号不空 且 新旧编号不等 
+					! oldID.equals(id)){
+				isUpdateKey = true; //更新主键
+				mapRecord.put(keyName, id);
+			}
+		}
+		else{
+			if(!StringTool.isNullEmpty(changeWhere) && !StringTool.isNullEmpty(keyValue)){
+				where = changeWhere + "=" + keyValue +"'";
+			}
+			else {
+				where = pd.getString("where");
+			}
+		}
+		
+		//系统会自动过滤到无用字段
+		Set set = mapRecord.entrySet();/// 返回此映射所包含的映射关系的 Set 视图。  
+        Iterator iterator = set.iterator();  
+  
+        while (iterator.hasNext()) {  
+            Map.Entry mapentry = (Map.Entry) iterator.next(); /////Map.Entry－－Map的内部类，描述Map中的按键/数值对。    
+            System.out.println(mapentry.getKey() + "   " + mapentry.getValue()+"in " + tableName + " edit save");  
+  
+        }  
 			
-			//系统会自动过滤到无用字段
-			Set set = mapRecord.entrySet();/// 返回此映射所包含的映射关系的 Set 视图。  
-	        Iterator iterator = set.iterator();  
-	  
-	        while (iterator.hasNext()) {  
-	            Map.Entry mapentry = (Map.Entry) iterator.next(); /////Map.Entry－－Map的内部类，描述Map中的按键/数值对。    
-	            System.out.println(mapentry.getKey() + "   " + mapentry.getValue()+" in cch_dbml edit save");  
-	  
-	        }  
+		int result = systemService.update(tableName, mapRecord,isUpdateKey, where);
+
+		if (result <= 0){//不成功
+			code = "-1";
+			message = "更新失败!";
+		}
+		return message(code,message);
+	}
+
+	//增加一条记录
+	@RequestMapping(value="/addSamSystem", produces="application/json; charset=utf-8")  
+	@ResponseBody 
+	public Object addSamSystem() 
+	{
+		String code = "2";
+		String message = "成功保存记录!";
+		
+		Map<String, Object> mapRecord = new HashMap<String, Object>();
+		PageTool pd = new PageTool();
+		pd = this.getPageData();
+		mapRecord = pd.getMap();
+		
+		String tableName = pd.getString("tableName");
+		int result = systemService.updateInsert(tableName, mapRecord);
 				
-			String tableName =  "cch_dbml";	
-			int result = systemService.update(tableName, mapRecord,isUpdateKey, where1);
-			if (result <= 0){//不成功
-				code = "-1";
-				message = "更新目录失败!";
-				return message(code,message);
-			}
+		if (result < 0){//不成功
+			code = "-1";
+			message = "保存记录失败!";
+		}
+		return message(code,message);
+	}	
+	
+	@RequestMapping(value="/changeTrackSamStstem", produces="application/json; charset=utf-8")  
+	@ResponseBody 
+	public Object changeTrackSamStstem() 
+	{
+		String code = "2";
+		String message = "成功更新!";
+		
+		PageTool pd = new PageTool();
+		pd = this.getPageData();
+		Map<String, Object> mapRecord = new HashMap<String, Object>();
+		mapRecord = pd.getMap();
 
-			String tableName2 =  "cch_dbzw";	
-			result = systemService.update(tableName2, mapRecord,isUpdateKey, where2);
+		String cc = pd.getString("cc");
+		String qbid = pd.getString("qbid");
 
-			if (result <= 0){//不成功
-				code = "-1";
-				message = "更新正文失败!";
-			}
+		//增加用户筛选
+		String where = pd.getString("where");
+		boolean isUpdateKey = false; 
+		String where1 = "cc='"+ cc + "' AND" + where;
+		String where2 = "qbid='"+ qbid + "' AND" + where;
+		
+		//系统会自动过滤到无用字段
+		Set set = mapRecord.entrySet();/// 返回此映射所包含的映射关系的 Set 视图。  
+        Iterator iterator = set.iterator();  
+  
+        while (iterator.hasNext()) {  
+            Map.Entry mapentry = (Map.Entry) iterator.next(); /////Map.Entry－－Map的内部类，描述Map中的按键/数值对。    
+            System.out.println(mapentry.getKey() + "   " + mapentry.getValue()+" in cch_dbml edit save");  
+  
+        }  
+			
+		String tableName =  "cch_dbml";	
+		int result = systemService.update(tableName, mapRecord,isUpdateKey, where1);
+		if (result <= 0){//不成功
+			code = "-1";
+			message = "更新目录失败!";
 			return message(code,message);
 		}
+
+		String tableName2 =  "cch_dbzw";	
+		result = systemService.update(tableName2, mapRecord,isUpdateKey, where2);
+
+		if (result <= 0){//不成功
+			code = "-1";
+			message = "更新正文失败!";
+		}
+		return message(code,message);
+	}
 		
 		
 		/*************

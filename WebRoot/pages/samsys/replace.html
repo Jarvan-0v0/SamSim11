@@ -31,14 +31,26 @@
 </head>
 <body><div>
   <script type="text/javascript">
+	var expriment;
   	$(document).ready(function () {
-		cc = GetQuery("cc");
-		var options = {path:"/SamSim11"}
-		$.cookie("TESTNAME", cc, options);
-		closeDialog();
-		
+  		var shixunhao = GetQuery("shixunhao");
+  		getTestName(shixunhao);
+  		
+		var options = {path:"/SamSim"}
+		$.cookie("TESTNAME", expriment, options);
+		//closeDialog();
+		//window.location.href="/SamSim/pages/facade/facade.html";
+		window.location.href="http://www.bzzxczz.com:8089/wwwroot/new4/student/Exprimenttime.asp";
+		othercloseTab();
 	});
     
+  //获取实验名称
+	  	function getTestName(shixunhao, stnum) {
+		  	var postData = {tableName:"syt_exprimenttime",queryWhere:"exprimenttime_id", keyValue:shixunhao}
+		  	getAjaxJson("/searchOneSamSystem.do", postData, function (data) {
+				expriment = data.expriment;
+	        });
+		}
 
 </script>
 

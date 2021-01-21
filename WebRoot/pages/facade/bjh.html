@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -17,7 +17,7 @@
     <script src="../scripts/jquery-ui/jquery-ui.min.js"></script>
     <script src="../scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
     <script src="../scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
-    <link href="../scripts/jqGrid/css/ui.jqgrid-maoboli.css" rel="stylesheet" />
+    <link href="../scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />
     <link href="../scripts/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
 
 	<script src="../scripts/jquery/jquery.cookie.js"></script>   
@@ -27,34 +27,35 @@
 </head>
 <body>
 <script>
-function a(){
+function a(where){
 	 $("#table1").jqGrid({
          url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
-         postData:{tableName:"bjh_lcddjh"}, 
+         postData:{tableName:"tab_dd_rbjhout", where:where}, 
      	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
          datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-         height: $(window).height() - 155,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-         autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+         height: 614,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+         
+         //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
          colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
              //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-             {label: "序", name: 'zj', index: 'zj', width: 30},
-             {label: "方向", name: 'fx', index: 'fx', width: 60},
-             {label: "车次", name: 'cc', index: 'cc', width: 60},
-             {label: "到达时刻", name: 'ddsk', index: 'ddsk', width: 60},
-             {label: "甲及以远", name: 'dd401', index: 'dd401', width: 50},
-             {label: "本站-甲间", name: 'dd402', index: 'dd402', width: 40},
-             {label: "乙及以远", name: 'dd403', index: 'dd403', width: 50},
-             {label: "本站-乙间", name: 'dd404', index: 'dd404', width: 40},
-             {label: "丙及以远", name: 'dd405', index: 'dd405', width: 50},
-             {label: "本站-丙间", name: 'dd406', index: 'dd406', width: 45},
-             {label: "丁及以远", name: 'dd407', index: 'dd407', width: 50},
-             {label: "本站-丁间", name: 'dd408', index: 'dd408', width: 40},
-             {label: "戊及以远", name: 'dd409', index: 'dd409', width: 50},
-             {label: "己及以远", name: 'dd410', index: 'dd410', width: 50},
-             {label: "空车", name: 'kc', index: 'kc', width: 40},
-             {label: "本站卸车", name: 'dd411', index: 'dd411', width: 40},
-             {label: "合计", name: 'hj', index: 'hj', width: 40},
-           
+             //{label: "序", name: 'zj', index: 'zj', width: 20,editable:true,sortable: false},
+             {label: "方向", name: 'fx', index: 'fx', width: 40,editable:true,sortable: false},
+             {label: "车次", name: 'cc', index: 'cc', width: 48,editable:true,sortable: false},
+             {label: "到达<br/>时刻", name: 'ddsk', index: 'ddsk', width: 54,editable:true,sortable: false},
+             {label: "甲及<br/>以远", name: 'dd401', index: 'dd401', width: 42,editable:true,sortable: false},
+             {label: "本站<br/>甲间", name: 'dd402', index: 'dd402', width: 45,editable:true,sortable: false},
+             {label: "乙及<br/>以远", name: 'dd403', index: 'dd403', width: 42,editable:true,sortable: false},
+             {label: "本站<br/>乙间", name: 'dd404', index: 'dd404', width: 45,editable:true,sortable: false},
+             {label: "丙及<br/>以远", name: 'dd405', index: 'dd405', width: 42,editable:true,sortable: false},
+             {label: "本站<br/>丙间", name: 'dd406', index: 'dd406', width: 45,editable:true,sortable: false},
+             {label: "丁及<br/>以远", name: 'dd407', index: 'dd407', width: 42,editable:true,sortable: false},
+             {label: "本站<br/>丁间", name: 'dd408', index: 'dd408', width: 45,editable:true,sortable: false},
+             {label: "戊及<br/>以远", name: 'dd409', index: 'dd409', width: 42,editable:true,sortable: false},
+             {label: "己及<br/>以远", name: 'dd410', index: 'dd410', width: 42,editable:true,sortable: false},
+             {label: "空车", name: 'kc', index: 'kc', width: 40,editable:true,sortable: false},
+             {label: "本站<br/>卸车", name: 'dd411', index: 'dd411', width: 45,editable:true,sortable: false},
+             {label: "合计", name: 'hj', index: 'hj', width: 45,editable:true,sortable: false},
+             
   		],
   	    contentType : 'application/json',
   	    viewrecords: true,//是否要显示总记录数
@@ -62,13 +63,69 @@ function a(){
          //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
          rowList: [10, 25, 50,100],//可调整每页显示的记录数 
          rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
-         sortname: 'cc',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+         //sortname: 'cc',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
          sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
           //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
          shrinkToFit: false,
          //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
          gridview: true,
-         
+         //cellattr: function(rowId, tv, rawObject, cm, rdata) {
+        	   //合并单元格
+        	//   return 'id=\'id' + rowId + "\'";
+        	//}
+         loadComplete:function(){
+        	 
+        	 $("#table1").css("text-align", "center");
+        	 var dataRow1 = {
+                     //"zj" : "",
+                     "fx" : "",
+                     "cc" : "",
+                     "ddsk" : "",
+                     "dd401" : "",
+                     "dd402" : "",
+                     "dd403" : "",
+                     "dd404" : "",
+                     "dd405" : "",
+                     "dd406" : "",
+                     "dd407" : "",
+                     "dd408" : "",
+                     "dd409" : "",
+                     "dd410" : "",
+                     "kc" : "",
+                     "dd411" : "",
+                     "hj" : "",
+              };
+        	 var dataR = {
+                   
+                     "fx" : "",
+                     "cc" : "上班结存",
+                     "ddsk" : "",
+                     "dd401" : "21",
+                     "dd402" : "48",
+                     "dd403" : "21",
+                     "dd404" : "30",
+                     "dd405" : "29",
+                     "dd406" : "20",
+                     "dd407" : "0",
+                     "dd408" : "0",
+                     "dd409" : "0",
+                     "dd410" : "0",
+                     "kc" : "",
+                     "dd411" : "",
+                     "hj" : "169",
+              };
+        	 
+        	 $("#table1").jqGrid("addRowData", 100, dataR, "first");
+              var count = $("#table1").getGridParam("reccount");//当前有几行
+              while(count<24){
+            	  count+=1;
+            	  $("#table1").jqGrid("addRowData", count+1, dataRow1, "last");
+            	  
+           	  }
+              MergerColspan('table1',100, 'id','fx');
+		$("td").css("text-align", "center");
+		change();
+         },
         jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
 		         id: "id", //行id，相当于设置主键
 		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
@@ -83,7 +140,7 @@ function a(){
 		     pagerpos: "center",//指定分页栏的位置left
 		     pgbuttons:true, //是否显示翻页按钮
 		     //pginput:true, //是否显示跳转页面的输入框
-		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     recordpos:	"center", //定义记录信息的位置： left, center, right
 		     
 		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
 		     prmNames:{
@@ -93,7 +150,7 @@ function a(){
 			    sort: "sidx", // 表示用于排序的列名的参数名称
 				order: "sord" // 表示采用的排序方式的参数名称
 		     }, 
-		
+		     
 		     //rowStyler: function(index, record) {
 	         //       if(record.gdjm){
 	         //            return "style='font-size:20px'"; 
@@ -105,9 +162,14 @@ function a(){
 	jQuery("#table1").jqGrid('setGroupHeaders', {
         useColSpanStyle: true, 
         groupHeaders:[
-        {startColumnName: 'dd401', numberOfColumns: 13, titleText: '编组内容'},
+        {startColumnName: 'fx', numberOfColumns: 16, titleText: '列车到达计划'},
         ]  
       });
+	function MergerColspan(gridName,rowId,id,CellName) {
+	
+	$("#" + gridName + "").setCell(rowId, id, '', { display: 'none' });
+	$("#" + CellName + "" + rowId + "").attr("colspan", 3);	
+	}
 }
 function b(){
 	 $("#table2").jqGrid({
@@ -115,15 +177,15 @@ function b(){
         postData:{tableName:"bjh_lccfjh"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 128,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        height: 614,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+        //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "方向", name: 'fx', index: 'fx', width: 80},
-            {label: "车次", name: 'cc', index: 'cc', width: 80},
-            {label: "出发时刻", name: 'cfsk', index: 'cfsk', width: 80},
-            {label: "编组内容及车流来源", name: 'bncl', index: 'bncl', width: 100},
-            {label: "合计", name: 'hj', index: 'hj', width: 50},
+            {label: "方向", name: 'fx', index: 'fx', width: 50,sortable: false},
+            {label: "车次", name: 'cc', index: 'cc', width: 60,sortable: false},
+            {label: "出发时刻", name: 'cfsk', index: 'cfsk', width: 70,sortable: false},
+            {label: "编组内容<br/>及车流来源", name: 'bncl', index: 'bncl', width: 70,sortable: false},
+            {label: "合计", name: 'hj', index: 'hj', width: 60,sortable: false},
             
             //{label: "车数", name: 'cheshu', index: 'cheshu', width: 30},
             //{label: "车辆信息", name: 'clsj', index: 'clsj', width: 12}, //formatter: editLink}
@@ -135,13 +197,32 @@ function b(){
         //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
         rowList: [10, 25, 50,100],//可调整每页显示的记录数 
         rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
-        sortname: 'cc',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+        sortname: 'fx',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
         sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
          //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
         shrinkToFit: false,
         //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
         gridview: true,
+        loadComplete:function(){
+        	$("td").css("text-align", "center");
         
+        	var dataRow2 = {
+
+                    fx : "",
+                    cc : "",
+                    cfsk : "",
+                    bncl : "",
+                    hj : "",
+                    
+             };
+             
+             var count = $("#table2").getGridParam("reccount");//当前有几行
+             while(count<24){
+           	    count+=1;
+           	    $("#table2").jqGrid("addRowData", count, dataRow2, "last");
+             }
+	     change2();
+        },
        jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
 		         id: "id", //行id，相当于设置主键
 		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
@@ -175,7 +256,12 @@ function b(){
          //ondblClickRow: function(){	btn_detail(); },
 		     
 	     });
-	
+	 jQuery("#table2").jqGrid('setGroupHeaders', {
+	        useColSpanStyle: true, 
+	        groupHeaders:[
+	        {startColumnName: 'fx', numberOfColumns: 5, titleText: '列车出发计划'},
+	        ]  
+	      });
 }
 function c(){
 	$("#table3").jqGrid({
@@ -183,33 +269,53 @@ function c(){
         postData:{tableName:"bjh_tsztsj"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 510,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        //height: $(window).height()*0.465,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+		height: 338,
+        //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "时间", name: 'sj', index: 'sj', width: 50,height:40},
-            {label: "到达", name: 'zsdd', index: 'zsdd', width: 50},
-            {label: "出发", name: 'zscf', index: 'zscf', width: 50},
-            {label: "结存", name: 'zsjc', index: 'zsjc', width: 50},
-            {label: "到达", name: 'ztdd', index: 'ztdd', width: 50},
-            {label: "出发", name: 'ztcf', index: 'ztcf', width: 50},
-            {label: "结存", name: 'ztjc', index: 'ztjc', width: 50},
+            {label: "时间", name: 'sj', index: 'sj', width: 70,sortable: false},
+            {label: "到<br>达", name: 'zsdd', index: 'zsdd', width: 40,sortable: false},
+            {label: "出<br>发", name: 'zscf', index: 'zscf', width: 40,sortable: false},
+            {label: "结<br>存", name: 'zsjc', index: 'zsjc', width: 40,sortable: false},
+            {label: "到<br>达", name: 'ztdd', index: 'ztdd', width: 40,sortable: false},
+            {label: "出<br>发", name: 'ztcf', index: 'ztcf', width: 40,sortable: false},
+            {label: "结<br>存", name: 'ztjc', index: 'ztjc', width: 40,sortable: false},
             
         
             //{label: "车数", name: 'cheshu', index: 'cheshu', width: 30},
             //{label: "车辆信息", name: 'clsj', index: 'clsj', width: 12}, //formatter: editLink}
-          
+            
  		],
+ 		gridComplete:function(){
+ 			$("td").css("text-align", "center");
+ 		
+ 			var dataRow3 = {
+ 		             "sj" : "",
+ 		             "zsdd" : "",
+ 		             "zscf" : "",
+ 		             "zsjc" : "",
+ 		             "ztdd" : "",
+ 		             "ztcf" : "",
+ 		             "ztjc" : "",
+ 		             
+ 		      };
+ 		      //$("#table3").jqGrid("addRowData", '-3', dataRow3, "first");
+ 		     var count = $("#table3").getGridParam("reccount");//当前有几行
+ 		    
+ 		    var ids = $("#table3").getDataIDs();	//获取 多行数据
+ 		   	
+ 		},
  	    contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
         //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
         rowList: [10, 25, 50,100],//可调整每页显示的记录数 
         rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
-        sortname: 'sj',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+        sortname: 'zj',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
         sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
          //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
-        shrinkToFit: false,
+        shrinkToFit: true,
         //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
         gridview: true,
         
@@ -227,7 +333,7 @@ function c(){
 		     pagerpos: "center",//指定分页栏的位置left
 		     pgbuttons:true, //是否显示翻页按钮
 		     //pginput:true, //是否显示跳转页面的输入框
-		     recordpos:	"left", //定义记录信息的位置： left, center, right
+		     recordpos:	"center", //定义记录信息的位置： left, center, right
 		     
 		     //用于设置jqGrid将要向Server传递的参数名称。其默认值为：
 		     prmNames:{
@@ -246,6 +352,7 @@ function c(){
          //ondblClickRow: function(){	btn_detail(); },
 		     
 	     });
+	//$("#identity“）.jqGrid("setGridHeight", 200);
 	jQuery("#table3").jqGrid('setGroupHeaders', {
         useColSpanStyle: true, 
         groupHeaders:[
@@ -255,6 +362,7 @@ function c(){
         //{startColumnName: 'zaiz', numberOfColumns: 2, titleText: 'Shiping'}
         ]  
       });
+
 }
 function d(){
 	$("#table4").jqGrid({
@@ -262,26 +370,35 @@ function d(){
         postData:{tableName:"bjh_zts"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 780,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        //height: $(window).height()*0.031,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+        height: $(window).height() - 100,
+        //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "中停时", name: 'zts', index: 'zts', width: 60},
-            {label: "中转车数", name: 'zzcs', index: 'zzcs', width: 100},
-            {label: "中时", name: 'zs', index: 'zs', width: 50},
-            {label: "作业次数", name: 'zycs', index: 'zycs', width: 100},
-            {label: "停时", name: 'ts', index: 'ts', width: 50},
-            
-            //{label: "车数", name: 'cheshu', index: 'cheshu', width: 30},
-            //{label: "车辆信息", name: 'clsj', index: 'clsj', width: 12}, //formatter: editLink}
+            //{label: "中停时", name: 'zts', index: 'zts', width: 55,sortable: false},
+            {label: "中转车数", name: 'zzcs', index: 'zzcs', width: 93,sortable: false},
+            {label: "中时", name: 'zs', index: 'zs', width: 67,sortable: false},
+            {label: "作业次数", name: 'zycs', index: 'zycs', width: 93,sortable: false},
+            {label: "停时", name: 'ts', index: 'ts', width: 67,sortable: false},
           
  		],
+ 		loadComplete:function(){
+ 			var dataRow4 = {
+ 		             "zts" : "",
+ 		             "zzcs" : "",
+ 		             "zs" : "",
+ 		             "zycs" : "",
+ 		             "ts" : "",      
+ 		    };
+ 		    $("#table4").jqGrid("addRowData", '-4', dataRow4, "first");
+ 		   $("#table4").jqGrid('setLabel','rn', '序号', {'text-align':'center','vertical-align':'middle'},'');
+ 		},
  	    contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
         //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
         rowList: [10, 25, 50,100],//可调整每页显示的记录数 
-        rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
+        rownumbers: true,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
         sortname: 'gdjm',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
         sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
          //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
@@ -330,16 +447,34 @@ function e(){
         postData:{tableName:"bjh_pkjh"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 660,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        //height: $(window).height()*0.13,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+        height: 100,
+       // autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "车种", name: 'cz', index: 'cz', width: 50},
-            {label: "车数", name: 'cs', index: 'cs', width: 50},
-            {label: "排空车次", name: 'pkcc', index: 'pkcc', width: 65},
-            {label: "空车来源", name: 'kcly', index: 'kcly', width: 60},
+            {label: "车种", name: 'cz', index: 'cz', width: 50,sortable: false},
+            {label: "车数", name: 'cs', index: 'cs', width: 50,sortable: false},
+            {label: "排空车次", name: 'pkcc', index: 'pkcc', width: 68,sortable: false},
+            {label: "空车来源", name: 'kcly', index: 'kcly', width: 68,sortable: false},
           
  		],
+ 		loadComplete:function(){
+			$("td").css("text-align", "center");
+ 			var dataRow5 = {
+ 		             "cz" : "",
+ 		             "cs" : "",
+ 		             "pkcc" : "",
+ 		             "kcly" : "",
+ 		                
+ 		     };
+ 		     //$("#table5").jqGrid("addRowData", '-5', dataRow5, "first");
+ 		    var count = $("#table5").getGridParam("reccount");//当前有几行
+            while(count<4){
+          	  count+=1;
+          	  $("#table5").jqGrid("addRowData", '-88', dataRow5, "last");
+         	  }
+           
+ 		},
  	    contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
@@ -401,27 +536,50 @@ function f(){
         postData:{tableName:"bjh_xcjh"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 560,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        //height: $(window).height()*0.22,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+ 		height: 208,
+ 		width: 600,
+        //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "卸车地点", name: 'xcdd', index: 'xcdd', width: 55},
-            {label: "车种", name: 'cz', index: 'cz', width: 50},
-            {label: "车数", name: 'cs', index: 'cz', width: 50},
-            {label: "到达车次", name: 'ddcc', index: 'ddcc', width: 55},
-            {label: "卸后安排", name: 'xhap', index: 'xhap', width: 55},
-            {label: "装车地点", name: 'zcdd', index: 'zcdd', width: 50},
-            {label: "去向", name: 'qx', index: 'qx', width: 50},
-            {label: "车种", name: 'cz', index: 'cz', width: 50},
-            {label: "车数", name: 'cs', index: 'cs', width: 50},
-            {label: "空车来源", name: 'kcly', index: 'kcly', width: 55},
-            {label: "挂运车次", name: 'gycc', index: 'gycc', width: 55},
-            
-        
+            {label: "卸车<br>地点", name: 'xcdd', index: 'xcdd', width: 50,sortable: false,align: 'center'},
+            {label: "车种", name: 'cz', index: 'cz', width: 50,sortable: false},
+            {label: "车数", name: 'cs', index: 'cz', width: 50,sortable: false},
+            {label: "到达<br>车次", name: 'ddcc', index: 'ddcc', width: 50,sortable: false},
+            {label: "卸后<br>安排", name: 'xhap', index: 'xhap', width: 50,sortable: false},
+            {label: "装车<br>地点", name: 'zcdd', index: 'zcdd', width: 50,sortable: false},
+            {label: "去向", name: 'qx', index: 'qx', width: 47,sortable: false},
+            {label: "车种", name: 'cz', index: 'cz', width: 47,sortable: false},
+            {label: "车数", name: 'cs', index: 'cs', width: 47,sortable: false},
+            {label: "空车<br>来源", name: 'kcly', index: 'kcly', width: 50,sortable: false},
+            {label: "挂运<br>车次", name: 'gycc', index: 'gycc', width: 50,sortable: false},
             //{label: "车数", name: 'cheshu', index: 'cheshu', width: 30},
             //{label: "车辆信息", name: 'clsj', index: 'clsj', width: 12}, //formatter: editLink}
           
  		],
+ 		loadComplete:function(){
+ 			var dataRow6 = {
+ 		             "xcdd" : "",
+ 		             "cz" : "",
+ 		             "cs" : "",
+ 		             "ddcc" : "",
+ 		             "xhap" : "",
+ 		             "zcdd" : "",
+ 		             "qx" : "",
+ 		             "cz" : "",
+ 		             "cs" : "",
+ 		             "kcly" : "",
+ 		             "gycc" : "",
+ 		             
+ 		      };
+ 		      $("#table6").jqGrid("addRowData", '-6', dataRow6, "first");
+ 		     var count = $("#table6").getGridParam("reccount");//当前有几行
+             while(count<8){
+           	  count+=1;
+             
+           	  $("#table6").jqGrid("addRowData", '-6', dataRow6, "last");
+          	  }
+ 		},
  	    contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
@@ -484,16 +642,32 @@ function g(){
         postData:{tableName:"tdcs_recvtrain"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 780,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        //height: $(window).height()*0.03,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+       height: 21,
+       // autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "到达列数", name: 'trainrstype', index: 'trainrstype', width: 50},
-            {label: "出发列数", name: 'trainid', index: 'trainid', width: 50},
-            {label: "解体列数", name: 'trainid1', index: 'trainid1', width: 65},
-            {label: "编组列数", name: 'trainid2', index: 'trainid2', width: 60},
+            {label: "到达<br>列数", name: 't1', index: 't1', width: 38,sortable: false},
+            {label: "出发<br>列数", name: 't2', index: 't2', width: 38,sortable: false},
+            {label: "解体<br>列数", name: 't3', index: 't3', width: 38,sortable: false},
+            {label: "编组<br>列数", name: 't4', index: 't4', width: 38,sortable: false},
+            {label: "中转<br>车数", name: 't5', index: 't5', width: 37,sortable: false},
+            {label: "作业<br>次数", name: 't6', index: 't6', width: 37,sortable: false},
           
  		],
+ 		loadComplete:function(){
+ 			var dataRow7 = {
+ 		             "t1" : "",
+ 		             "t2" : "",
+ 		             "t3" : "",
+ 		             "t4" : "",
+ 		             "t5" : "",
+ 		             "t6" : "",
+ 		    };
+ 		    $("#table7").jqGrid("addRowData", 'orz', dataRow7, "first");
+ 		   	var newHeight = $("#biao1").height();
+ 		  	$("#table7").css("cssText","height: "+newHeight+"px!important;")
+ 		},
  	    contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
@@ -540,6 +714,12 @@ function g(){
          //ondblClickRow: function(){	btn_detail(); },
 		     
 	     });
+	jQuery("#table7").jqGrid('setGroupHeaders', {
+        useColSpanStyle: true, 
+        groupHeaders:[
+        {startColumnName: 't1', numberOfColumns: 6, titleText: '班工作总任务'},
+        ]  
+      });
 }
 function h(){
 	$("#table8").jqGrid({
@@ -547,16 +727,28 @@ function h(){
         postData:{tableName:"tdcs_recvtrain"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 780,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        //height: $(window).height()*0.03,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+        height: 21,
+        //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "卸车数", name: 'trainrstype', index: 'trainrstype', width: 50},
-            {label: "装车数", name: 'trainid', index: 'trainid', width: 50},
-            {label: "排空数", name: 'trainid1', index: 'trainid1', width: 65},
-            {label: "办理车数", name: 'trainid2', index: 'trainid2', width: 60},
-          
+            {label: "卸车数", name: 'tr1', index: 'tr1', width: 38,sortable: false},
+            {label: "装车数", name: 'tr2', index: 'tr2', width: 38,sortable: false},
+            {label: "排空数", name: 'tr3', index: 'tr3', width: 38,sortable: false},
+            {label: "办理数", name: 'tr4', index: 'tr4', width: 38,sortable: false},
+            {label: "中时", name: 'tr5', index: 'tr5', width: 37,sortable: false},
+            {label: "停时", name: 'tr6', index: 'tr6', width: 37,sortable: false},
  		],
+ 		loadComplete:function(){
+ 			var dataRow8 = {
+ 		             "tr1" : "",
+ 		             "tr2" : "",
+ 		             "tr3" : "",
+ 		             "tr4" : "", 
+ 		      };
+ 		      $("#table8").jqGrid("addRowData", '-8', dataRow8, "first");
+ 		     $("table8").height=$("table8").height+5;
+ 		},
  	    contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
@@ -569,7 +761,8 @@ function h(){
         shrinkToFit: false,
         //构造一行数据后添加到grid中，如果设为true则是将整个表格的数据都构造完成后再添加到grid中
         gridview: true,
-        
+        fitColumns :true,
+ 	    scrollbarSize:0,
        jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
 		         id: "id", //行id，相当于设置主键
 		         root:"rows", //数据行.默认为rows; Json数据:JsonArray. 
@@ -610,15 +803,28 @@ function i(){
         postData:{tableName:"tdcs_recvtrain"}, 
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
-        height: $(window).height() - 680,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
+        //height: $("#biao1").height()*0.17,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
+        height: 79,
+        //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-            {label: "重点指示", name: 'trainrstype', index: 'trainrstype', width: 255},
+            {label: "重点指示", name: 'type', index: 'type', width: 251,height:251,sortable: false},
            
           
  		],
- 	    contentType : 'application/json',
+ 		fitColumns :true,
+ 	    scrollbarSize:0,
+ 		loadComplete:function(){
+ 			$("#table9 td").css("height", "40px");
+ 			var dataRow9 = {
+		             "type" : "",
+		             
+		      };
+		      //$("#table9").jqGrid("addRowData", '-9', dataRow9, "first");
+		     
+	              
+ 		},
+ 		contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
         //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
@@ -665,61 +871,117 @@ function i(){
 		     
 	     });
 }
+var stnum = $.cookie("USERNAME");
+var testname = $.cookie("TESTNAME");
+var where = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
 $(document).ready(function(){
-	a();
+	a(where);
 	b();
 	c();
-	d();
+	//d();
 	e();
 	f();
 	g();
 	h();
 	i();
+	var dataRow9 = {
+			"type" : "1.30052次接续30138次任务紧，加强组织工作<br>2.夜间天气不良加强卸车组织，注意安全",
+	};
+	$("#table9").jqGrid("addRowData", '-9', dataRow9, "first");
 	$("#table1").attr("contenteditable",true);
 	$("#table2").attr("contenteditable",true);
 	$("#table3").attr("contenteditable",true);
 	$("#table4").attr("contenteditable",true);
-	$("#table5").attr("contenteditable",true);
+	//$("#table5").attr("contenteditable",true);
 	$("#table6").attr("contenteditable",true);
 	$("#table7").attr("contenteditable",true);
 	$("#table8").attr("contenteditable",true);
 	$("#table9").attr("contenteditable",true);
-	$("#table1").css("backgroundColor","#8cceee");
-	$("#table2").css("backgroundColor","#8cceee");
-	$("#table3").css("backgroundColor","#8cceee");
-	$("#table4").css("backgroundColor","#8cceee");
-	$("#table5").css("backgroundColor","#8cceee");
-	$("#table6").css("backgroundColor","#8cceee");
-	$("#table7").css("backgroundColor","#8cceee");
-	$("#table8").css("backgroundColor","#8cceee");
-	$("#table9").css("backgroundColor","#8cceee");
+	$("#table1 tr").eq(0).attr("contenteditable",false);
+	$("#table2 tr").eq(0).attr("contenteditable",false);
+	$("#table3 tr").eq(0).attr("contenteditable",false);
+	$("#table4 tr").eq(0).attr("contenteditable",false);
+	$("#table5 tr").eq(0).attr("contenteditable",false);
+	$("#table6 tr").eq(0).attr("contenteditable",false);
+	$("#table7 tr").eq(0).attr("contenteditable",false);
+	$("#table8 tr").eq(0).attr("contenteditable",false);
+	$("#table9 tr").eq(0).attr("contenteditable",false);
+	$("#table1 tr").eq(3).attr("background-color","blue");
+	
+
+	var dataRow7 = {
+             "t1" : "16",
+             "t2" : "17",
+             "t3" : "8",
+             "t4" : "9",
+	     "t5" : "816",
+	     "t6" : "99",
+    };
+    $("#table7").jqGrid("addRowData", '-7', dataRow7, "first");
+    var dataRow8 = {
+             "tr1" : "60",
+             "tr2" : "39",
+             "tr3" : "20",
+             "tr4" : "1761",
+	     "tr5" : "2.2",
+	     "tr6" : "6.8", 
+     };
+     $("#table8").jqGrid("addRowData", '-8', dataRow8, "first");
+     var dataRow4 = {
+	             "zts" : "",
+	             "zzcs" : "",
+	             "zs" : "",
+	             "zycs" : "",
+	             "ts" : "",      
+	  };
+	  
 });
+
 
 </script>
 <style>
-body{
-	overflow:scroll;
+.ui-jqgrid .ui-jqgrid-bdiv{ overflow: hidden;} 
+#table1.ui-row-ltr{
+height:160px !important;
 }
-
+#table1{
+text-align:right;
+}
+#table9 td{
+	height:80px;
+}
 #biao1{
-	height:25rem;
-	width:45%;
+	height:650px;
+	width:784.5px;
 	float:left;
+
 }
 #biao2{
 
-	height:25rem;
-	width:22%;
+	width:335.5px;
 	float:left;
 }
 #biao3{
-
-	height:25rem;
-	width:32%;
+	width:327px;
 	float:left;
 }
-#table1{
-	//overflow:scroll;
+#biao4{
+	width:300px;
+	float:left;
+}
+#biao5{
+
+	width:200px;
+	float:left;
+}
+#zhedang{
+	width:20px;
+	
+	background-color:blue;
+	height:100px;
+}
+button{
+	width:8 rem;
 }
 .t1{
 	//background:blue;
@@ -757,7 +1019,7 @@ body{
 	margin: 15px 0;
 	border: 0;
 	border-collapse: collapse;
-	//overflow: scroll;
+	
 	writing-mode : lr-tb；
 }
 
@@ -794,11 +1056,84 @@ body{
 	height: 20%;
 	overflow: hidden;
 }
+.button.small{
+  padding: 4px 12px;
+}
+.button::-moz-focus-inner{
+  border: 0;
+  padding: 0;
+}
 
+.button{
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  padding: 6px 20px;
+  margin: 0;
+  cursor: pointer;
+  border: 1px solid #bbb;
+  overflow: visible;
+  font: bold 13px arial, helvetica, sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  color: #555;
+  
+  background-color: #ddd;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,1)), to(rgba(255,255,255,0)));
+  background-image: -webkit-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+  background-image: -moz-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+  background-image: -ms-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+  background-image: -o-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+  background-image: linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+  
+  -webkit-transition: background-color .2s ease-out;
+  -moz-transition: background-color .2s ease-out;
+  -ms-transition: background-color .2s ease-out;
+  -o-transition: background-color .2s ease-out;
+  transition: background-color .2s ease-out;
+  background-clip: padding-box; /* Fix bleeding */
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+  text-shadow: 0 1px 0 rgba(255,255,255, .9);
+  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.button:hover{
+  background-color: #eee;
+  color: #555;
+}
+
+.button:active{
+  background: #e9e9e9;
+  position: relative;
+  top: 1px;
+  text-shadow: none;
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+}
+th.ui-th-column div{
+    white-space:normal !important;
+    height:auto !important;
+    padding:0px;
+}
+.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight{border:none #dddddd;background:#FFFFFF;color:#000000}.ui-state-highlight a
 </style>
 
-
-<h1 align="center">班计划大表编制</h1>
+<div id="header">
+<!-- h1 align="center" style="font-size:20px">班计划大表编制</h1>
+<br-->
+<br/>
 <p align="center">
 <form action="bjh.jsp" method="post" align="center">
 <input style="display: none"name="zj" id="sub1"/>
@@ -857,8 +1192,12 @@ body{
 <input style="display: none"name="QX" id="QX"/>
 <input style="display: none"name="KCLY1" id="KCLY1"/>
 <input style="display: none"name="GYCC" id="GYCC"/>
-<button type="submit" onclick="save()">保存</button><button>提交</button>
-</form></p>
+<input style="display: none"name="CZ2" id="CZ2"/>
+<input style="display: none"name="CS2" id="CS2"/>
+<!-- button type="submit" class="small button" onclick="save()">保存</button-->
+<button type="button" class="small button" onclick="save()">保存</button>
+</form>
+<!-- br>
 <script>
 setInterval("document.getElementById('time').innerHTML=new Date().toLocaleString();", 1000);
 </script>
@@ -871,130 +1210,225 @@ setInterval("document.getElementById('time').innerHTML=new Date().toLocaleString
 <span>姓名:</span>&nbsp&nbsp&nbsp&nbsp
 <span>学号:</span>&nbsp&nbsp&nbsp&nbsp
 <span>实训编号:</span>&nbsp&nbsp&nbsp&nbsp
+</div-->
 </div>
-<div style="background-color:#0080ff;width:71rem;text-align:center;height:1.5rem;float:left">
-<span style="background-color:#0080ff;">列车到达计划</span>
+<!-- div>
+<div style="background-color:#f6f6f6;width:43.5%;text-align:center;height:1.5rem;float:left" >
+<span style="background-color:#f6f6f6;">列车到达计划</span>
 </div>
-<div style="width:1rem;height:1.5rem;float:left">
+<div style="width:0.5%;height:1.5rem;float:left">
 <span></span>
 </div>
-<div style="background-color:#0080ff;width:34rem;text-align:center;height:1.5rem;float:left">
-<span style="background-color:#0080ff;">列车出发计划</span>
+<div style="background-color:#f6f6f6;width:20.5%;text-align:center;height:1.5rem;float:left">
+<span style="background-color:#f6f6f6;">列车出发计划</span>
 </div>
-<div style="width:1rem;height:1.5rem;float:left">
+<div style="width:0.5%;height:1.5rem;float:left">
 <span></span>
 </div>
-<div style="background-color:#0080ff;width:31.5rem;text-align:center;height:1.5rem;float:left">
-<span style="background-color:#0080ff;">推算中停时间</span>
+<div style="background-color:#f6f6f6;width:19.2%;text-align:center;height:1.5rem;float:left">
+<span style="background-color:#f6f6f6;">推算中停时间</span>
 </div>
-<div style="width:0.5rem;height:1.5rem;float:left">
+<div style="width:0.2%;height:1.5rem;float:left">
 <span></span>
 </div>
-<div style="background-color:#0080ff;width:20rem;text-align:center;height:1.5rem;float:left">
-<span style="background-color:#0080ff;">班工作总任务</span>
+<div style="background-color:#f6f6f6;width:13%	;text-align:center;height:1.5rem;float:left">
+<span style="background-color:#f6f6f6;">班工作总任务</span>
+</div>
 </div>
 <!-- div ></div-->
-<div id="biao1"><table id="table1"></table></div>
-<div id="biao2"><table id="table2"></table></div>
-<div id="biao3">
-<table>
-<tr>
-<td rowspan="2" colspan="2"><div class="t1"><table id="table3"></table></div></td>
-<td><div class="t2">
-<table id="table7"></table>
-<table id="table8"></table>
-<table id="table9"></table>
-</div>
-</td>
-</tr>
-<tr>
-<td rowspan="2"><div class="t4">..................................................................................<table id="table5"></table></div>
-</td>
-</tr>
-<tr>
-<td colspan="2"><div class="t3"><table id="table4"></table>.................................................................................................................</div></td>
-</tr>
-<tr><td colspan="3"><div class="t5"><table id="table6"></table></div></td></tr>
-</table>
-	
-</div>
-<script type="text/javascript">
-function save(){
 
-	var data = getTableContent('table1');
+<!-- div style="overflow:scroll"-->
+<div style="padding:2px;overflow: auto; width:1800px; margin-bottom: 17px;" id="container">
+	<div id="biao1"><table id="table1"></table></div>
+
+	<div id="biao2"><table id="table2"></table></div>
+
+	<div id="biao3" >
+		<div><table id="table3"></table></div>
+		<div><table id="table4"></table></div>
+	</div>
+	<div id="biao4">
+		<div><table id="table7"></table></div>
+		<div><table id="table8"></table></div>
+		<div><table id="table9" data-options="fitColumns:true,scrollbarSize:0"></table></div>
+		<div><table id="table5"></table></div>
+	</div>
+	<div id="biao5">
+		<table id="table6"></table>
+	</div>
 	
-    document.getElementById("sub1").value=data[0][0];
-    document.getElementById("s1").value=data[0][1];
-    document.getElementById("s2").value=data[0][2];
-    document.getElementById("s3").value=data[0][3];
-    document.getElementById("D1").value=data[0][4];
-    document.getElementById("D2").value=data[0][5];
-    document.getElementById("D3").value=data[0][6];
-    document.getElementById("D4").value=data[0][7];
-    document.getElementById("D5").value=data[0][8];
-    document.getElementById("D6").value=data[0][9];
-    document.getElementById("D7").value=data[0][10];
-    document.getElementById("D8").value=data[0][11];
-    document.getElementById("D9").value=data[0][12];
-    document.getElementById("D10").value=data[0][13];
-    document.getElementById("KC").value=data[0][14];
-    document.getElementById("D11").value=data[0][15];
-    document.getElementById("HJ").value=data[0][16];
+</div>
+<!-- /div-->
+<script type="text/javascript">
+function change(){
+	var mytable = document.getElementById("table1");
+	var data = [];//将表格内容存入到数组中
+	for(var i=0,rows=mytable.rows.length; i<rows; i++){
+	    for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
+	        if(!data[i]){
+	            data[i] = new Array();
+	        }
+	        data[i][j] = mytable.rows[i].cells[j].innerHTML;
+	    }
+	}
+	for(i=0;i<data[1].length;i++){
+		data[1][i]=data[1][i].replace(/&nbsp;/,"");
+	}
+	for(var j=0;j<data.length;j++){
+		for(var i=0;i<data[1].length;i++){
+			if(data[j][i]=="0")
+				mytable.rows[j].cells[i].innerHTML="";
+			else if(data[j][i]=="E")
+				mytable.rows[j].cells[i].innerHTML="乙";
+			else if(data[j][i]=="W")
+				mytable.rows[j].cells[i].innerHTML="丙";
+			else if(data[j][i]=="N")
+				mytable.rows[j].cells[i].innerHTML="甲";
+			else if(data[j][i]=="S")
+				mytable.rows[j].cells[i].innerHTML="丁";
+		}
+	}
+}
+function change2(){
+	var mytable = document.getElementById("table2");
+	var data = [];//将表格内容存入到数组中
+	for(var i=0,rows=mytable.rows.length; i<rows; i++){
+	    for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
+	        if(!data[i]){
+	            data[i] = new Array();
+	        }
+	        data[i][j] = mytable.rows[i].cells[j].innerHTML;
+	    }
+	}
+	for(i=0;i<data[1].length;i++){
+		data[1][i]=data[1][i].replace(/&nbsp;/,"");
+	}
+	for(var j=0;j<data.length;j++){
+		for(var i=0;i<data[1].length;i++){
+			
+			if(data[j][i]=="E")
+				mytable.rows[j].cells[i].innerHTML="乙";
+			else if(data[j][i]=="W")
+				mytable.rows[j].cells[i].innerHTML="丙";
+			else if(data[j][i]=="N")
+				mytable.rows[j].cells[i].innerHTML="甲";
+			else if(data[j][i]=="S")
+				mytable.rows[j].cells[i].innerHTML="丁";
+		}
+	}
+}
+$("#table1").css("text-align", "center");
+function save(){
+	var data = getTableContent('table1');
+	for(i=0;i<data[1].length;i++){
+		data[1][i]=data[1][i].replace(/&nbsp;/,"");
+	}
+    document.getElementById("sub1").value=data[1][0];
+    document.getElementById("s1").value=data[1][1];
+    document.getElementById("s2").value=data[1][2];
+    document.getElementById("s3").value=data[1][3];
+    document.getElementById("D1").value=data[1][4];
+    document.getElementById("D2").value=data[1][5];
+    document.getElementById("D3").value=data[1][6];
+    document.getElementById("D4").value=data[1][7];
+    document.getElementById("D5").value=data[1][8];
+    document.getElementById("D6").value=data[1][9];
+    document.getElementById("D7").value=data[1][10];
+    document.getElementById("D8").value=data[1][11];
+    document.getElementById("D9").value=data[1][12];
+    document.getElementById("D10").value=data[1][13];
+    document.getElementById("KC").value=data[1][14];
+    document.getElementById("D11").value=data[1][15];
+    document.getElementById("HJ").value=data[1][16];
     
     var data1 = getTableContent('table2');
-    document.getElementById("SU1").value=data1[0][0];
-    document.getElementById("SU2").value=data1[0][1];
-    document.getElementById("SU3").value=data1[0][2];
-    document.getElementById("SU4").value=data1[0][3];
-    document.getElementById("SU5").value=data1[0][4];
+    for(i=0;i<data1[1].length;i++){
+		data1[1][i]=data1[1][i].replace(/&nbsp;/,"");
+	}
+    document.getElementById("SU1").value=data1[1][0];
+    document.getElementById("SU2").value=data1[1][1];
+    document.getElementById("SU3").value=data1[1][2];
+    document.getElementById("SU4").value=data1[1][3];
+    document.getElementById("SU5").value=data1[1][4];
 	
+    var temp="";
     var data2 = getTableContent('table3');
-
-    document.getElementById("SJ").value=data2[0][0];
-    document.getElementById("ZSDD").value=data2[0][1];
-    document.getElementById("ZSCF").value=data2[0][2];
-    document.getElementById("ZSJC").value=data2[0][3];
-    document.getElementById("ZTDD").value=data2[0][4];
-    document.getElementById("ZTCF").value=data2[0][5];
-    document.getElementById("ZTJC").value=data2[0][6];
+    for(i=0;i<data2[1].length;i++){
+		for(j=0;j<13;j++){
+			data2[j][i]=data2[j][i].replace(/&nbsp;/,"");
+			temp=temp+data2[j][i]+"/";
+		}
+		temp+="$";
+	}
+  
+    //document.getElementById("SJ").value=data2[1][0];
+    document.getElementById("ZSDD").value=data2[1][1];
+    document.getElementById("ZSCF").value=data2[1][2];
+    document.getElementById("ZSJC").value=data2[1][3];
+    document.getElementById("ZTDD").value=data2[1][4];
+    document.getElementById("ZTCF").value=data2[1][5];
+    document.getElementById("ZTJC").value=data2[1][6];
     
-    var data3 = getTableContent('table4');
-    document.getElementById("ZTS").value=data3[0][0];
-    document.getElementById("ZZCS").value=data3[0][1];
-    document.getElementById("ZS").value=data3[0][2];
-    document.getElementById("ZYCS").value=data3[0][3];
-    document.getElementById("TS").value=data3[0][4];
+    /*var data3 = getTableContent('table4');
+    for(i=0;i<data3[1].length;i++){
+		data3[1][i]=data3[1][i].replace(/&nbsp;/,"");
+	}
+    document.getElementById("ZTS").value=data3[1][0];
+    document.getElementById("ZZCS").value=data3[1][1];
+    document.getElementById("ZS").value=data3[1][2];
+    document.getElementById("ZYCS").value=data3[1][3];
+    document.getElementById("TS").value=data3[1][4];*/
 	
     var data4 = getTableContent('table7');
     var data5 = getTableContent('table8');
     var data6 = getTableContent('table9');
-    document.getElementById("DDLS").value=data4[0][0];
-    document.getElementById("CFLS").value=data4[0][1];
-    document.getElementById("JTLS").value=data4[0][2];
-    document.getElementById("BZLS").value=data4[0][3];
-    document.getElementById("XCS").value=data5[0][0];
-    document.getElementById("ZCS").value=data5[0][1];
-    document.getElementById("PKS").value=data5[0][2];
-    document.getElementById("BLCS").value=data5[0][3];
-    document.getElementById("ZDZS").value=data6[0][0];
+    for(i=0;i<data4[1].length;i++){
+		data4[1][i]=data4[1][i].replace(/&nbsp;/,"");
+	}
+    for(i=0;i<data5[1].length;i++){
+		data5[1][i]=data5[1][i].replace(/&nbsp;/,"");
+	}
+    for(i=0;i<data6[1].length;i++){
+		data6[1][i]=data6[1][i].replace(/&nbsp;/,"");
+	}
+    document.getElementById("DDLS").value=data4[1][0];
+    document.getElementById("CFLS").value=data4[1][1];
+    document.getElementById("JTLS").value=data4[1][2];
+    document.getElementById("BZLS").value=data4[1][3];
+    document.getElementById("ZZCS").value=data4[1][4];
+    document.getElementById("ZYCS").value=data4[1][5];
+    document.getElementById("XCS").value=data5[1][0];
+    document.getElementById("ZCS").value=data5[1][1];
+    document.getElementById("PKS").value=data5[1][2];
+    document.getElementById("BLCS").value=data5[1][3];
+    document.getElementById("ZS").value=data5[1][4];
+    document.getElementById("TS").value=data5[1][5];
+    document.getElementById("ZDZS").value=data6[1][0];
     
     var data7 = getTableContent('table5');
-    document.getElementById("CZ").value=data7[0][0];
-    document.getElementById("CS").value=data7[0][1];
-    document.getElementById("PKCC").value=data7[0][2];
-    document.getElementById("KCLY").value=data7[0][3];
-    
+    for(i=0;i<data7[1].length;i++){
+		data7[1][i]=data7[1][i].replace(/&nbsp;/,"");
+	}
+    document.getElementById("CZ").value=data7[1][0];
+    document.getElementById("CS").value=data7[1][1];
+    document.getElementById("PKCC").value=data7[1][2];
+    document.getElementById("KCLY").value=data7[1][3];
+
     var data8 = getTableContent('table6');
-    alert(data8);
-    document.getElementById("XCDD").value=data8[0][0];
-    document.getElementById("CZ1").value=data8[0][1];
-    document.getElementById("CS1").value=data8[0][2];
-    document.getElementById("DDCC").value=data8[0][3];
-    document.getElementById("XHAP").value=data8[0][4];
-    document.getElementById("ZCDD").value=data8[0][5];
-    document.getElementById("QX").value=data8[0][6];
-    document.getElementById("KCLY1").value=data8[0][7];
-    document.getElementById("GYCC").value=data8[0][8];
+    for(i=0;i<data8[1].length;i++){
+		data8[1][i]=data8[1][i].replace(/&nbsp;/,"");
+	}
+    document.getElementById("XCDD").value=data8[1][0];
+    document.getElementById("CZ1").value=data8[1][1];
+    document.getElementById("CS1").value=data8[1][2];
+    document.getElementById("DDCC").value=data8[1][3];
+    document.getElementById("XHAP").value=data8[1][4];
+    document.getElementById("ZCDD").value=data8[1][5];
+    document.getElementById("QX").value=data8[1][6];
+    document.getElementById("KCLY1").value=data8[1][9];
+    document.getElementById("GYCC").value=data8[1][10];
+    document.getElementById("CZ2").value=data8[1][7];
+    document.getElementById("CS2").value=data8[1][8];
 }
 function getTableContent(ID){
     var mytable = document.getElementById(ID);
@@ -1007,9 +1441,24 @@ function getTableContent(ID){
             data[i][j] = mytable.rows[i].cells[j].innerHTML;
         }
     }
-    
+    mytable.rows[1].cells[1].rowspan=3;
     return data;
 }
+function save1(){
+	var data = getTableContent('table1');
+	//data[1][0]=data[1][0].replace(/&nbsp;/,"");
+	//data[1][0]=data[1][0].replace(/&nbsp;/,"");
+	//alert(data[1][0]);
+	for(i=0;i<data[1].length;i++){
+		data[1][i]=data[1][i].replace(/&nbsp;/,"");
+	}
+	alert(data[1][0]);
+	alert(data[1][1]);
+	alert(data[1][2]);
+	//alert(data[1][1]);
+}
+
+ 
 </script>
 </body>
 </html>

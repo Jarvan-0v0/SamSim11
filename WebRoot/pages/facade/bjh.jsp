@@ -63,6 +63,8 @@ String KCLY = new String(request.getParameter("KCLY").getBytes("iso-8859-1"), "u
 String XCDD = new String(request.getParameter("XCDD").getBytes("iso-8859-1"), "utf-8");
 String CZ1 = new String(request.getParameter("CZ1").getBytes("iso-8859-1"), "utf-8");
 String CS1 = new String(request.getParameter("CS1").getBytes("iso-8859-1"), "utf-8");
+String CZ2 = new String(request.getParameter("CZ2").getBytes("iso-8859-1"), "utf-8");
+String CS2 = new String(request.getParameter("CS2").getBytes("iso-8859-1"), "utf-8");
 String DDCC = new String(request.getParameter("DDCC").getBytes("iso-8859-1"), "utf-8");
 String XHAP = new String(request.getParameter("XHAP").getBytes("iso-8859-1"), "utf-8");
 String ZCDD = new String(request.getParameter("ZCDD").getBytes("iso-8859-1"), "utf-8");
@@ -72,7 +74,7 @@ String GYCC = new String(request.getParameter("GYCC").getBytes("iso-8859-1"), "u
 
 User u=new User();
 u.setZJ(zj);
-u.setFX(fx);
+/*u.setFX(fx);
 u.setCC(cc);
 u.setDDSK(ddsk);
 u.setD1(d1);
@@ -92,7 +94,7 @@ u.setFX1(SU1);
 u.setCC1(SU2);
 u.setCFSK1(SU3);
 u.setBNCL1(SU4);
-u.setHJ1(SU5);
+u.setHJ1(SU5);*/
 u.setSJ(SJ);
 u.setZSDD(ZSDD);
 u.setZSCF(ZSCF);
@@ -127,13 +129,16 @@ u.setZCDD(ZCDD);
 u.setQX(QX);
 u.setKCLY1(KCLY1);
 u.setGYCC(GYCC);
+u.setCZ2(CZ2);
+u.setCS2(CS2);
 UserDao ud=new UserDao();
 ud.insert(u);
+
 %>
-<%=XCDD %>
+<div><%=PKCC %></div>
 <script>
-alert("111");
-//window.location.href="bjh.html";
+//alert(document.getElementById("XCDD").value);
+window.location.href="bjh.html";
 </script>
 </body>
 </html>

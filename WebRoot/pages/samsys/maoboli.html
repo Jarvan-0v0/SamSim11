@@ -37,6 +37,8 @@
 <script type="text/javascript">
     var objData = {};
     var stnum = $.cookie("USERNAME");
+    var testname = $.cookie("TESTNAME");
+    var where = "(stnum = '" + stnum + "' OR stnum IS NULL) AND (testname = '" + testname + "' OR testname IS NULL) GROUP BY GDH";
     $(document).ready(function () {
     	getTrainData();
     	GetGrid(); //加载表格      
@@ -46,7 +48,7 @@
     function GetGrid() {
 	   $("#gridTable").jqGrid({
 		    url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maoboli", stnum:stnum}, 
+            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maoboli", where:where}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 56,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -113,7 +115,8 @@
      
     //获取dbml信息
     function getTrainData() {
-    	getAjaxJson("/initSamSystem.do", {tableName:"cch_dbml",stnum:stnum, rows:100, page:1}, function (data){
+    	var where2 = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+    	getAjaxJson("/initSamSystem.do", {tableName:"cch_dbml",where:where2, rows:100, page:1}, function (data){
         	objData = data;
 	    });
 	}
