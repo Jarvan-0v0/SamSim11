@@ -129,8 +129,8 @@ u.setZCDD(ZCDD);
 u.setQX(QX);
 u.setKCLY1(KCLY1);
 u.setGYCC(GYCC);
-u.setCZ2(CZ2);
-u.setCS2(CS2);
+//u.setCZ2(CZ2);
+//u.setCS2(CS2);
 UserDao ud=new UserDao();
 ud.insert(u);
 

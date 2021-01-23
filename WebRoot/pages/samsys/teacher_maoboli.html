@@ -36,12 +36,17 @@
 <body><div>
 <script type="text/javascript">
 	var objData = {};
-	var cch_dbml = "cch_dbml_1";
-	var cch_dbzw = "cch_dbzw_1";
+	var selectData = {};
+	var cch_dbml = "cch_dbml";
+	var cch_dbzw = "cch_dbzw";
+	var testname = "";
+	var stnum = $.cookie("USERNAME");
     $(document).ready(function () {
     	getTestName();
-    	getTrainData("cch_dbml_1");
-    	GetGrid(); //加载表格      
+        var where = "(stnum = '" + stnum + "' OR stnum IS NULL) AND (testname = '" + testname + "' OR testname IS NULL)";
+    	getTrainData(where);
+    	where += " GROUP BY GDH";
+    	GetGrid(where); //加载表格      
         BindSelectItem(); 	//下拉框
     });
 
@@ -54,21 +59,23 @@
   	function getTestName() {
 	  	var postData = {tableName:"syt_exprimenttime",queryWhere:"status", keyValue:"1", rows:50, page:1}
 	  	getAjaxJson("/searchSamSystem.do", postData, function (data) {
+	  		selectData = data;
 	  		var str = "";//="<option value=''></option>";		//select框第一个选项为空，这样不选择的时候就是空（null）
 	  		for(var i=0; i<data.records; i++){			//将数据循环插入select框中
 	  			var obj = data.rows[i];
 	        	str+="<option value=" + obj['exprimenttime_id'] + ">" + obj['expriment'] + "</option>";
 	        }
+	  		testname = data.rows[0]['expriment'];
 	        $("#textname").html(str);　
            	
         });
 	}
   
    //加载毛玻璃表格
-    function GetGrid() {
+    function GetGrid(where) {
 	   $("#gridTable").jqGrid({
-            url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"xc_sql_tab", queryWhere:"sql_name", keyValue:"maoboli_1"},
+			url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
+	        postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maoboli", where:where}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 97,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -135,8 +142,8 @@
      
    
   //获取dbml信息
-    function getTrainData(tableName) {
-    	getAjaxJson("/initSamSystem.do", {tableName:tableName, rows:100, page:1}, function (data){
+    function getTrainData(where) {
+    	getAjaxJson("/initSamSystem.do", {tableName:"cch_dbml", where:where, rows:100, page:1}, function (data){
         	objData = data;
 	    });
 	}
@@ -237,26 +244,24 @@
  
  	//改变实验名称
  	function change_text() {
- 		var textname = $("#textname").val();
- 		if (IsChecked(textname)) {
- 			change_MBL(textname);
+ 		var val = $("#textname").val();
+ 		testname = selectData.rows[val-1]['expriment'];
+        var where = "(stnum = '" + stnum + "' OR stnum IS NULL) AND (testname = '" + testname + "' OR testname IS NULL)";
+ 		if (IsCheckedValue(textname)) {
+ 			change_MBL(where);
  		}
 	}
  
  	//改变毛玻璃
- 	function change_MBL(textname) {
- 		var keyValue = "maoboli_" + textname;
- 		cch_dbml = "cch_dbml_" + textname;
- 		cch_dbzw = "cch_dbzw_" + textname;
-        if (IsChecked(textname)) {
-        	getTrainData(cch_dbml);
-        	$("#gridTable").jqGrid('setGridParam',{
-	  			url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
-	  			postData:{tableName:"xc_sql_tab", queryWhere:"sql_name", keyValue:keyValue},
-	         	datatype:'json',               
-	         	page:1 ,
-        	}).trigger('reloadGrid');
-		}
+ 	function change_MBL(where) {
+       	getTrainData(where);
+       	where += " GROUP BY GDH";
+       	$("#gridTable").jqGrid('setGridParam',{
+       		url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maoboli", where:where}, 
+         	datatype:'json',               
+         	page:1 ,
+       	}).trigger('reloadGrid');
  	}
  
 </script>

@@ -27,6 +27,12 @@
 </head>
 <body>
 <script>
+function a2(where){
+	$("#table1").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_lcddjh", where:where}, 
+    	}).trigger('reloadGrid');
+}
 function a(where){
 	 $("#table1").jqGrid({
          url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
@@ -150,6 +156,13 @@ function a(where){
 	$("#" + CellName + "" + rowId + "").attr("colspan", 3);	
 	}
 }
+	 
+function b2(where){
+	$("#table2").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_lccfjh", where:where}, 
+    	}).trigger('reloadGrid');
+}
 function b(where){
 	 $("#table2").jqGrid({
         url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
@@ -241,6 +254,13 @@ function b(where){
 	        {startColumnName: 'fx', numberOfColumns: 5, titleText: '列车出发计划'},
 	        ]  
 	      });
+}
+
+function c2(where){
+	$("#table3").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_tsztsj", where:where}, 
+    	}).trigger('reloadGrid');
 }
 function c(where){
 	$("#table3").jqGrid({
@@ -343,6 +363,13 @@ function c(where){
       });
 
 }
+
+function d2(where){
+	$("#table4").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_zts", where:where}, 
+    	}).trigger('reloadGrid');
+}
 function d(where){
 	$("#table4").jqGrid({
         url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
@@ -419,6 +446,13 @@ function d(where){
 		     
 	     });
 	
+}
+	
+function e2(where){
+	$("#table5").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_pkjh", where:where}, 
+    	}).trigger('reloadGrid');
 }
 function e(where){
 	$("#table5").jqGrid({
@@ -508,6 +542,13 @@ function e(where){
         //{startColumnName: 'zaiz', numberOfColumns: 2, titleText: 'Shiping'}
         ]  
       });
+}
+	
+function f2(where){
+	$("#table6").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_xcjh", where:where}, 
+    	}).trigger('reloadGrid');
 }
 function f(where){
 	$("#table6").jqGrid({
@@ -615,6 +656,13 @@ function f(where){
         ]  
       });
 }
+
+function g2(where){
+	$("#table7").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_bgzzrw", where:where}, 
+    	}).trigger('reloadGrid');
+}
 function g(where){
 	$("#table7").jqGrid({
         url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
@@ -687,6 +735,13 @@ function g(where){
         ]  
       });
 }
+	
+function h2(where){
+	$("#table8").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_bgzzrw", where:where}, 
+    	}).trigger('reloadGrid');
+}
 function h(where){
 	$("#table8").jqGrid({
         url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
@@ -753,6 +808,13 @@ function h(where){
 		     
 	     });
 }
+	
+function i2(where){
+	$("#table9").jqGrid('setGridParam',{
+		url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
+        postData:{tableName:"bjh_bgzzrw", where:where}, 
+    	}).trigger('reloadGrid');
+}
 function i(where){
 	$("#table9").jqGrid({
         url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
@@ -818,9 +880,11 @@ function i(where){
 	     });
 }
 var stnum = $.cookie("USERNAME");
-var testname = $.cookie("TESTNAME");
-var where = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+var selectData = {};
+var testname = "";
 $(document).ready(function(){
+	getTestName();
+	var where = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
 	a(where);
 	b(where);
 	c(where);
@@ -830,15 +894,12 @@ $(document).ready(function(){
 	g(where);
 	h(where);
 	i(where);
-	/* var dataRow9 = {
-			"type" : "1.30052次接续30138次任务紧，加强组织工作<br>2.夜间天气不良加强卸车组织，注意安全",
-	};
-	$("#table9").jqGrid("addRowData", '-9', dataRow9, "first"); */
+	
 	$("#table1").attr("contenteditable",true);
 	$("#table2").attr("contenteditable",true);
 	$("#table3").attr("contenteditable",true);
 	$("#table4").attr("contenteditable",true);
-	//$("#table5").attr("contenteditable",true);
+	$("#table5").attr("contenteditable",true);
 	$("#table6").attr("contenteditable",true);
 	$("#table7").attr("contenteditable",true);
 	$("#table8").attr("contenteditable",true);
@@ -1141,7 +1202,13 @@ th.ui-th-column div{
 <input style="display: none"name="CZ2" id="CZ2"/>
 <input style="display: none"name="CS2" id="CS2"/>
 <!-- button type="submit" class="small button" onclick="save()">保存</button-->
-<button type="button" class="small button" onclick="save()">保存</button>
+<table class="form-find" style="boder: 0px; height: 40px;">
+	<tr>
+		<th class="formTitleLong" style="font-size: 16px;">实训名称：</th>
+	    <td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="textname" class="txtselect" onchange="change_text()"></select></td>
+	    <td><button type="button" class="small button" onclick="save()">保存</button></td>
+	</tr>
+</table> 
 </form>
 <!-- br>
 <script>
@@ -1206,6 +1273,46 @@ setInterval("document.getElementById('time').innerHTML=new Date().toLocaleString
 </div>
 <!-- /div-->
 <script type="text/javascript">
+	//获取所有表格
+	function getTables(where) {
+		
+	}
+
+//获取实验名称
+	function getTestName() {
+  	var postData = {tableName:"syt_exprimenttime",queryWhere:"status", keyValue:"1", rows:50, page:1}
+  	getAjaxJson("/searchSamSystem.do", postData, function (data) {
+  		selectData = data;
+  		var str = "";//="<option value=''></option>";		//select框第一个选项为空，这样不选择的时候就是空（null）
+  		for(var i=0; i<data.records; i++){			//将数据循环插入select框中
+  			var obj = data.rows[i];
+        	str+="<option value=" + obj['exprimenttime_id'] + ">" + obj['expriment'] + "</option>";
+        }
+  		testname = data.rows[0]['expriment'];
+        $("#textname").html(str);　
+       	
+    });
+}
+
+	//改变实验名称
+ 	function change_text() {
+ 		var val = $("#textname").val();
+ 		testname = selectData.rows[val-1]['expriment'];
+        var where = "(stnum = '" + stnum + "' OR stnum IS NULL) AND (testname = '" + testname + "' OR testname IS NULL)";
+ 		if (IsCheckedValue(textname)) {
+ 			a2(where);
+ 			b2(where);
+ 			c2(where);
+ 			//d2(where);
+ 			e2(where);
+ 			f2(where);
+ 			g2(where);
+ 			h2(where);
+ 			i2(where);
+ 		}
+	}
+
+
 function change(){
 	var mytable = document.getElementById("table1");
 	var data = [];//将表格内容存入到数组中

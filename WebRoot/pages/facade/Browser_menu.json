@@ -1,19 +1,21 @@
 ﻿[
 
 {"ModuleId":"10000","ParentId":"root","FullName":"通知管理","Icon":"tongzhi.png","Location":"","Target":"click"},
-{"ModuleId":"11000","ParentId":"10000","FullName":"公告通知","Icon":"gonggao2.png","Location":"http://www.railwills.xyz:8089/wwwroot/new4/teacher/teacher.asp","Target":"iframe"},
-{"ModuleId":"12000","ParentId":"10000","FullName":"我的消息","Icon":"tongzhi2.png","Location":"http://www.railwills.xyz:8089/wwwroot/new4/teacher/message.html","Target":"iframe"},
+{"ModuleId":"11000","ParentId":"10000","FullName":"公告通知","Icon":"gonggao.png","Location":"http://www.bzzxczz.com:8089/wwwroot/new4/teacher/teacher.asp","Target":"iframe"},
+{"ModuleId":"12000","ParentId":"10000","FullName":"我的消息","Icon":"xiaoxi.png","Location":"http://www.bzzxczz.com:8089/wwwroot/new4/teacher/message.html","Target":"iframe"},
 
-{"ModuleId":"20000","ParentId":"root","FullName":"学生管理","Icon":"report_user.png","Location":"http://www.railwills.xyz:8089/wwwroot/new4/teacher/StudentManage.html","Target":"click"},
+{"ModuleId":"20000","ParentId":"root","FullName":"学生管理","Icon":"report_user.png","Location":"http://www.bzzxczz.com:8089/wwwroot/new4/teacher/StudentManage.html","Target":"click"},
 
-{"ModuleId":"30000","ParentId":"root","FullName":"实训管理","Icon":"shixunguanli.png","Location":"http://www.railwills.xyz:8089/wwwroot/new4/teacher/ExprimentAssignment.html","Target":"click"},
+{"ModuleId":"30000","ParentId":"root","FullName":"实训管理","Icon":"shixunguanli.png","Location":"http://www.bzzxczz.com:8089/wwwroot/new4/teacher/ExprimentAssignment.html","Target":"click"},
 
-{"ModuleId":"40000","ParentId":"root","FullName":"成绩管理","Icon":"chart_bar.png","Location":"http://www.railwills.xyz:8089/wwwroot/new4/teacher/StudentGrade.html","Target":"click"},
+{"ModuleId":"40000","ParentId":"root","FullName":"成绩管理","Icon":"chart_bar.png","Location":"http://www.bzzxczz.com:8089/wwwroot/new4/teacher/StudentGrade.asp","Target":"click"},
 
-{"ModuleId":"50000","ParentId":"root","FullName":"场景管理","Icon":"changjingguanli.png","Location":"/pages/samsys/teacher_maoboli.html","Target":"click"},
+{"ModuleId":"50000","ParentId":"root","FullName":"场景管理","Icon":"changjingguanli.png","Location":"","Target":"click"},
+{"ModuleId":"51000","ParentId":"50000","FullName":"毛玻璃","Icon":"maoboli.png","Location":"/pages/samsys/teacher_maoboli.html","Target":"iframe"},
+{"ModuleId":"52000","ParentId":"50000","FullName":"日班计划","Icon":"date.png","Location":"/pages/facade/teacher_bjh.html","Target":"iframe"},
 
 {"ModuleId":"60000","ParentId":"root","FullName":"试题管理","Icon":"archive.png","Location":"http://www","Target":"click"},
 
-{"ModuleId":"70000","ParentId":"root","FullName":"课程管理","Icon":"application_view_tile.png","Location":"http://www","Target":"iframe"}
+{"ModuleId":"70000","ParentId":"root","FullName":"课程管理","Icon":"application_view_tile.png","Location":"http://www","Target":"click"}
 
 ]
