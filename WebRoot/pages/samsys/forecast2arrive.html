@@ -37,6 +37,7 @@
 <script type="text/javascript"> 
 	var cc, allRow, actual;
 	var stnum = $.cookie("USERNAME");
+	var testname = $.cookie("TESTNAME");
 	$(document).ready(function () {
 		cc = GetQuery("cc");
 		ch = GetQuery("ch");
@@ -46,23 +47,27 @@
 	});
 	
 	function GetGrid() {
-		var keyValue = cc;
-	    var queryWhere = "cc";
+		//var keyValue = cc;
+	    //var queryWhere = "cc";
 	    var tableName = $("#tableTitle").val(); 
-		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, function (data){
+	    var where = "(cc = '" cc + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, where:where}, function (data){
                 SetWebControls(data);
 	        });
 		if(IsCheckedNull(ch)){
 			tableName = $("#tableName").val();
-			queryWhere = "ch";
-	        keyValue = ch;
-	        getGridTab(tableName, queryWhere, keyValue);
+			//queryWhere = "ch";
+	        //keyValue = ch;
+	        where = "(ch = '" ch + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+	        getGridTab(tableName, where);
 		}
 		else{
 			tableName = $("#tableName").val();
-			queryWhere = "qbid";
-	        keyValue = $("#qbid").val();
-			getGridTab(tableName, queryWhere, keyValue);
+			//queryWhere = "qbid";
+	        //keyValue = $("#qbid").val();
+	        var qbid = $("#qbid").val();
+	        where = "(qbid = '" qbid + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+			getGridTab(tableName, where);
 		}
 	}
 	
@@ -79,10 +84,10 @@
    }
    
  //获取新格
-   function getGridTab(tableName, queryWhere, keyValue) {
+   function getGridTab(tableName, where) {
 	   $("#gridTable").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, 
+            postData:{tableName:tableName, where:where}, 
         	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() + 230,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -175,9 +180,10 @@
         var keyValue = GetJqGridRowValue("#gridTable", deletWhere);
         var tableName = $("#tableName").val();
         if (IsDelData(deletWhere)) {
-           var delparm = {tableName:tableName, deletWhere:deletWhere, keyValue:keyValue, stnum:stnum};
-           delConfig("/delSamSystem.do",delparm,"1");
-           windowload();
+        	var where = "(ch = '" keyValue + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+           	var delparm = {tableName:tableName, where:where};
+           	delConfig("/delSamSystem.do",delparm,"1");
+           	windowload();
         }
     }
     
@@ -193,10 +199,12 @@
   //存盘
     function btn_Save() {
     	tableName = $("#tableName").val();
-		queryWhere = "qbid";
-        keyValue = $("#qbid").val();
+		//queryWhere = "qbid";
+        //keyValue = $("#qbid").val();
+        var qbid = $("#qbid").val();
         var objData = {};
-        getAjaxJson("/searchSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum, rows:100, page:1}, function (data){
+        var where = "(qbid = '" qbid + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+        getAjaxJson("/searchSamSystem.do", {tableName:tableName, where:where, rows:100, page:1}, function (data){
         	objData = data;
 	    });
 	  	var ids = $("#gridTable").getDataIDs();	//获取 多行数据
@@ -205,10 +213,12 @@
 	  	for(var i=0;i<ids.length;i++){	//现在数据，和数据库逐行比较，有相同车号就更新数据库，没有相同车号，就新增数据库
     		var rowData = $("#gridTable").getRowData(ids[i]);
     		rowData["tableName"] = $("#tableName").val();
-    		rowData["changeWhere"] = "ch";
-        	rowData["keyValue"] = rowData.ch;
+    		//rowData["changeWhere"] = "ch";
+        	//rowData["keyValue"] = rowData.ch;
         	rowData["qbid"] = $("#qbid").val();
         	rowData["stnum"] = stnum;
+        	rowData["testname"] = testname;
+        	rowData["where"] = "(ch = '" rowData.ch + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
         	
     		for(var j=0;j<objData.records;j++){
             	if(rowData.swh == objData.rows[j].swh){
@@ -243,7 +253,7 @@
   //转股道
     function btn_Change() {
  	   if(IsCheckedValue(actual, "值班员没有报点！")){
- 		  var cc = $("#cc").val();
+ 		   var cc = $("#cc").val();
  	 	   var jxcc = $("#jxcc").val();
  	 	   var qbid = $("#qbid").val();
  	 	   var clzs = $("#clzs").val();

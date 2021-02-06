@@ -38,6 +38,8 @@
 <script type="text/javascript"> 
 
 	var cc, gdh, qbid;
+	var stnum = $.cookie("USERNAME");
+	var testname = $.cookie("TESTNAME");
 	$(document).ready(function () {
 		cc = GetQuery("cc");
 		gdh = GetQuery("gdh");
@@ -58,17 +60,15 @@
 	});
 	
 	function GetGrid() {
-		var keyValue = cc;
-	    var queryWhere = "cc";
 	    var tableName = "cch_dbml"; 
-	    getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, function (data){
+	    var where = "(cc = '" + cc + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+	    getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, where:where}, function (data){
             SetWebControls(data);
         });
 	    
 		tableName = "cch_dbzw"; 
-        queryWhere = "gdh";
-        keyValue = gdh;
-		getGridTab(tableName, queryWhere, keyValue);
+        where = "(gdh = '" + gdh + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+		getGridTab(tableName, where);
 	}
    
 	//下拉框
@@ -77,10 +77,10 @@
 		}
 	
    //获取表格
-   function getGridTab(tableName, queryWhere, keyValue) {
+   function getGridTab(tableName, where) {
 	   $("#gridTable").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, 
+            postData:{tableName:tableName, where:where}, 
         	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() + 250,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -189,9 +189,9 @@
     	if (!CheckDataValid('#form1')) {
             return false;
         }
-		var keyValue = gdh;
 		var qbid = $("#qbid").val();
-	   	var postData = {tableName:"cch_dbzw", changeWhere:"gdh", keyValue:keyValue, qbid:qbid };
+		var where = "(gdh = '" + gdh + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+	   	var postData = {tableName:"cch_dbzw", where:where, qbid:qbid };
 	        
 		getAjaxJson("/editSaveSamSystem.do", postData, function (data) {	//修改正文内容
 	                    tipDialog(data.Message, 3, data.Code);
@@ -202,8 +202,10 @@
 	    });
 		postData = GetWebControls("#form1"); 
 		postData.tableName = "cch_dbml"; 
-		postData.changeWhere = "qbid"; 
-	    postData.keyValue = $("#qbid").val();
+		//postData.changeWhere = "qbid"; 
+	    //postData.keyValue = $("#qbid").val();
+	    var qbid = = $("#qbid").val();
+	    postData.where = "(qbid = '" + qbid + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
 		getAjaxJson("/editSaveSamSystem.do", postData, function (data) {	//修改目录内容
 	                    tipDialog(data.Message, 3, data.Code);
 	    	if(data.Code > 0){

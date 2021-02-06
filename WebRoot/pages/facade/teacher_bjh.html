@@ -44,7 +44,7 @@ function a(where){
          //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
          colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
              //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
-             //{label: "序", name: 'zj', index: 'zj', width: 20,editable:true,sortable: false},
+             {label: "序号", name: 'zj', index: 'zj', width: 1, hidden: true},
              {label: "方向", name: 'fx', index: 'fx', width: 40,editable:true,sortable: false},
              {label: "车次", name: 'cc', index: 'cc', width: 48,editable:true,sortable: false},
              {label: "到达<br/>时刻", name: 'ddsk', index: 'ddsk', width: 54,editable:true,sortable: false},
@@ -69,7 +69,7 @@ function a(where){
          //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
          rowList: [10, 25, 50,100],//可调整每页显示的记录数 
          rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
-         sortname: 'fx',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+         sortname: 'zj',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
          sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
           //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
          shrinkToFit: false,
@@ -83,7 +83,7 @@ function a(where){
         	 
         	 $("#table1").css("text-align", "center");
         	 var dataRow1 = {
-                     //"zj" : "",
+                     "zj" : "",
                      "fx" : "",
                      "cc" : "",
                      "ddsk" : "",
@@ -107,7 +107,7 @@ function a(where){
             	  $("#table1").jqGrid("addRowData", count+1, dataRow1, "last");
             	  
            	  }
-              MergerColspan('table1',100, 'id','fx');
+              MergerColspan('table1',100, 'id','fx'); 
 		$("td").css("text-align", "center");
 		change();
          },
@@ -173,6 +173,7 @@ function b(where){
         //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+            {label: "序号", name: 'zj', index: 'zj', width: 1, hidden: true},
             {label: "方向", name: 'fx', index: 'fx', width: 50,sortable: false},
             {label: "车次", name: 'cc', index: 'cc', width: 60,sortable: false},
             {label: "出发时刻", name: 'cfsk', index: 'cfsk', width: 70,sortable: false},
@@ -189,7 +190,7 @@ function b(where){
         //用来调整表格显示的记录数，此参数值会替代rowNum参数值传给服务器端。如果为空则不显示
         rowList: [10, 25, 50,100],//可调整每页显示的记录数 
         rownumbers: false,//如果为ture则会在表格左边新增一列，显示行顺序号，从1开始递增。此列名为'rn'.
-        sortname: 'fx',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
+        sortname: 'zj',//默认的排序列。可以是列名称或者是一个数字，这个参数会被提交到后台 'CompanyId,DepartmentId,SortCode',
         sortorder: 'asc',//排序顺序，升序或者降序（asc or desc）
          //说明当初始化列宽度时候的计算类型，如果为ture，则按比例初始化列宽度。如果为false，则使用colModel指定的宽度
         shrinkToFit: false,
@@ -199,12 +200,12 @@ function b(where){
         	$("td").css("text-align", "center");
         
         	var dataRow2 = {
-
-                    fx : "",
-                    cc : "",
-                    cfsk : "",
-                    bncl : "",
-                    hj : "",
+					"zj" : "",
+                    "fx" : "",
+                    "cc" : "",
+                    "cfsk" : "",
+                    "bncl" : "",
+                    "hj" : "",
                     
              };
              
@@ -212,7 +213,7 @@ function b(where){
              while(count<24){
            	    count+=1;
            	    $("#table2").jqGrid("addRowData", count, dataRow2, "last");
-             }
+             } 
 	     change2();
         },
        jsonReader : {//设置解析从Server端发回来的json数据。其默认值为：
@@ -269,10 +270,11 @@ function c(where){
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
         //height: $(window).height()*0.465,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-		height: 338,
+		height: 363,
         //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+            {label: "序号", name: 'zj', index: 'zj', width: 1, hidden: true},
             {label: "时间", name: 'sj', index: 'sj', width: 70,sortable: false},
             {label: "到<br>达", name: 'zsdd', index: 'zsdd', width: 40,sortable: false},
             {label: "出<br>发", name: 'zscf', index: 'zscf', width: 40,sortable: false},
@@ -280,31 +282,8 @@ function c(where){
             {label: "到<br>达", name: 'ztdd', index: 'ztdd', width: 40,sortable: false},
             {label: "出<br>发", name: 'ztcf', index: 'ztcf', width: 40,sortable: false},
             {label: "结<br>存", name: 'ztjc', index: 'ztjc', width: 40,sortable: false},
-            
-        
-            //{label: "车数", name: 'cheshu', index: 'cheshu', width: 30},
-            //{label: "车辆信息", name: 'clsj', index: 'clsj', width: 12}, //formatter: editLink}
-            
  		],
- 		gridComplete:function(){
- 			$("td").css("text-align", "center");
  		
- 			var dataRow3 = {
- 		             "sj" : "",
- 		             "zsdd" : "",
- 		             "zscf" : "",
- 		             "zsjc" : "",
- 		             "ztdd" : "",
- 		             "ztcf" : "",
- 		             "ztjc" : "",
- 		             
- 		      };
- 		      //$("#table3").jqGrid("addRowData", '-3', dataRow3, "first");
- 		     var count = $("#table3").getGridParam("reccount");//当前有几行
- 		    
- 		    var ids = $("#table3").getDataIDs();	//获取 多行数据
- 		   	
- 		},
  	    contentType : 'application/json',
  	    viewrecords: true,//是否要显示总记录数
         rowNum: "25",//每页显示记录数，设为-1则禁用此检查
@@ -342,7 +321,9 @@ function c(where){
 			    sort: "sidx", // 表示用于排序的列名的参数名称
 				order: "sord" // 表示采用的排序方式的参数名称
 		     }, 
-		
+		     loadComplete:function(){
+		        	$("td").css("text-align", "center");
+		     }
 		     //rowStyler: function(index, record) {
 	         //       if(record.gdjm){
 	         //            return "style='font-size:20px'"; 
@@ -465,6 +446,7 @@ function e(where){
        // autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+            {label: "序号", name: 'zj', index: 'zj', width: 1, hidden: true},
             {label: "车种", name: 'cz', index: 'cz', width: 50,sortable: false},
             {label: "车数", name: 'cs', index: 'cs', width: 50,sortable: false},
             {label: "排空车次", name: 'pkcc', index: 'pkcc', width: 68,sortable: false},
@@ -474,7 +456,8 @@ function e(where){
  		loadComplete:function(){
 			$("td").css("text-align", "center");
  			var dataRow5 = {
- 		             "cz" : "",
+ 		            "zj" : "", 
+ 					"cz" : "",
  		             "cs" : "",
  		             "pkcc" : "",
  		             "kcly" : "",
@@ -483,8 +466,8 @@ function e(where){
  		     //$("#table5").jqGrid("addRowData", '-5', dataRow5, "first");
  		    var count = $("#table5").getGridParam("reccount");//当前有几行
             while(count<4){
-          	  count+=1;
-          	  $("#table5").jqGrid("addRowData", '-88', dataRow5, "last");
+          	  	count+=1;
+      	  		$("#table5").jqGrid("addRowData", count+1, dataRow5, "last");
          	  }
            
  		},
@@ -562,6 +545,7 @@ function f(where){
         //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+            {label: "序号", name: 'zj', index: 'zj', width: 1, hidden: true},
             {label: "卸车<br>地点", name: 'xcdd', index: 'xcdd', width: 50,sortable: false,align: 'center'},
             {label: "车种", name: 'cz', index: 'cz', width: 50,sortable: false},
             {label: "车数", name: 'cs', index: 'cz', width: 50,sortable: false},
@@ -569,8 +553,8 @@ function f(where){
             {label: "卸后<br>安排", name: 'xhap', index: 'xhap', width: 50,sortable: false},
             {label: "装车<br>地点", name: 'zcdd', index: 'zcdd', width: 50,sortable: false},
             {label: "去向", name: 'qx', index: 'qx', width: 47,sortable: false},
-            {label: "车种", name: 'cz', index: 'cz', width: 47,sortable: false},
-            {label: "车数", name: 'cs', index: 'cs', width: 47,sortable: false},
+            {label: "车种", name: 'cz2', index: 'cz2', width: 47,sortable: false},
+            {label: "车数", name: 'cs2', index: 'cs2', width: 47,sortable: false},
             {label: "空车<br>来源", name: 'kcly', index: 'kcly', width: 50,sortable: false},
             {label: "挂运<br>车次", name: 'gycc', index: 'gycc', width: 50,sortable: false},
             //{label: "车数", name: 'cheshu', index: 'cheshu', width: 30},
@@ -579,7 +563,8 @@ function f(where){
  		],
  		loadComplete:function(){
  			var dataRow6 = {
- 		             "xcdd" : "",
+ 		            "zj" : "", 
+ 					"xcdd" : "",
  		             "cz" : "",
  		             "cs" : "",
  		             "ddcc" : "",
@@ -595,9 +580,8 @@ function f(where){
  		      $("#table6").jqGrid("addRowData", '-6', dataRow6, "first");
  		     var count = $("#table6").getGridParam("reccount");//当前有几行
              while(count<8){
-           	  count+=1;
-             
-           	  $("#table6").jqGrid("addRowData", '-6', dataRow6, "last");
+            	count+=1;
+       	  		$("#table6").jqGrid("addRowData", count+1, dataRow6, "last");
           	  }
  		},
  	    contentType : 'application/json',
@@ -670,10 +654,11 @@ function g(where){
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
         //height: $(window).height()*0.03,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-       height: 21,
+       height: 24,
        // autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
+            {label: "序号", name: 'zj', index: 'zj', width: 1, hidden: true},
             {label: "到达<br>列数", name: 'ddls', index: 'ddls', width: 38,sortable: false},
             {label: "出发<br>列数", name: 'cfls', index: 'cfls', width: 38,sortable: false},
             {label: "解体<br>列数", name: 'jtls', index: 'jtls', width: 38,sortable: false},
@@ -726,7 +711,9 @@ function g(where){
 	         //       },
 		     //onSelectRow : function(id) {    },
          //ondblClickRow: function(){	btn_detail(); },
-		     
+		     loadComplete:function(){
+		        	$("td").css("text-align", "center");
+		     }, 
 	     });
 	jQuery("#table7").jqGrid('setGroupHeaders', {
         useColSpanStyle: true, 
@@ -749,7 +736,7 @@ function h(where){
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
         //height: $(window).height()*0.03,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        height: 21,
+        height: 24,
         //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
@@ -805,7 +792,9 @@ function h(where){
 	         //       },
 		     //onSelectRow : function(id) {    },
          //ondblClickRow: function(){	btn_detail(); },
-		     
+		     loadComplete:function(){
+		        	$("td").css("text-align", "center");
+		     }, 
 	     });
 }
 	
@@ -822,7 +811,7 @@ function i(where){
     	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
         datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
         //height: $("#biao1").height()*0.17,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
-        height: 79,
+        height: 98,
         //autowidth: true,//ture时，则当表格在首次被创建时会根据父元素比例重新调整表格宽度
         colModel:[//对显示列属性的设置，是一个数组对象。, hidden: true align: 'center',
             //{label: "车站名称", name: 'ZMLM', index: 'ZMLM', width: 100, hidden: true},
@@ -876,7 +865,9 @@ function i(where){
 	         //       },
 		     //onSelectRow : function(id) {    },
          //ondblClickRow: function(){	btn_detail(); },
-		     
+		     loadComplete:function(){
+		        	$("td").css("text-align", "center");
+		     }, 
 	     });
 }
 var stnum = $.cookie("USERNAME");
@@ -955,7 +946,7 @@ height:160px !important;
 text-align:right;
 }
 #table9 td{
-	height:80px;
+	height:95px;
 }
 #biao1{
 	height:650px;
@@ -1207,6 +1198,7 @@ th.ui-th-column div{
 		<th class="formTitleLong" style="font-size: 16px;">实训名称：</th>
 	    <td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="textname" class="txtselect" onchange="change_text()"></select></td>
 	    <td><button type="button" class="small button" onclick="save()">保存</button></td>
+	    <td><input id="btnInsert" type="button" class="btnSearch" value="导入固定模板" onclick="btn_Insert()" /> </td>
 	</tr>
 </table> 
 </form>
@@ -1273,10 +1265,6 @@ setInterval("document.getElementById('time').innerHTML=new Date().toLocaleString
 </div>
 <!-- /div-->
 <script type="text/javascript">
-	//获取所有表格
-	function getTables(where) {
-		
-	}
 
 //获取实验名称
 	function getTestName() {
@@ -1298,7 +1286,7 @@ setInterval("document.getElementById('time').innerHTML=new Date().toLocaleString
  	function change_text() {
  		var val = $("#textname").val();
  		testname = selectData.rows[val-1]['expriment'];
-        var where = "(stnum = '" + stnum + "' OR stnum IS NULL) AND (testname = '" + testname + "' OR testname IS NULL)";
+ 		var where = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
  		if (IsCheckedValue(textname)) {
  			a2(where);
  			b2(where);
@@ -1370,146 +1358,99 @@ function change2(){
 		}
 	}
 }
-$("#table1").css("text-align", "center");
 function save(){
-	var data = getTableContent('table1');
-	for(i=0;i<data[1].length;i++){
-		data[1][i]=data[1][i].replace(/&nbsp;/,"");
-	}
-    document.getElementById("sub1").value=data[1][0];
-    document.getElementById("s1").value=data[1][1];
-    document.getElementById("s2").value=data[1][2];
-    document.getElementById("s3").value=data[1][3];
-    document.getElementById("D1").value=data[1][4];
-    document.getElementById("D2").value=data[1][5];
-    document.getElementById("D3").value=data[1][6];
-    document.getElementById("D4").value=data[1][7];
-    document.getElementById("D5").value=data[1][8];
-    document.getElementById("D6").value=data[1][9];
-    document.getElementById("D7").value=data[1][10];
-    document.getElementById("D8").value=data[1][11];
-    document.getElementById("D9").value=data[1][12];
-    document.getElementById("D10").value=data[1][13];
-    document.getElementById("KC").value=data[1][14];
-    document.getElementById("D11").value=data[1][15];
-    document.getElementById("HJ").value=data[1][16];
-    
-    var data1 = getTableContent('table2');
-    for(i=0;i<data1[1].length;i++){
-		data1[1][i]=data1[1][i].replace(/&nbsp;/,"");
-	}
-    document.getElementById("SU1").value=data1[1][0];
-    document.getElementById("SU2").value=data1[1][1];
-    document.getElementById("SU3").value=data1[1][2];
-    document.getElementById("SU4").value=data1[1][3];
-    document.getElementById("SU5").value=data1[1][4];
-	
-    var temp="";
-    var data2 = getTableContent('table3');
-    for(i=0;i<data2[1].length;i++){
-		for(j=0;j<13;j++){
-			data2[j][i]=data2[j][i].replace(/&nbsp;/,"");
-			temp=temp+data2[j][i]+"/";
-		}
-		temp+="$";
-	}
-  
-    //document.getElementById("SJ").value=data2[1][0];
-    document.getElementById("ZSDD").value=data2[1][1];
-    document.getElementById("ZSCF").value=data2[1][2];
-    document.getElementById("ZSJC").value=data2[1][3];
-    document.getElementById("ZTDD").value=data2[1][4];
-    document.getElementById("ZTCF").value=data2[1][5];
-    document.getElementById("ZTJC").value=data2[1][6];
-    
-    /*var data3 = getTableContent('table4');
-    for(i=0;i<data3[1].length;i++){
-		data3[1][i]=data3[1][i].replace(/&nbsp;/,"");
-	}
-    document.getElementById("ZTS").value=data3[1][0];
-    document.getElementById("ZZCS").value=data3[1][1];
-    document.getElementById("ZS").value=data3[1][2];
-    document.getElementById("ZYCS").value=data3[1][3];
-    document.getElementById("TS").value=data3[1][4];*/
-	
-    var data4 = getTableContent('table7');
-    var data5 = getTableContent('table8');
-    var data6 = getTableContent('table9');
-    for(i=0;i<data4[1].length;i++){
-		data4[1][i]=data4[1][i].replace(/&nbsp;/,"");
-	}
-    for(i=0;i<data5[1].length;i++){
-		data5[1][i]=data5[1][i].replace(/&nbsp;/,"");
-	}
-    for(i=0;i<data6[1].length;i++){
-		data6[1][i]=data6[1][i].replace(/&nbsp;/,"");
-	}
-    document.getElementById("DDLS").value=data4[1][0];
-    document.getElementById("CFLS").value=data4[1][1];
-    document.getElementById("JTLS").value=data4[1][2];
-    document.getElementById("BZLS").value=data4[1][3];
-    document.getElementById("ZZCS").value=data4[1][4];
-    document.getElementById("ZYCS").value=data4[1][5];
-    document.getElementById("XCS").value=data5[1][0];
-    document.getElementById("ZCS").value=data5[1][1];
-    document.getElementById("PKS").value=data5[1][2];
-    document.getElementById("BLCS").value=data5[1][3];
-    document.getElementById("ZS").value=data5[1][4];
-    document.getElementById("TS").value=data5[1][5];
-    document.getElementById("ZDZS").value=data6[1][0];
-    
-    var data7 = getTableContent('table5');
-    for(i=0;i<data7[1].length;i++){
-		data7[1][i]=data7[1][i].replace(/&nbsp;/,"");
-	}
-    document.getElementById("CZ").value=data7[1][0];
-    document.getElementById("CS").value=data7[1][1];
-    document.getElementById("PKCC").value=data7[1][2];
-    document.getElementById("KCLY").value=data7[1][3];
-
-    var data8 = getTableContent('table6');
-    for(i=0;i<data8[1].length;i++){
-		data8[1][i]=data8[1][i].replace(/&nbsp;/,"");
-	}
-    document.getElementById("XCDD").value=data8[1][0];
-    document.getElementById("CZ1").value=data8[1][1];
-    document.getElementById("CS1").value=data8[1][2];
-    document.getElementById("DDCC").value=data8[1][3];
-    document.getElementById("XHAP").value=data8[1][4];
-    document.getElementById("ZCDD").value=data8[1][5];
-    document.getElementById("QX").value=data8[1][6];
-    document.getElementById("KCLY1").value=data8[1][9];
-    document.getElementById("GYCC").value=data8[1][10];
-    document.getElementById("CZ2").value=data8[1][7];
-    document.getElementById("CS2").value=data8[1][8];
+	var where = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+	setTableContent('table1', "bjh_lcddjh", where);
+    setTableContent('table2', "bjh_lccfjh", where);
+    setTableContent('table3', "bjh_tsztsj", where);
+    //setTableContent('table4', "bjh_zts", where);
+    setTableContent('table5', "bjh_pkjh", where);
+    setTableContent('table6', "bjh_xcjh", where);
+    setTableContent2('table7', 'table8', 'table9', "bjh_bgzzrw", where);
 }
-function getTableContent(ID){
-    var mytable = document.getElementById(ID);
-    var data = [];//将表格内容存入到数组中
-    for(var i=0,rows=mytable.rows.length; i<rows; i++){
-        for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
-            if(!data[i]){
-                data[i] = new Array();
-            }
-            data[i][j] = mytable.rows[i].cells[j].innerHTML;
-        }
+function setTableContent(ID, tableName, where){
+	var ids = $("#" + ID + "").getDataIDs();
+	var len = ids.length;
+	var data = {}; 
+	   
+	//首先关闭改行的编辑
+	var rowid = $("#" + ID + "").jqGrid("getGridParam","selrow");
+	$("#" + ID + "").saveRow(rowid, false);
+	
+    for(var i=0;i<len;i++){	
+    	var rowData = $("#" + ID + "").getRowData(ids[i]);
+    	for(var j in rowData){
+    		if(IsCheckedValue(rowData[j])){
+    			data[i] = $("#" + ID + "").getRowData(ids[i]);
+    			break;
+    		}
+    	}
     }
-    mytable.rows[1].cells[1].rowspan=3;
-    return data;
+    //调用后端接口，处理保存数据
+    postData = {tableName:tableName, stnum:stnum, testname:testname, where:where, len:len, data:JSON.stringify(data)};
+    getAjaxJson("/setBJHSamSystem.do", postData, function (data) {
+    	tipDialog(data.Message, 3, data.Code);
+    });
 }
-function save1(){
-	var data = getTableContent('table1');
-	//data[1][0]=data[1][0].replace(/&nbsp;/,"");
-	//data[1][0]=data[1][0].replace(/&nbsp;/,"");
-	//alert(data[1][0]);
-	for(i=0;i<data[1].length;i++){
-		data[1][i]=data[1][i].replace(/&nbsp;/,"");
-	}
-	alert(data[1][0]);
-	alert(data[1][1]);
-	alert(data[1][2]);
-	//alert(data[1][1]);
+
+function setTableContent2(ID1, ID2, ID3, tableName, where){
+	var data = {}; 
+	var ids = $("#" + ID1 + "").getDataIDs();
+	//首先关闭改行的编辑
+	$("#" + ID1 + "").saveRow(ids[0], false);
+	var obj1 = $("#" + ID1 + "").getRowData(ids[0]);
+	
+	ids = $("#" + ID2 + "").getDataIDs();
+	$("#" + ID2 + "").saveRow(ids[0], false);
+	var obj2 = $("#" + ID2 + "").getRowData(ids[0]);
+	
+	ids = $("#" + ID3 + "").getDataIDs();
+	$("#" + ID3 + "").saveRow(ids[0], false);
+	var obj3 = $("#" + ID3 + "").getRowData(ids[0]);
+	data[0] = Object.assign(obj1, obj2, obj3);
+	var len = ids.length;
+	
+    //调用后端接口，处理保存数据
+    postData = {tableName:tableName, stnum:stnum, testname:testname, where:where, len:len, data:JSON.stringify(data)};
+    getAjaxJson("/setBJHSamSystem.do", postData, function (data) {
+    	tipDialog(data.Message, 3, data.Code);
+    });
 }
+
+//导入固定模板
+function btn_Insert(){
+	setModel("bjh_bgzzrw");
+	setModel("bjh_lccfjh");
+	setModel("bjh_lcddjh");
+	setModel("bjh_pkjh");
+	setModel("bjh_tsztsj");
+	setModel("bjh_xcjh");
+	windowload();
+	//location.reload();
+}
+
+//刷新表格
+function windowload() {
+   $("#table1").trigger("reloadGrid"); 
+   $("#table2").trigger("reloadGrid"); 
+   $("#table3").trigger("reloadGrid"); 
+   $("#table4").trigger("reloadGrid");
+   $("#table5").trigger("reloadGrid"); 
+   $("#table6").trigger("reloadGrid");
+   $("#table7").trigger("reloadGrid"); 
+   $("#table8").trigger("reloadGrid");
+   $("#table9").trigger("reloadGrid"); 
+}
+
+//复制固定模板数据
+function setModel(tableName){
+	var postData = {stnum:stnum, testname:testname, tableName:tableName};
+	getAjaxJson("/setModelSamSystem.do", postData, function (data) {
+		tipDialog(data.Message, 2, data.Code);
+   	});
+}
+
+
 
  
 </script>

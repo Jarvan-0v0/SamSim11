@@ -33,6 +33,7 @@
   
   var cc, jxcc, qbid, clzs, dfrq, dfsj;
   var stnum = $.cookie("USERNAME");
+  var testname = $.cookie("TESTNAME");
   $(function () {
 	  
   	cc = GetQuery("cc");	//当前转股道车次
@@ -144,7 +145,7 @@
     	Loading(true, "正在提交数据...");
         window.setTimeout(function () {
         var postData = GetWebControls("#form1"); 
-        postData.stnum = stnum;
+        postData.where = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
         getAjaxJson("/changeTrackSamStstem.do", postData, function (data) {
                 tipDialog(data.Message, 3, data.Code);
                if(data.Code > 0)

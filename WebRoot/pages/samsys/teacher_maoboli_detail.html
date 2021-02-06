@@ -36,19 +36,19 @@
 <body><div>
 <script type="text/javascript"> 
 	var gdh, allRow, tableName;
+	var stnum = $.cookie("USERNAME");
+	var testname = $.cookie("TESTNAME");
 	$(document).ready(function () {
 		gdh = GetQuery("gdh");
-		tableName = GetQuery("tableName");
-        var queryWhere = "gdh";
-        
-		getGridTab(tableName, queryWhere, gdh);		//加载表格
+		var where = "(gdh = '" + gdh + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+		getGridTab(tableName, where);		//加载表格
 	});
 	
  //获取新格
-   function getGridTab(tableName, queryWhere, keyValue) {
+   function getGridTab(tableName, where) {
 	   $("#gridTable").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue}, 
+            postData:{tableName:tableName, where:where}, 
         	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() + 300,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -122,11 +122,10 @@
    
     //删除记录
     function btn_delete() {
-    	var deletWhere = "ch";
-        var keyValue = GetJqGridRowValue("#gridTable", deletWhere);
-        
+        var ch = GetJqGridRowValue("#gridTable", "ch");
+        var where = "(ch = '" + ch + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
         if (IsDelData(deletWhere)) {
-           var delparm = {tableName:tableName, deletWhere:deletWhere, keyValue:keyValue};
+           var delparm = {tableName:tableName, where:where};
            delConfig("/delSamSystem.do",delparm,"1");
            windowload();
         }
@@ -144,7 +143,8 @@
   	//存盘
     function btn_Save() {
         var objData = {};
-        getAjaxJson("/searchSamSystem.do", {tableName:tableName, queryWhere:"gdh", keyValue:gdh, rows:500, page:1}, function (data){
+        var where = "(gdh = '" + gdh + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+        getAjaxJson("/searchSamSystem.do", {tableName:tableName, where:where, rows:500, page:1}, function (data){
         	objData = data;
 	    });
 	  	var ids = $("#gridTable").getDataIDs();	//获取 多行数据
@@ -153,8 +153,7 @@
 	  	for(var i=0;i<ids.length;i++){	//现在数据，和数据库逐行比较，有相同车号就更新数据库，没有相同车号，就新增数据库
     		var rowData = $("#gridTable").getRowData(ids[i]);
     		rowData["tableName"] = tableName;
-    		rowData["changeWhere"] = "ch";
-        	rowData["keyValue"] = rowData.ch;
+    		rowData["where"] = "(ch = '" + rowData.ch + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
         	rowData["gdh"] = gdh;
         	
     		for(var j=0;j<objData.records;j++){

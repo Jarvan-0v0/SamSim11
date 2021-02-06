@@ -31,20 +31,21 @@
 <body><div>
   <script type="text/javascript">
   
-  var cc, qbid, clzs, dfrq, dfsj;
-  $(function () {
+  	var cc, qbid, clzs, dfrq, dfsj;
+  	var stnum = $.cookie("USERNAME");
+  	var testname = $.cookie("TESTNAME");
+  	$(function () {
 	  
-  	cc = GetQuery("cc");	//当前转股道车次
-    document.getElementById('cc').value = cc;
-    qbid = GetQuery("qbid");	//确报ID
-  	document.getElementById('qbid').value = qbid;
-  	document.getElementById('keyValue').value = qbid;
-  	clzs = GetQuery("clzs");	//车辆总数
-  	document.getElementById('clzs').value = clzs;
-  	gdh = GetQuery("gdh");	//股道号
+	  	cc = GetQuery("cc");	//当前转股道车次
+	    document.getElementById('cc').value = cc;
+	    qbid = GetQuery("qbid");	//确报ID
+	  	document.getElementById('qbid').value = qbid;
+	  	clzs = GetQuery("clzs");	//车辆总数
+	  	document.getElementById('clzs').value = clzs;
+	  	gdh = GetQuery("gdh");	//股道号
     
-    BindSelectItem(); 	//下拉框
-    RadioSelectItem();	//点击选项
+	    BindSelectItem(); 	//下拉框
+	    RadioSelectItem();	//点击选项
   });
   
 	//radio lable事件
@@ -83,6 +84,7 @@
            window.setTimeout(function () {
            var postData = GetWebControls("#form1");  
            postData.gdh = "";
+           postData.where = "(qbid = '" + qbid + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
            getAjaxJson("/editSaveSamSystem.do", postData, function (data) {
                    tipDialog(data.Message, 3, data.Code);
            		if(data.Code > 0)
@@ -148,9 +150,6 @@
 			 <td style="display:none; position: absolute;"><input id="qbid" ></td>
 			 <th style="display:none; position: absolute;">状态：</th>
 			 <td style="display:none; position: absolute;"><input id="zhuangtai" value="CF" ></td>
-			 
-			 <td style="display:none; position: absolute;"><input id="changeWhere" value="qbid" ></td>
-			 <td style="display:none; position: absolute;"><input id="keyValue" ></td>
 		 </tr>
 	</table>
 	</div>

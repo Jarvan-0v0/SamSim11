@@ -39,6 +39,7 @@
 	var iFlag = false;
 	var objData = {};
 	var stnum = $.cookie("USERNAME");
+	var testname = $.cookie("TESTNAME");
     $(document).ready(function () {
     	getTrainData();
     	GetGrid(); //加载表格
@@ -48,9 +49,10 @@
     });
    //加载毛玻璃表格
     function GetGrid() {
-	   $("#gridTable").jqGrid({
-            url: RootPath()+ "/initSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"tab_mbl_1", stnum:stnum}, 
+    	var where = "(stnum = '" + stnum + "' OR stnum IS NULL) AND (testname = '" + testname + "' OR testname IS NULL) GROUP BY GDH";
+	    $("#gridTable").jqGrid({
+	    	url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maoboli", where:where}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 126,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -117,9 +119,10 @@
      
     //加载所有预报表格
     function GetGrid2() {
+       var where = "((ZHUANGTAI = 'FB') OR (ZHUANGTAI = 'CF')) AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
 	   $("#gridTableLeave").jqGrid({
-            url: RootPath()+ "/searchSQLSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"my_leave", stnum:stnum}, 
+		    url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
+            postData:{tableName:"cch_dbml", where:where}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 119,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -204,9 +207,10 @@
       }  
   //加载我的到报表格
     function GetGrid3() {
+    	var where = "(ZHUANGTAI = 'FB') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
 	   $("#gridTableAssign").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:"cch_dbml",queryWhere:"zhuangtai", keyValue:"FB", stnum:stnum}, 
+            postData:{tableName:"cch_dbml", where:where}, 
         	mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() - 80,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。
@@ -291,7 +295,8 @@
    
   	//获取dbml信息
     function getTrainData() {
-    	getAjaxJson("/initSamSystem.do", {tableName:"cch_dbml", stnum:stnum, rows:100, page:1}, function (data){
+    	var where = "(stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+    	getAjaxJson("/initSamSystem.do", {tableName:"cch_dbml", where:where}, function (data){
         	objData = data;
 	    });
 	}

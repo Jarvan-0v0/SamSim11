@@ -39,6 +39,7 @@
 	var cc, allRow, ch, idNum;
 	var iFlag = false;
 	var stnum = $.cookie("USERNAME");
+	var testname = $.cookie("TESTNAME");
 	$(document).ready(function () {
 		cc = GetQuery("cc");
 		ch = GetQuery("ch");
@@ -48,33 +49,31 @@
 	});
 	
 	function GetGrid() {
-		var keyValue = cc;
-	    var queryWhere = "cc";
 	    var tableName = $("#tableTitle").val(); 
-		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, function (data){
+	    var where = "(cc = '" + cc + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+		getAjaxJson("/searchOneSamSystem.do", {tableName:tableName, where:where}, function (data){
                 SetWebControls(data);
 	        });
 		if(IsCheckedNull(ch)){
 			tableName = $("#tableName").val();
-			queryWhere = "ch";
-	        keyValue = ch;
-	        getGridTab(tableName, queryWhere, keyValue);
+			where = "(ch = '" + ch + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+	        getGridTab(tableName, where);
 		}
 		else{
 			tableName = $("#tableName").val();
-			queryWhere = "qbid";
-	        keyValue = $("#qbid").val();
-			getGridTab(tableName, queryWhere, keyValue);
+	        var qbid = $("#qbid").val();
+	        where = "(qbid = '" + qbid + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
+			getGridTab(tableName, where);
 			
 		}
 	}
 
    
    //获取表格
-   function getGridTab(tableName, queryWhere, keyValue) {
+   function getGridTab(tableName, where) {
 	   $("#gridTable").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",//?KeyValue=" + KeyValue,
-            postData:{tableName:tableName, queryWhere:queryWhere, keyValue:keyValue, stnum:stnum}, 
+            postData:{tableName:tableName, where:where}, 
         	 mtype : "POST",//ajax提交方式。POST或者GET，默认GET
             datatype: "json",//从服务器端返回的数据类型，默认xml。可选类型：xml，local，json，jsonnp，script，xmlstring，jsonstring，clientside
             height: $(window).height() + 230,//无工具条是的值是132。表格高度，可以是数字，像素值或者百分比。

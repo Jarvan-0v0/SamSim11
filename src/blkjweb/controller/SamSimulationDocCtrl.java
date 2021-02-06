@@ -2,7 +2,9 @@ package blkjweb.controller;
 
 import java.util.*;
 import java.util.Map.Entry;
+
 import javax.annotation.Resource;
+
 import org.blkj.utils.ConvertTool;
 import org.blkj.utils.DateTool;
 import org.blkj.utils.FileTool;
@@ -11,6 +13,9 @@ import org.blkj.utils.StringTool;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mysql.fabric.xmlrpc.base.Data;
+
 import blkjweb.service.*;
 import blkjweb.utils.Const;
 
@@ -360,7 +365,100 @@ public class SamSimulationDocCtrl extends AbstractBase
 		}
 		return message(code,message);
 	}
+	
+	//保存班计划数据
+	@RequestMapping(value="/setBJHSamSystem", produces="application/json; charset=utf-8")  
+	@ResponseBody 
+	public Object setBJHSamSystem() 
+	{
+		String code = "2";
+		String message = "成功保存班计划数据!";
 		
+		PageTool pd = new PageTool();
+		pd = this.getPageData();
+		String tableName = pd.getString("tableName");
+		String stnum = pd.getString("stnum");
+		String testname = pd.getString("testname");
+		String where = pd.getString("where");
+		//String len = pd.getString("len");
+		
+		//请空原来数据，可能原本没有，无需判断是否失败
+		systemService.delete(tableName, where);
+		
+		String dataString = pd.getString("data");
+		int left = 0, right = 0;
+		for (int i = 1; i < dataString.length()-1; i++) {
+			if(dataString.charAt(i) == '{'){
+				left = i; 
+			}
+			else if(dataString.charAt(i) == '}') {
+				right = i;
+				String jsonLiString = dataString.substring(left, right+1);
+
+				Map<String, Object> mapRecord = ConvertTool.json2Map(jsonLiString);
+				mapRecord.put("stnum", stnum);
+				mapRecord.put("testname", testname);
+				int result = systemService.updateInsert(tableName, mapRecord);
+				
+				if (result < 0){//不成功
+					code = "-1";
+					message = "保存记录失败!";
+				}
+			}
+			
+		}
+		
+		return message(code,message);
+	}	
+	
+	/**
+	 * 教师端导入固定模板
+	 * @return
+	 */
+	@RequestMapping(value="/setModelSamSystem", produces="application/json; charset=utf-8")  
+	@ResponseBody 
+	public Object setModelSamSystem() 
+	{
+		String code = "2";
+		String message = "成功导入固定模板!";
+		
+		final String testname_backup = "固定模板";
+		PageTool pd = new PageTool();
+		pd = this.getPageData();
+		String tableName = pd.getString("tableName");
+		String tableName_backup = tableName + "_backup";
+		String stnum = pd.getString("stnum");
+		String testname = pd.getString("testname");
+		String where = "stnum = '" + stnum + "' AND testname = '" + testname + "'";
+		
+		//请空备份表数据，可能原本没有，无需判断是否失败
+		systemService.delete(tableName, where);
+		systemService.broom(tableName_backup);
+		
+		ArrayList<String> batchSQLStr = new ArrayList<String>();
+		//将固定模板数据拷贝到备份数据库
+		String sql = "INSERT INTO " + tableName_backup + " SELECT * FROM " + tableName 
+				+ " WHERE stnum = '" + stnum + "' AND testname = '" + testname_backup + "'";
+		batchSQLStr.add(sql);
+		
+		//更新备份数据库的实训名称
+		sql = "UPDATE " + tableName_backup + " SET testname = '" + testname + "'";
+		batchSQLStr.add(sql);
+		
+		
+		//将备份数据库修改后的内容复制到原数据库
+		sql = "INSERT INTO " + tableName + " SELECT * FROM " + tableName_backup;
+		batchSQLStr.add(sql);
+		
+		boolean bresult = systemService.batchInsertUpdate(batchSQLStr);
+		if (!bresult){//不成功
+			code = "-1";
+			message = "导入模板失败!";
+		}
+		return message(code,message);
+	}	
+	
+	
 		
 		/*************
 		 * 此部分无用，删除
@@ -468,7 +566,7 @@ public class SamSimulationDocCtrl extends AbstractBase
 			
 			return message(code,message);
 		}	
-		
+	*/	
 		//学生恢复数据
 		@RequestMapping(value="/recDataSamSystem", produces="application/json; charset=utf-8")  
 		@ResponseBody 
@@ -478,31 +576,46 @@ public class SamSimulationDocCtrl extends AbstractBase
 			String message = "成功恢复数据!";
 			boolean bresult = true;
 			
-			String cch_dbml = "cch_dbml";
-			String cch_dbzw = "cch_dbzw";
-			String cch_dbml_backup = "cch_dbml_backup";
-			String cch_dbzw_backup = "cch_dbzw_backup";
+			ArrayList<String> tableName = new ArrayList<String>();	//所有表名
+			tableName.add("cch_dbml");
+			tableName.add("cch_dbzw");
+			tableName.add("bjh_bgzzrw");
+			tableName.add("bjh_lccfjh");
+			tableName.add("bjh_lcddjh");
+			tableName.add("bjh_pkjh");
+			tableName.add("bjh_tsztsj");
+			tableName.add("bjh_xcjh");
 			
 			PageTool pd = new PageTool();
 			pd = this.getPageData();
-			//获取学生的组号
-			String teamnum =  pd.getString("teamnum");
+			//获取学生id和实训名称
+			String stnum =  pd.getString("stnum");
+			String testname =  pd.getString("testname");
+			String where = "stnum = '" + stnum + "' AND testname = '" + testname + "'";
 			
-			*//******************************************
-			 * 删除该组，位于目录和正文的现存数据
-			 * 将备份中的数据的组号改为该组
-			 * 将备份数据拷贝到目录和正文
-			 * ***************************************//*			
-			String where = " WHERE teamnum = '" + teamnum + "'";
-			String[] batchSQLStr = new String[9];					//用于同时删除多个表格
-			batchSQLStr[0] = "DELETE FROM " + cch_dbml + where;		//删除记录语句
-			batchSQLStr[1] = "DELETE FROM " + cch_dbzw + where;		//删除记录语句
-			batchSQLStr[2] = "UPDATE " + cch_dbml_backup + " SET teamnum = '" + teamnum + "'";		//更新记录语句
-			batchSQLStr[3] = "UPDATE " + cch_dbzw_backup + " SET teamnum = '" + teamnum + "'";		//更新记录语句
-			batchSQLStr[4] = "INSERT INTO " + cch_dbml + " SELECT * FROM " + cch_dbml_backup;		//拷贝备份记录语句
-			batchSQLStr[5] = "INSERT INTO " + cch_dbzw + " SELECT * FROM " + cch_dbzw_backup;		//拷贝备份记录语句
-			bresult = systemService.batchMultiTable(batchSQLStr);	//执行指令
-
+			/******************************************
+			 * 删除该id位于上述表中现存数据
+			 * 将上述这些表中对应实训的数据拷贝到备份表，并修改学生id
+			 * 将备份表的数据复制回来
+			 * ***************************************/	
+			for (String table : tableName) {
+				String tableName_backup = table + "_backup";
+				systemService.broom(tableName_backup);
+				systemService.delete(table, where);
+				
+				ArrayList<String> batchSQLStr = new ArrayList<String>();
+				String sql = "INSERT INTO " + tableName_backup + " SELECT * FROM " + table 
+						+ " WHERE stnum = '1001' AND testname = '" + testname + "'";
+				batchSQLStr.add(sql);
+				
+				sql = "UPDATE " + tableName_backup + " SET stnum = '" + stnum + "'";
+				batchSQLStr.add(sql);
+				
+				sql = "INSERT INTO " + table + " SELECT * FROM " + tableName_backup;
+				batchSQLStr.add(sql);
+				
+				bresult = systemService.batchInsertUpdate(batchSQLStr);
+			}
 			
 			if (! bresult){//不成功 <= 0
 				code = "-1";
@@ -510,6 +623,6 @@ public class SamSimulationDocCtrl extends AbstractBase
 			}
 			return message(code,message);
 		}
-		*/
+	
 
 }

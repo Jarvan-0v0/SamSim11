@@ -40,6 +40,7 @@
 <script>
     var gdh;
     var stnum = $.cookie("USERNAME");
+    var testname = $.cookie("TESTNAME");
     $(function () {
     	gdh = GetQuery("gdh");
         
@@ -49,9 +50,10 @@
      //股道详细信息开始
     function GetGrid_GuDao() {
     	var tableName = $("#tableName").val();
+    	var where = "(gdh = '" + gdh "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
     	 $("#gridTable_GuDao").jqGrid({
             url: RootPath()+ "/searchSamSystem.do",
-            postData:{tableName:tableName, queryWhere:"gdh", keyValue:gdh, stnum:stnum}, 
+            postData:{tableName:tableName, where:where}, 
             datatype: "json",
             height: $(window).height() - 50,
             width: $(window).width() - 20,
@@ -87,24 +89,15 @@
             recordpos:"left", //定义记录信息的位置： left, center, right
         });
  
-        //表格自适应（高度、宽度）gridTable_tqiaodun
-        $(window).resize(function () {
-            $("#gridTable_GuDao").jqGrid('setGridWidth', $(window).width() - 20).jqGrid('setGridHeight', $(window).height() - 50);
-        });
+	        //表格自适应（高度、宽度）gridTable_tqiaodun
+	        $(window).resize(function () {
+	            $("#gridTable_GuDao").jqGrid('setGridWidth', $(window).width() - 20).jqGrid('setGridHeight', $(window).height() - 50);
+	        });
       
-       $("#lr-Girder_brush").click(function () {
-           //Replace();
-           windowload();
        }); 
      }
        function windowload() {//只刷新本页面
           //$("#gridTable_Girder").trigger("reloadGrid"); //不起作用，原因不明，重新载入
-         $("#gridTable_GuDao").jqGrid('setGridParam',{
-                url: RootPath()+ "/searchSamSystem.do",
-                postData:{tableName:tableName, queryWhere:"gdh", keyValue:gdh, stnum:stnum}, 
-                datatype:'json', 
-                page:1
-          }).trigger('reloadGrid');  
       }
       
 </script>

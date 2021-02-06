@@ -117,15 +117,17 @@ function RecoverData()
 {
 	confirmDialog("提示", "您确定要恢复数据吗？(此操作将删除现在所有记录！)", function (r) {
 		if (r) {
-			var user_id = $.cookie("USERNAME");
+			/*var user_id = $.cookie("USERNAME");
 			var objData = {};
 			//查询得到该学生组号
 			getAjaxJson("/searchOneSamSystem.do", {tableName:"syt_users", queryWhere: "user_id", keyValue: user_id}, function (data){
                 objData = data;
 	        });
 			
-			var teamnum = objData.user_teamnum;
-			var postData =  {teamnum: teamnum};
+			var teamnum = objData.user_teamnum;*/
+			var stnum = $.cookie("USERNAME");
+		    var testname = $.cookie("TESTNAME");
+			var postData =  {stnum: stnum, testname: testname};
 			getAjaxJson("/recDataSamSystem.do", postData, function (data) {
 		  		tipDialog(data.Message, 2, data.Code);
 	            if(data.Code > 0)

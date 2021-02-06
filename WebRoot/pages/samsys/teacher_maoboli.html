@@ -137,7 +137,7 @@
 		     onSelectRow : function(id) {    },
              ondblClickRow: function(){	btn_detail(); },
  		     
-	     });
+	     }).trigger('reloadGrid');
       }  
      
    
@@ -198,7 +198,7 @@
    function btn_detail(){
         var gdh = GetJqGridRowValue("#gridTable", "gdh");
         if (IsChecked(gdh)) {
-           var url ="/pages/samsys/teacher_maoboli_detail.html?gdh=" + escape(gdh) + "&tableTitle=" + escape(cch_dbml) + "&tableName=" + escape(cch_dbzw);
+           var url ="/pages/samsys/teacher_maoboli_detail.html?gdh=" + escape(gdh);
      		 FullWidthDialog(url, "Maoboli_Details_Form", "股道详细信息--[股道号："+ gdh + "]");
        }
     }
@@ -241,6 +241,21 @@
            		windowload();
        });
     }
+	//导入固定模板
+	function btn_Insert(){
+		setModel("cch_dbml");
+		setModel("cch_dbzw");
+		windowload();
+		//location.reload();
+    }
+	
+	//复制固定模板数据
+	function setModel(tableName){
+		var postData = {stnum:stnum, testname:testname, tableName:tableName};
+		getAjaxJson("/setModelSamSystem.do", postData, function (data) {
+			tipDialog(data.Message, 2, data.Code);
+       	});
+    }
  
  	//改变实验名称
  	function change_text() {
@@ -272,6 +287,7 @@
 	    	<tr>
 	        	<th class="formTitleLong" style="font-size: 16px;">实训名称：</th>
 	        	<td class="formValue"><select style="height: 26px; font-size: 16px; margin-top: 3px; border-radius:6px;" id="textname" class="txtselect" onchange="change_text()"></select></td>
+	        	<td><input id="btnInsert" type="button" class="btnSearch" value="导入固定模板" onclick="btn_Insert()" /> </td>
 <!-- 	            <td><input id="btnSet" type="button" class="btnSearch" value="设置" onclick="btn_Set()" /> </td> -->
 	        </tr>
 	     </table> 

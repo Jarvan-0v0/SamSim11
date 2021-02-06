@@ -34,6 +34,7 @@
   
 	var gdh;
 	var stnum = $.cookie("USERNAME");
+	var testname = $.cookie("TESTNAME");
   $(function () {
 	var qbid, clzs;
 	getAjaxJson("/searchSQLSamSystem.do", {tableName:"xc_sql_tab",queryWhere:"sql_name", keyValue:"maxqbid", stnum:stnum, rows:1, page:1}, function (data){
@@ -42,7 +43,6 @@
     document.getElementById('cc').value = qbid;
     document.getElementById('qbid').value = qbid;
     gdh = GetQuery("gdh");	//股道号
-    document.getElementById('keyValue').value = gdh;
     
   	clzs = GetQuery("clzs");	//车辆总数
   	document.getElementById('clzs').value = clzs;	//车辆总数
@@ -81,12 +81,14 @@
             document.getElementById('tableName').value = "cch_dbml";
 	    	var postData = GetWebControls("#form1"); 
 	    	postData.stnum = stnum;
+	    	postData.testname = testname;
             getAjaxJson("/addSamSystem.do", postData, function (data) {	//新增目录信息
                     tipDialog(data.Message, 3, data.Code);
                     if(data.Code > 0)
                    		top.frames[tabiframeId()].windowload();
             });
             postData.tableName = "cch_dbzw";
+            postData.where = "(gdh = '" + gdh + "') AND (stnum = '" + stnum + "') AND (testname = '" + testname + "')";
             getAjaxJson("/editSaveSamSystem.do", postData, function (data) {	//修改正文内容
                         tipDialog(data.Message, 3, data.Code);
                    if(data.Code > 0)
@@ -141,9 +143,6 @@
 			 <td style="display:none; position: absolute;"><input id="qbid" ></td>
 			 <th style="display:none; position: absolute;">状态：</th>
 			 <td style="display:none; position: absolute;"><input id="zhuangtai" value="FB" ></td>
-			 
-			 <td style="display:none; position: absolute;"><input id="changeWhere" value="gdh" ></td>
-			 <td style="display:none; position: absolute;"><input id="keyValue" ></td>
 			 <th style="display:none; position: absolute;">发站：</th>
              <td style="display:none; position: absolute;"><input id="fzm" value="本站" class="txt"/></td>
 		 </tr>
